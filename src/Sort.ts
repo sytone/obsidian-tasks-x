@@ -22,20 +22,13 @@ export class Sort {
 
         for (const { property, reverse, propertyInstance } of query.sorting) {
             const comparator = Sort.comparators[property];
-            userComparators.push(
-                reverse ? Sort.makeReversedComparator(comparator) : comparator,
-            );
+            userComparators.push(reverse ? Sort.makeReversedComparator(comparator) : comparator);
             if (property === 'tag') {
                 Sort.tagPropertyInstance = propertyInstance;
             }
         }
 
-        return tasks.sort(
-            Sort.makeCompositeComparator([
-                ...userComparators,
-                ...defaultComparators,
-            ]),
-        );
+        return tasks.sort(Sort.makeCompositeComparator([...userComparators, ...defaultComparators]));
     }
 
     private static comparators: Record<SortingProperty, Comparator> = {
@@ -55,9 +48,7 @@ export class Sort {
         return (a, b) => (comparator(a, b) * -1) as -1 | 0 | 1;
     }
 
-    private static makeCompositeComparator(
-        comparators: Comparator[],
-    ): Comparator {
+    private static makeCompositeComparator(comparators: Comparator[]): Comparator {
         return (a, b) => {
             for (const comparator of comparators) {
                 const result = comparator(a, b);
@@ -119,20 +110,11 @@ export class Sort {
         // Arrays start at 0 but the users specify a tag starting at 1.
         const tagInstanceToSortBy = Sort.tagPropertyInstance - 1;
 
-        if (
-            a.tags.length < Sort.tagPropertyInstance &&
-            b.tags.length >= Sort.tagPropertyInstance
-        ) {
+        if (a.tags.length < Sort.tagPropertyInstance && b.tags.length >= Sort.tagPropertyInstance) {
             return 1;
-        } else if (
-            b.tags.length < Sort.tagPropertyInstance &&
-            a.tags.length >= Sort.tagPropertyInstance
-        ) {
+        } else if (b.tags.length < Sort.tagPropertyInstance && a.tags.length >= Sort.tagPropertyInstance) {
             return -1;
-        } else if (
-            a.tags.length < Sort.tagPropertyInstance &&
-            b.tags.length < Sort.tagPropertyInstance
-        ) {
+        } else if (a.tags.length < Sort.tagPropertyInstance && b.tags.length < Sort.tagPropertyInstance) {
             return 0;
         }
 
@@ -145,10 +127,7 @@ export class Sort {
         }
     }
 
-    private static compareByDate(
-        a: moment.Moment | null,
-        b: moment.Moment | null,
-    ): -1 | 0 | 1 {
+    private static compareByDate(a: moment.Moment | null, b: moment.Moment | null): -1 | 0 | 1 {
         if (a !== null && b === null) {
             return -1;
         } else if (a === null && b !== null) {
@@ -183,9 +162,7 @@ export class Sort {
      * in order to be simpler, faster, and not async.
      */
     private static compareByDescription(a: Task, b: Task) {
-        return Sort.cleanDescription(a.description).localeCompare(
-            Sort.cleanDescription(b.description),
-        );
+        return Sort.cleanDescription(a.description).localeCompare(Sort.cleanDescription(b.description));
     }
 
     /**
@@ -205,28 +182,21 @@ export class Sort {
             // For a link, we have to check whether it has another visible name set.
             // For example `[[this is the link|but this is actually shown]]`.
             description =
-                innerLinkText.substring(innerLinkText.indexOf('|') + 1) +
-                description.replace(startsWithLinkRegex, '');
+                innerLinkText.substring(innerLinkText.indexOf('|') + 1) + description.replace(startsWithLinkRegex, '');
         }
 
         const startsWithItalicOrBoldRegex = /^\*\*?([^*]*)\*/;
-        const italicBoldRegexMatch = description.match(
-            startsWithItalicOrBoldRegex,
-        );
+        const italicBoldRegexMatch = description.match(startsWithItalicOrBoldRegex);
         if (italicBoldRegexMatch !== null) {
             const innerItalicBoldText = italicBoldRegexMatch[1];
-            description =
-                innerItalicBoldText +
-                description.replace(startsWithLinkRegex, '');
+            description = innerItalicBoldText + description.replace(startsWithLinkRegex, '');
         }
 
         const startsWithHighlightRegex = /^==?([^=]*)==/;
         const highlightRegexMatch = description.match(startsWithHighlightRegex);
         if (highlightRegexMatch !== null) {
             const innerHighlightsText = highlightRegexMatch[1];
-            description =
-                innerHighlightsText +
-                description.replace(startsWithHighlightRegex, '');
+            description = innerHighlightsText + description.replace(startsWithHighlightRegex, '');
         }
 
         return description;

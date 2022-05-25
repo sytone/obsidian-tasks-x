@@ -80,8 +80,6 @@ export class IntermediateTaskGroups {
         // groups.keys() will initially be in the order the entries were added,
         // so effectively random.
         // Return a duplicate map, with the keys (that is, group names) sorted in alphabetical order:
-        return new IntermediateTaskGroupsStorage(
-            [...this.groups.entries()].sort(),
-        );
+        return new IntermediateTaskGroupsStorage([...this.groups.entries()].sort());
     }
 }

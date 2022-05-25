@@ -9,7 +9,7 @@ import type { Events } from './Events';
 import type { Task } from './Task';
 import { rootQueryService } from './config/LogConfig';
 
-export class QueryRenderer {
+export class QueryRendererX {
     private readonly app: App;
     private readonly events: Events;
 
@@ -17,14 +17,14 @@ export class QueryRenderer {
         this.app = plugin.app;
         this.events = events;
 
-        plugin.registerMarkdownCodeBlockProcessor('tasks', this._addQueryRenderChild.bind(this));
+        plugin.registerMarkdownCodeBlockProcessor('tasksx', this._addQueryRenderChild.bind(this));
     }
 
     public addQueryRenderChild = this._addQueryRenderChild.bind(this);
 
     private async _addQueryRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
         context.addChild(
-            new QueryRenderChild({
+            new QueryRenderChildX({
                 app: this.app,
                 events: this.events,
                 container: element,
@@ -34,7 +34,7 @@ export class QueryRenderer {
     }
 }
 
-class QueryRenderChild extends MarkdownRenderChild {
+class QueryRenderChildX extends MarkdownRenderChild {
     private readonly app: App;
     private readonly events: Events;
     private readonly source: string;
@@ -42,7 +42,7 @@ class QueryRenderChild extends MarkdownRenderChild {
 
     private renderEventRef: EventRef | undefined;
     private queryReloadTimeout: NodeJS.Timeout | undefined;
-    log = rootQueryService.getChildCategory('QueryRenderChild');
+    log = rootQueryService.getChildCategory('QueryRenderChildX');
 
     constructor({
         app,
@@ -114,7 +114,7 @@ class QueryRenderChild extends MarkdownRenderChild {
             for (const group of tasksSortedLimitedGrouped.groups) {
                 // If there were no 'group by' instructions, group.groupHeadings
                 // will be empty, and no headings will be added.
-                QueryRenderChild.addGroupHeadings(content, group.groupHeadings);
+                QueryRenderChildX.addGroupHeadings(content, group.groupHeadings);
 
                 const { taskList } = await this.createTasksList({
                     tasks: group.tasks,
@@ -209,7 +209,7 @@ class QueryRenderChild extends MarkdownRenderChild {
      */
     private static addGroupHeadings(content: HTMLDivElement, groupHeadings: GroupHeading[]) {
         for (const heading of groupHeadings) {
-            QueryRenderChild.addGroupHeading(content, heading);
+            QueryRenderChildX.addGroupHeading(content, heading);
         }
     }
 

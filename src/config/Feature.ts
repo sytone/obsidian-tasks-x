@@ -38,11 +38,7 @@ export class Feature {
     );
 
     static get values(): Feature[] {
-        return [
-            this.TASK_STATUS_MENU,
-            this.TASK_STATUS_MENU,
-            this.ENABLE_DB_STORE,
-        ];
+        return [this.TASK_STATUS_MENU, this.TASK_STATUS_MENU, this.ENABLE_DB_STORE];
     }
 
     static get settingsFlags(): FeatureFlag {

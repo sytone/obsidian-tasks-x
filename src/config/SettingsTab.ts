@@ -1,12 +1,7 @@
 import { Notice, PluginSettingTab, Setting } from 'obsidian';
 import type TasksPlugin from '../main';
 import { Feature } from './Feature';
-import {
-    getSettings,
-    isFeatureEnabled,
-    toggleFeature,
-    updateSettings,
-} from './Settings';
+import { getSettings, isFeatureEnabled, toggleFeature, updateSettings } from './Settings';
 
 export class SettingsTab extends PluginSettingTab {
     private readonly plugin: TasksPlugin;
@@ -30,9 +25,7 @@ export class SettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Global task filter')
-            .setDesc(
-                'The global filter will be applied to all checklist items.',
-            )
+            .setDesc('The global filter will be applied to all checklist items.')
             .addText((text) => {
                 const settings = getSettings();
 
@@ -62,28 +55,22 @@ export class SettingsTab extends PluginSettingTab {
             .addToggle((toggle) => {
                 const settings = getSettings();
 
-                toggle
-                    .setValue(settings.removeGlobalFilter)
-                    .onChange(async (value) => {
-                        updateSettings({ removeGlobalFilter: value });
+                toggle.setValue(settings.removeGlobalFilter).onChange(async (value) => {
+                    updateSettings({ removeGlobalFilter: value });
 
-                        await this.plugin.saveSettings();
-                    });
+                    await this.plugin.saveSettings();
+                });
             });
 
         new Setting(containerEl)
             .setName('Set done date on every completed task')
-            .setDesc(
-                'Enabling this will add a timestamp ✅ YYYY-MM-DD at the end when a task is toggled to done',
-            )
+            .setDesc('Enabling this will add a timestamp ✅ YYYY-MM-DD at the end when a task is toggled to done')
             .addToggle((toogle) => {
                 const settings = getSettings();
-                toogle
-                    .setValue(settings.setDoneDate)
-                    .onChange(async (value) => {
-                        updateSettings({ setDoneDate: value });
-                        await this.plugin.saveSettings();
-                    });
+                toogle.setValue(settings.setDoneDate).onChange(async (value) => {
+                    updateSettings({ setDoneDate: value });
+                    await this.plugin.saveSettings();
+                });
             });
 
         /* -------------------------------------------------------------------------- */
@@ -132,9 +119,7 @@ export class SettingsTab extends PluginSettingTab {
                         .onChange(async (new_symbol) => {
                             // Check to see if they are adding in defaults and block. UI provides this information already.
                             if ([' ', 'x', '-', '/'].includes(new_symbol)) {
-                                new Notice(
-                                    `The symbol ${new_symbol} is already in use.`,
-                                );
+                                new Notice(`The symbol ${new_symbol} is already in use.`);
                                 updateSettings({
                                     status_types: status_types,
                                 });
@@ -144,12 +129,7 @@ export class SettingsTab extends PluginSettingTab {
                                 return;
                             }
 
-                            await this.updateStatusSetting(
-                                status_types,
-                                status_type,
-                                0,
-                                new_symbol,
-                            );
+                            await this.updateStatusSetting(status_types, status_type, 0, new_symbol);
                         });
 
                     return t;
@@ -159,12 +139,7 @@ export class SettingsTab extends PluginSettingTab {
                         .setPlaceholder('Status name')
                         .setValue(status_type[1])
                         .onChange(async (new_name) => {
-                            await this.updateStatusSetting(
-                                status_types,
-                                status_type,
-                                1,
-                                new_name,
-                            );
+                            await this.updateStatusSetting(status_types, status_type, 1, new_name);
                         });
                     return t;
                 })
@@ -173,12 +148,7 @@ export class SettingsTab extends PluginSettingTab {
                         .setPlaceholder('Next status symbol')
                         .setValue(status_type[2])
                         .onChange(async (new_symbol) => {
-                            await this.updateStatusSetting(
-                                status_types,
-                                status_type,
-                                2,
-                                new_symbol,
-                            );
+                            await this.updateStatusSetting(status_types, status_type, 2, new_symbol);
                         });
 
                     return t;
@@ -203,18 +173,12 @@ export class SettingsTab extends PluginSettingTab {
         });
         setting.infoEl.remove();
 
-        const addStatusesSupportedByMinimalTheme = new Setting(
-            this.containerEl,
-        ).addButton((button) => {
+        const addStatusesSupportedByMinimalTheme = new Setting(this.containerEl).addButton((button) => {
             button
-                .setButtonText(
-                    'Add all Status types supported by Minimal Theme',
-                )
+                .setButtonText('Add all Status types supported by Minimal Theme')
                 .setCta()
                 .onClick(async () => {
-                    const minimalSupportedStatuses: Array<
-                        [string, string, string]
-                    > = [
+                    const minimalSupportedStatuses: Array<[string, string, string]> = [
                         ['>', 'Forwarded', 'x'],
                         ['<', 'Schedule', 'x'],
                         ['?', 'Question', 'x'],
@@ -249,9 +213,7 @@ export class SettingsTab extends PluginSettingTab {
                         if (!hasStatus) {
                             status_types.push(importedStatus);
                         } else {
-                            new Notice(
-                                `The status ${importedStatus[1]} (${importedStatus[0]}) is already added.`,
-                            );
+                            new Notice(`The status ${importedStatus[1]} (${importedStatus[0]}) is already added.`);
                         }
                     });
 
@@ -296,19 +258,14 @@ export class SettingsTab extends PluginSettingTab {
                 .setName(feature.displayName)
                 .setDesc(feature.description + ' Is Stable? ' + feature.stable)
                 .addToggle((toggle) => {
-                    toggle
-                        .setValue(isFeatureEnabled(feature.internalName))
-                        .onChange(async (value) => {
-                            const updatedFeatures = toggleFeature(
-                                feature.internalName,
-                                value,
-                            );
-                            updateSettings({ features: updatedFeatures });
+                    toggle.setValue(isFeatureEnabled(feature.internalName)).onChange(async (value) => {
+                        const updatedFeatures = toggleFeature(feature.internalName, value);
+                        updateSettings({ features: updatedFeatures });
 
-                            await this.plugin.saveSettings();
-                            // Force refresh
-                            this.display();
-                        });
+                        await this.plugin.saveSettings();
+                        // Force refresh
+                        this.display();
+                    });
                 });
         });
     }
@@ -320,9 +277,7 @@ export class SettingsTab extends PluginSettingTab {
         newValue: string,
     ) {
         const index = status_types.findIndex((element) => {
-            element[0] === status_type[0] &&
-                element[1] === status_type[1] &&
-                element[2] === status_type[2];
+            element[0] === status_type[0] && element[1] === status_type[1] && element[2] === status_type[2];
         });
 
         if (index > -1) {

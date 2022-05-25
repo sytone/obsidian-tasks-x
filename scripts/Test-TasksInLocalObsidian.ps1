@@ -5,7 +5,7 @@ param (
     $ObsidianPluginRoot = $env:OBSIDIAN_PLUGIN_ROOT,
     [Parameter(HelpMessage = 'The folder name of the plugin to copy the files to.')]
     [String]
-    $PluginFolderName = 'obsidian-tasks-plugin'
+    $PluginFolderName = 'obsidian-tasks-x-plugin'
 )
 
 $repoRoot = (Resolve-Path -Path $(git rev-parse --show-toplevel)).Path
@@ -26,6 +26,10 @@ if ($?) {
     Write-Output 'Build successful'
 
     $filesToLink = @('main.js', 'styles.css', 'manifest.json')
+
+    if(-not (Test-Path $ObsidianPluginRoot/$PluginFolderName)) {
+        New-Item -Path $ObsidianPluginRoot/$PluginFolderName -ItemType Directory
+    }
 
     foreach ($file in $filesToLink ) {
         if ((Get-Item "$ObsidianPluginRoot/$PluginFolderName/$file" ).LinkType -ne 'SymbolicLink') {

@@ -19,9 +19,7 @@ export class StatusRegistry {
      * @memberof StatusRegistry
      */
     public get registeredStatuses(): Status[] {
-        return this._registeredStatuses.filter(
-            ({ indicator }) => indicator !== Status.EMPTY.indicator,
-        );
+        return this._registeredStatuses.filter(({ indicator }) => indicator !== Status.EMPTY.indicator);
     }
 
     /**
@@ -86,13 +84,8 @@ export class StatusRegistry {
      * @memberof StatusRegistry
      */
     public byName(nameToFind: string): Status {
-        if (
-            this._registeredStatuses.filter(({ name }) => name === nameToFind)
-                .length > 0
-        ) {
-            return this._registeredStatuses.filter(
-                ({ name }) => name === nameToFind,
-            )[0];
+        if (this._registeredStatuses.filter(({ name }) => name === nameToFind).length > 0) {
+            return this._registeredStatuses.filter(({ name }) => name === nameToFind)[0];
         }
 
         return Status.EMPTY;
@@ -134,9 +127,7 @@ export class StatusRegistry {
      * @memberof StatusRegistry
      */
     private getIndicator(indicatorToFind: string): Status {
-        return this._registeredStatuses.filter(
-            ({ indicator }) => indicator === indicatorToFind,
-        )[0];
+        return this._registeredStatuses.filter(({ indicator }) => indicator === indicatorToFind)[0];
     }
 
     /**
@@ -148,11 +139,7 @@ export class StatusRegistry {
      * @memberof StatusRegistry
      */
     private hasIndicator(indicatorToFind: string): boolean {
-        return (
-            this._registeredStatuses.filter(
-                ({ indicator }) => indicator === indicatorToFind,
-            ).length > 0
-        );
+        return this._registeredStatuses.filter(({ indicator }) => indicator === indicatorToFind).length > 0;
     }
 
     /**
@@ -162,13 +149,7 @@ export class StatusRegistry {
      * @memberof StatusRegistry
      */
     private addDefaultStatusTypes(): void {
-        const defaultStatuses = [
-            Status.TODO,
-            Status.IN_PROGRESS,
-            Status.DONE,
-            Status.CANCELLED,
-            Status.EMPTY,
-        ];
+        const defaultStatuses = [Status.TODO, Status.IN_PROGRESS, Status.DONE, Status.CANCELLED, Status.EMPTY];
 
         defaultStatuses.forEach((status) => {
             this.add(status);

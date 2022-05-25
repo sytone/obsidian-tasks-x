@@ -16,11 +16,7 @@ type FilteringCase = {
     expectedResult: Array<string>;
 };
 
-function shouldSupportFiltering(
-    filters: Array<string>,
-    allTaskLines: Array<string>,
-    expectedResult: Array<string>,
-) {
+function shouldSupportFiltering(filters: Array<string>, allTaskLines: Array<string>, expectedResult: Array<string>) {
     // Arrange
     const query = new Query({ source: filters.join('\n') });
 
@@ -111,9 +107,7 @@ describe('Query', () => {
                 '- [ ] #task this does not include the word; only in the global filter',
                 '- [ ] #task this does: task',
             ];
-            const expectedResult: Array<string> = [
-                '- [ ] #task this does: task',
-            ];
+            const expectedResult: Array<string> = ['- [ ] #task this does: task'];
 
             // Act, Assert
             shouldSupportFiltering(filters, tasks, expectedResult);
@@ -268,12 +262,9 @@ describe('Query', () => {
                     expectedResult: ['- [ ] task 2 ⏳ 2022-04-15'],
                 },
             ],
-        ])(
-            'should support filtering %s',
-            (_, { tasks: allTaskLines, filters, expectedResult }) => {
-                shouldSupportFiltering(filters, allTaskLines, expectedResult);
-            },
-        );
+        ])('should support filtering %s', (_, { tasks: allTaskLines, filters, expectedResult }) => {
+            shouldSupportFiltering(filters, allTaskLines, expectedResult);
+        });
     });
 
     const defaultTasksWithTags = [
@@ -389,9 +380,7 @@ describe('Query', () => {
                 {
                     filters: ['tags include TopLevelItem'],
                     tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #work #TopLevelItem/sub',
-                    ],
+                    expectedResult: ['- [ ] #task something to do #later #work #TopLevelItem/sub'],
                 },
             ],
             [
@@ -469,11 +458,7 @@ describe('Query', () => {
             updateSettings({ globalFilter: '' });
 
             // Act, Assert
-            shouldSupportFiltering(
-                ['tags include task'],
-                defaultTasksWithTags,
-                defaultTasksWithTags,
-            );
+            shouldSupportFiltering(['tags include task'], defaultTasksWithTags, defaultTasksWithTags);
 
             // Cleanup
             updateSettings(originalSettings);
@@ -549,22 +534,19 @@ describe('Query', () => {
             // ----------------------------------------------------------------
             // 'before'
             {
-                description:
-                    'before: should match if a date is before specified date',
+                description: 'before: should match if a date is before specified date',
                 happensFilter: 'happens before 2012-03-04',
                 start: '2012-03-02',
                 taskShouldMatch: true,
             },
             {
-                description:
-                    'before: should not match if a date is on specified date',
+                description: 'before: should not match if a date is on specified date',
                 happensFilter: 'happens before 2012-03-04',
                 start: '2012-03-04',
                 taskShouldMatch: false,
             },
             {
-                description:
-                    'before: should not match if a date is after specified date',
+                description: 'before: should not match if a date is after specified date',
                 happensFilter: 'happens before 2012-03-04',
                 start: '2012-03-05',
                 taskShouldMatch: false,
@@ -573,22 +555,19 @@ describe('Query', () => {
             // ----------------------------------------------------------------
             // 'after'
             {
-                description:
-                    'after: should match if a date is after specified date',
+                description: 'after: should match if a date is after specified date',
                 happensFilter: 'happens after 2012-03-04',
                 start: '2012-03-05',
                 taskShouldMatch: true,
             },
             {
-                description:
-                    'after: should not match if a date is on specified date',
+                description: 'after: should not match if a date is on specified date',
                 happensFilter: 'happens after 2012-03-04',
                 start: '2012-03-04',
                 taskShouldMatch: false,
             },
             {
-                description:
-                    'after: should not match if a date is before specified date',
+                description: 'after: should not match if a date is before specified date',
                 happensFilter: 'happens after 2012-03-04',
                 start: '2012-03-03',
                 taskShouldMatch: false,
@@ -597,8 +576,7 @@ describe('Query', () => {
             // ----------------------------------------------------------------
             // multiple date values
             {
-                description:
-                    'multiple dates in task: should match if any date matches',
+                description: 'multiple dates in task: should match if any date matches',
                 happensFilter: 'happens on 2012-03-04',
                 due: '2012-03-04',
                 scheduled: '2012-03-05',
@@ -609,14 +587,7 @@ describe('Query', () => {
 
         test.concurrent.each<HappensCase>(HappensCases)(
             'filters via "happens" correctly (%j)',
-            ({
-                happensFilter,
-                due,
-                scheduled,
-                start,
-                done,
-                taskShouldMatch,
-            }) => {
+            ({ happensFilter, due, scheduled, start, done, taskShouldMatch }) => {
                 // Arrange
                 const line = [
                     '- [ ] this is a task',
@@ -671,15 +642,11 @@ describe('Query', () => {
             },
             {
                 input: 'sort by tag',
-                output: [
-                    { property: 'tag', reverse: false, propertyInstance: 1 },
-                ],
+                output: [{ property: 'tag', reverse: false, propertyInstance: 1 }],
             },
             {
                 input: 'sort by tag 2',
-                output: [
-                    { property: 'tag', reverse: false, propertyInstance: 2 },
-                ],
+                output: [{ property: 'tag', reverse: false, propertyInstance: 2 }],
             },
         ];
         it.concurrent.each(cases)('sorting as %j', ({ input, output }) => {
@@ -809,11 +776,7 @@ describe('Query', () => {
 - [ ] Task 6 - should not appear in output
             `;
 
-            const tasks = createTasksFromMarkdown(
-                tasksAsMarkdown,
-                'some_markdown_file',
-                'Some Heading',
-            );
+            const tasks = createTasksFromMarkdown(tasksAsMarkdown, 'some_markdown_file', 'Some Heading');
 
             // Act
             const groups = query.applyQueryToTasks(tasks);
@@ -825,9 +788,7 @@ describe('Query', () => {
 - [ ] Task 3 - will be sorted to 1st place, so should pass limit
 - [ ] Task 4 - will be sorted to 2nd place, so should pass limit
 `;
-            expect('\n' + soleTaskGroup.tasksAsStringOfLines()).toStrictEqual(
-                expectedTasks,
-            );
+            expect('\n' + soleTaskGroup.tasksAsStringOfLines()).toStrictEqual(expectedTasks);
         });
     });
 });

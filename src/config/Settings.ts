@@ -39,10 +39,7 @@ export const isFeatureEnabled = (internalName: string): boolean => {
     return settings.features[internalName] ?? false;
 };
 
-export const toggleFeature = (
-    internalName: string,
-    enabled: boolean,
-): FeatureFlag => {
+export const toggleFeature = (internalName: string, enabled: boolean): FeatureFlag => {
     settings.features[internalName] = enabled;
     return settings.features;
 };

@@ -53,10 +53,7 @@ export class Group {
      * @param property
      * @param task
      */
-    public static getGroupNameForTask(
-        property: GroupingProperty,
-        task: Task,
-    ): string {
+    public static getGroupNameForTask(property: GroupingProperty, task: Task): string {
         const grouper = Group.groupers[property];
         return grouper(task);
     }
@@ -79,10 +76,7 @@ export class Group {
     private static groupByFolder(task: Task): string {
         const path = task.path;
         const fileNameWithExtension = task.filename + '.md';
-        const folder = path.substring(
-            0,
-            path.lastIndexOf(fileNameWithExtension),
-        );
+        const folder = path.substring(0, path.lastIndexOf(fileNameWithExtension));
         if (folder === '') {
             return '/';
         }
@@ -113,10 +107,7 @@ export class Group {
     }
 
     private static groupByHeading(task: Task): string {
-        if (
-            task.precedingHeader === null ||
-            task.precedingHeader.length === 0
-        ) {
+        if (task.precedingHeader === null || task.precedingHeader.length === 0) {
             return '(No heading)';
         }
         return task.precedingHeader;

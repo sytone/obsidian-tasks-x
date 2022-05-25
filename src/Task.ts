@@ -116,17 +116,11 @@ export class Task {
             sectionIndex: record.sectionIndex,
             precedingHeader: record.precedingHeader,
             priority: record.priority,
-            startDate:
-                record.startDate !== null ? moment(record.startDate) : null,
-            scheduledDate:
-                record.scheduledDate !== null
-                    ? moment(record.scheduledDate)
-                    : null,
+            startDate: record.startDate !== null ? moment(record.startDate) : null,
+            scheduledDate: record.scheduledDate !== null ? moment(record.scheduledDate) : null,
             dueDate: record.dueDate !== null ? moment(record.dueDate) : null,
             doneDate: record.doneDate !== null ? moment(record.doneDate) : null,
-            recurrence: record.recurrence
-                ? Recurrence.fromRecurrenceRecord(record.recurrence)
-                : null,
+            recurrence: record.recurrence ? Recurrence.fromRecurrenceRecord(record.recurrence) : null,
             blockLink: record.blockLink,
             tags: record.tags,
         });
@@ -230,10 +224,7 @@ export class Task {
         // longer needs to be on the description. If this happens
         // there may be a double space. So all double spaces are made
         // single like the UI processing.
-        let description = body
-            .replace(globalFilter, '')
-            .replace('  ', ' ')
-            .trim();
+        let description = body.replace(globalFilter, '').replace('  ', ' ').trim();
         const indentation = regexMatch[1];
 
         // Get the status of the task.
@@ -282,18 +273,14 @@ export class Task {
                         break;
                 }
 
-                description = description
-                    .replace(Task.priorityRegex, '')
-                    .trim();
+                description = description.replace(Task.priorityRegex, '').trim();
                 matched = true;
             }
 
             const doneDateMatch = description.match(Task.doneDateRegex);
             if (doneDateMatch !== null) {
                 doneDate = window.moment(doneDateMatch[1], Task.dateFormat);
-                description = description
-                    .replace(Task.doneDateRegex, '')
-                    .trim();
+                description = description.replace(Task.doneDateRegex, '').trim();
                 matched = true;
             }
 
@@ -304,26 +291,17 @@ export class Task {
                 matched = true;
             }
 
-            const scheduledDateMatch = description.match(
-                Task.scheduledDateRegex,
-            );
+            const scheduledDateMatch = description.match(Task.scheduledDateRegex);
             if (scheduledDateMatch !== null) {
-                scheduledDate = window.moment(
-                    scheduledDateMatch[1],
-                    Task.dateFormat,
-                );
-                description = description
-                    .replace(Task.scheduledDateRegex, '')
-                    .trim();
+                scheduledDate = window.moment(scheduledDateMatch[1], Task.dateFormat);
+                description = description.replace(Task.scheduledDateRegex, '').trim();
                 matched = true;
             }
 
             const startDateMatch = description.match(Task.startDateRegex);
             if (startDateMatch !== null) {
                 startDate = window.moment(startDateMatch[1], Task.dateFormat);
-                description = description
-                    .replace(Task.startDateRegex, '')
-                    .trim();
+                description = description.replace(Task.startDateRegex, '').trim();
                 matched = true;
             }
 
@@ -336,9 +314,7 @@ export class Task {
                     dueDate,
                 });
 
-                description = description
-                    .replace(Task.recurrenceRegex, '')
-                    .trim();
+                description = description.replace(Task.recurrenceRegex, '').trim();
                 matched = true;
             }
 
@@ -351,9 +327,7 @@ export class Task {
         // The global filter will be removed from the collection.
         const hashTagMatch = description.match(this.hashTags);
         if (hashTagMatch !== null) {
-            tags = hashTagMatch
-                .filter((tag) => tag !== globalFilter)
-                .map((tag) => tag.trim());
+            tags = hashTagMatch.filter((tag) => tag !== globalFilter).map((tag) => tag.trim());
         }
 
         const task = new Task({
@@ -427,12 +401,7 @@ export class Task {
         const textSpan = li.createSpan();
         textSpan.addClass('tasks-list-text');
 
-        await MarkdownRenderer.renderMarkdown(
-            taskAsString,
-            textSpan,
-            this.path,
-            null as unknown as Component,
-        );
+        await MarkdownRenderer.renderMarkdown(taskAsString, textSpan, this.path, null as unknown as Component);
 
         // If the task is a block quote, the block quote wraps the p-tag that contains the content.
         // In that case, we need to unwrap the p-tag *inside* the surrounding block quote.
@@ -529,16 +498,12 @@ export class Task {
         }
 
         if (!layoutOptions.hideRecurrenceRule && this.recurrence) {
-            const recurrenceRule: string = layoutOptions.shortMode
-                ? ' 🔁'
-                : ` 🔁 ${this.recurrence.toText()}`;
+            const recurrenceRule: string = layoutOptions.shortMode ? ' 🔁' : ` 🔁 ${this.recurrence.toText()}`;
             taskString += recurrenceRule;
         }
 
         if (!layoutOptions.hideStartDate && this.startDate) {
-            const startDate: string = layoutOptions.shortMode
-                ? ' 🛫'
-                : ` 🛫 ${this.startDate.format(Task.dateFormat)}`;
+            const startDate: string = layoutOptions.shortMode ? ' 🛫' : ` 🛫 ${this.startDate.format(Task.dateFormat)}`;
             taskString += startDate;
         }
 
@@ -550,16 +515,12 @@ export class Task {
         }
 
         if (!layoutOptions.hideDueDate && this.dueDate) {
-            const dueDate: string = layoutOptions.shortMode
-                ? ' 📅'
-                : ` 📅 ${this.dueDate.format(Task.dateFormat)}`;
+            const dueDate: string = layoutOptions.shortMode ? ' 📅' : ` 📅 ${this.dueDate.format(Task.dateFormat)}`;
             taskString += dueDate;
         }
 
         if (!layoutOptions.hideDoneDate && this.doneDate) {
-            const doneDate: string = layoutOptions.shortMode
-                ? ' ✅'
-                : ` ✅ ${this.doneDate.format(Task.dateFormat)}`;
+            const doneDate: string = layoutOptions.shortMode ? ' ✅' : ` ✅ ${this.doneDate.format(Task.dateFormat)}`;
             taskString += doneDate;
         }
 
@@ -576,9 +537,7 @@ export class Task {
      * @memberof Task
      */
     public toFileLineString(): string {
-        return `${this.indentation}- [${
-            this.status.indicator
-        }] ${this.toString().trim()}`;
+        return `${this.indentation}- [${this.status.indicator}] ${this.toString().trim()}`;
     }
 
     public toValueTable(): Object {
@@ -611,9 +570,7 @@ export class Task {
      * task is not recurring, it will return `[toggled]`.
      */
     public toggle(): Task[] {
-        const newStatus = StatusRegistry.getInstance().getNextStatus(
-            this.status,
-        );
+        const newStatus = StatusRegistry.getInstance().getNextStatus(this.status);
 
         let newDoneDate = null;
 
@@ -685,11 +642,7 @@ export class Task {
      *                                        If it is undefined, the outcome will be the same as with a unique file name: the file name only.
      *                                        If set to `true`, the full path will be returned.
      */
-    public getLinkText({
-        isFilenameUnique,
-    }: {
-        isFilenameUnique: boolean | undefined;
-    }): string | null {
+    public getLinkText({ isFilenameUnique }: { isFilenameUnique: boolean | undefined }): string | null {
         let linkText: string | null;
         if (isFilenameUnique) {
             linkText = this.filename;
@@ -703,10 +656,7 @@ export class Task {
         }
 
         // Otherwise, this wouldn't provide additional information and only take up space.
-        if (
-            this.precedingHeader !== null &&
-            this.precedingHeader !== linkText
-        ) {
+        if (this.precedingHeader !== null && this.precedingHeader !== linkText) {
             linkText = linkText + ' > ' + this.precedingHeader;
         }
 
@@ -781,15 +731,7 @@ export class Task {
         });
     }
 
-    private static toTooltipDate({
-        signifier,
-        date,
-    }: {
-        signifier: string;
-        date: Moment;
-    }): string {
-        return `${signifier} ${date.format(Task.dateFormat)} (${date.from(
-            window.moment().startOf('day'),
-        )})`;
+    private static toTooltipDate({ signifier, date }: { signifier: string; date: Moment }): string {
+        return `${signifier} ${date.format(Task.dateFormat)} (${date.from(window.moment().startOf('day'))})`;
     }
 }

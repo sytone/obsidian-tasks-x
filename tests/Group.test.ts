@@ -9,11 +9,7 @@ import { fromLine } from './TestHelpers';
 
 window.moment = moment;
 
-function checkGroupNameOfTask(
-    task: Task,
-    property: GroupingProperty,
-    expectedGroupName: string,
-) {
+function checkGroupNameOfTask(task: Task, property: GroupingProperty, expectedGroupName: string) {
     const group = Group.getGroupNameForTask(property, task);
     expect(group).toEqual(expectedGroupName);
 }
@@ -153,10 +149,7 @@ describe('Grouping tasks', () => {
         });
         const tasks = [t1, t2, t3];
 
-        const grouping: Grouping[] = [
-            { property: 'folder' },
-            { property: 'filename' },
-        ];
+        const grouping: Grouping[] = [{ property: 'folder' }, { property: 'filename' }];
 
         // Act
         const groups = Group.by(grouping, tasks);

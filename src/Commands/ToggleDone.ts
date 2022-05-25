@@ -89,18 +89,12 @@ const toggleLine = ({ line, path }: { line: string; path: string }): string => {
 const toggleTask = ({ task }: { task: Task }): string => {
     // Toggle a regular task.
     const toggledTasks = task.toggle();
-    const serialized = toggledTasks
-        .map((task: Task) => task.toFileLineString())
-        .join('\n');
+    const serialized = toggledTasks.map((task: Task) => task.toFileLineString()).join('\n');
 
     return serialized;
 };
 
-const toggleChecklistItem = ({
-    regexMatch,
-}: {
-    regexMatch: RegExpMatchArray;
-}): string => {
+const toggleChecklistItem = ({ regexMatch }: { regexMatch: RegExpMatchArray }): string => {
     // It's a checklist item, let's toggle it.
     const indentation = regexMatch[1];
     const statusString = regexMatch[2].toLowerCase();
