@@ -1,9 +1,12 @@
 <script lang="ts">
     import chrono from 'chrono-node';
+    import { Status } from '../Status';
     import { onMount } from 'svelte';
     import { Recurrence } from '../Recurrence';
-    import { getSettings } from '../Settings';
-    import { Priority, Status, Task } from '../Task';
+    import { getSettings, isFeatureEnabled } from '../Settings';
+    import { Priority, Task } from '../Task';
+    import { StatusRegistry } from '../StatusRegistry';
+    import { Feature } from 'Feature';
 
     export let task: Task;
     export let onSubmit: (updatedTasks: Task[]) => void | Promise<void>;
@@ -20,7 +23,7 @@
         doneDate: string;
     } = {
         description: '',
-        status: Status.Todo,
+        status: Status.TODO,
         priority: 'none',
         recurrenceRule: '',
         startDate: '',
@@ -34,6 +37,7 @@
     let parsedDueDate: string = '';
     let parsedRecurrence: string = '';
     let parsedDone: string = '';
+    let statusOptions = StatusRegistry.getInstance().registeredStatuses;
 
     $: {
         if (!editableTask.startDate) {
@@ -155,9 +159,17 @@
 
     const _onSubmit = () => {
         const { globalFilter } = getSettings();
+
         let description = editableTask.description.trim();
+
+        // Check to see if the global filter was added by user.
         if (!description.includes(globalFilter)) {
-            description = globalFilter + ' ' + description;
+            if (isFeatureEnabled(Feature.APPEND_GLOBAL_FILTER.internalName)) {
+                description = `${description} ${globalFilter}`;
+            } else {
+                // Default is to have filter at front.
+                description = `${globalFilter} ${description}`;
+            }
         }
 
         let startDate: moment.Moment | null = null;
@@ -308,15 +320,26 @@
         </div>
         <hr />
         <div class="tasks-modal-section">
+            <label for="status">Status </label>
+            <select
+                bind:value={editableTask.status}
+                id="status"
+                class="dropdown"
+            >
+                {#each statusOptions as status}
+                    <option value={status}>{status.name}</option>
+                {/each}
+            </select>
+        </div>
+        <div class="tasks-modal-section">
             <div>
-                Status:
+                Completed:
                 <input
                     type="checkbox"
                     class="task-list-item-checkbox tasks-modal-checkbox"
-                    checked={editableTask.status === Status.Done}
+                    checked={editableTask.status === Status.DONE}
                     disabled
                 />
-                <code>{editableTask.status}</code>
             </div>
             <div>
                 Done on:

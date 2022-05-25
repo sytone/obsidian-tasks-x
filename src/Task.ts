@@ -1,21 +1,13 @@
 import type { Moment } from 'moment';
 import { Component, MarkdownRenderer } from 'obsidian';
+import { StatusRegistry } from './StatusRegistry';
+import type { Status } from './Status';
 import { replaceTaskWithTasks } from './File';
 import { LayoutOptions } from './LayoutOptions';
 import { Recurrence } from './Recurrence';
-import { getSettings } from './Settings';
+import { getSettings, isFeatureEnabled } from './Settings';
 import { Urgency } from './Urgency';
-
-/**
- * Collection of status types supported by the plugin.
- * TODO: Make this a class so it can support other types and easier mapping to status character.
- * @export
- * @enum {number}
- */
-export enum Status {
-    Todo = 'Todo',
-    Done = 'Done',
-}
+import { Feature } from './Feature';
 
 /**
  * When sorting, make sure low always comes after none. This way any tasks with low will be below any exiting
@@ -48,11 +40,6 @@ export class Task {
     public readonly sectionStart: number;
     /** The index of the nth task in its section. */
     public readonly sectionIndex: number;
-    /**
-     * The original character from within `[]` in the document.
-     * Required to be added to the LI the same way obsidian does as a `data-task` attribute.
-     */
-    public readonly originalStatusCharacter: string;
     public readonly precedingHeader: string | null;
 
     public readonly tags: string[];
@@ -106,7 +93,6 @@ export class Task {
         indentation,
         sectionStart,
         sectionIndex,
-        originalStatusCharacter,
         precedingHeader,
         priority,
         startDate,
@@ -123,7 +109,6 @@ export class Task {
         indentation: string;
         sectionStart: number;
         sectionIndex: number;
-        originalStatusCharacter: string;
         precedingHeader: string | null;
         priority: Priority;
         startDate: moment.Moment | null;
@@ -140,7 +125,6 @@ export class Task {
         this.indentation = indentation;
         this.sectionStart = sectionStart;
         this.sectionIndex = sectionIndex;
-        this.originalStatusCharacter = originalStatusCharacter;
         this.precedingHeader = precedingHeader;
 
         this.tags = tags;
@@ -197,18 +181,21 @@ export class Task {
             return null;
         }
 
-        let description = body;
+        // Global filter is applied via edit or to string and no
+        // longer needs to be on the description. If this happens
+        // there may be a double space. So all double spaces are made
+        // single like the UI processing.
+        let description = body
+            .replace(globalFilter, '')
+            .replace('  ', ' ')
+            .trim();
         const indentation = regexMatch[1];
 
-        // Get the status of the task, only todo and done supported.
+        // Get the status of the task.
         const statusString = regexMatch[2].toLowerCase();
-        let status: Status;
-        switch (statusString) {
-            case ' ':
-                status = Status.Todo;
-                break;
-            default:
-                status = Status.Done;
+        const status = StatusRegistry.getInstance().byIndicator(statusString);
+        if (status === null) {
+            throw new Error(`Missing status indicator: ${statusString}`);
         }
 
         // Match for block link and remove if found. Always expected to be
@@ -331,7 +318,6 @@ export class Task {
             indentation,
             sectionStart,
             sectionIndex,
-            originalStatusCharacter: statusString,
             precedingHeader,
             priority,
             startDate,
@@ -346,6 +332,24 @@ export class Task {
         return task;
     }
 
+    /**
+     * Renders a list item the same way Obsidian does. Note that anything between the
+     * square brackets means it is 'checked' this is not the same as done.
+     *
+     * @param {{
+     *         parentUlElement: HTMLElement;
+     *         listIndex: number;
+     *         layoutOptions?: LayoutOptions;
+     *         isFilenameUnique?: boolean;
+     *     }} {
+     *         parentUlElement,
+     *         listIndex,
+     *         layoutOptions,
+     *         isFilenameUnique,
+     *     }
+     * @return {*}  {Promise<HTMLLIElement>}
+     * @memberof Task
+     */
     public async toLi({
         parentUlElement,
         listIndex,
@@ -358,13 +362,21 @@ export class Task {
         layoutOptions?: LayoutOptions;
         isFilenameUnique?: boolean;
     }): Promise<HTMLLIElement> {
-        const li: HTMLLIElement = parentUlElement.createEl('li');
-        li.addClasses(['task-list-item', 'plugin-tasks-list-item']);
-
         let taskAsString = this.toString(layoutOptions);
         const { globalFilter, removeGlobalFilter } = getSettings();
+
+        // Hide the global filter when rendering the query results.
         if (removeGlobalFilter) {
             taskAsString = taskAsString.replace(globalFilter, '').trim();
+        }
+
+        // Generate top level list item.
+        const li: HTMLLIElement = parentUlElement.createEl('li');
+        li.setAttr('data-line', listIndex);
+        li.setAttr('data-task', this.status.indicator.trim()); // Trim to ensure empty attribute for space. Same way as obsidian.
+        li.addClasses(['task-list-item', 'plugin-tasks-list-item']);
+        if (this.status.indicator !== ' ') {
+            li.addClass('is-checked');
         }
 
         const textSpan = li.createSpan();
@@ -405,12 +417,13 @@ export class Task {
         });
 
         const checkbox = li.createEl('input');
-        checkbox.addClass('task-list-item-checkbox');
-        checkbox.type = 'checkbox';
-        if (this.status !== Status.Todo) {
+        checkbox.setAttr('data-line', listIndex);
+        if (this.status.indicator !== ' ') {
             checkbox.checked = true;
-            li.addClass('is-checked');
         }
+        checkbox.type = 'checkbox';
+        checkbox.addClass('task-list-item-checkbox');
+
         checkbox.onClickEvent((event: MouseEvent) => {
             event.preventDefault();
             // It is required to stop propagation so that obsidian won't write the file with the
@@ -428,11 +441,6 @@ export class Task {
 
         li.prepend(checkbox);
 
-        // Set these to be compatible with stock obsidian lists:
-        li.setAttr('data-task', this.originalStatusCharacter.trim()); // Trim to ensure empty attribute for space. Same way as obsidian.
-        li.setAttr('data-line', listIndex);
-        checkbox.setAttr('data-line', listIndex);
-
         if (layoutOptions?.shortMode) {
             this.addTooltip({ element: textSpan, isFilenameUnique });
         }
@@ -441,7 +449,8 @@ export class Task {
     }
 
     /**
-     *
+     * Returns a string representation of the task. This is the entire body after the
+     * markdown task prefix. ( - [ ] )
      *
      * @param {LayoutOptions} [layoutOptions]
      * @return {*}  {string}
@@ -449,7 +458,16 @@ export class Task {
      */
     public toString(layoutOptions?: LayoutOptions): string {
         layoutOptions = layoutOptions ?? new LayoutOptions();
-        let taskString = this.description;
+
+        let taskString = this.description.trim();
+        const { globalFilter } = getSettings();
+
+        if (isFeatureEnabled(Feature.APPEND_GLOBAL_FILTER.internalName)) {
+            taskString = `${taskString} ${globalFilter}`.trim();
+        } else {
+            // Default is to have filter at front.
+            taskString = `${globalFilter} ${taskString}`.trim();
+        }
 
         if (!layoutOptions.hidePriority) {
             let priority: string = '';
@@ -514,8 +532,8 @@ export class Task {
      */
     public toFileLineString(): string {
         return `${this.indentation}- [${
-            this.originalStatusCharacter
-        }] ${this.toString()}`;
+            this.status.indicator
+        }] ${this.toString().trim()}`;
     }
 
     /**
@@ -527,8 +545,9 @@ export class Task {
      * task is not recurring, it will return `[toggled]`.
      */
     public toggle(): Task[] {
-        const newStatus: Status =
-            this.status === Status.Todo ? Status.Done : Status.Todo;
+        const newStatus = StatusRegistry.getInstance().getNextStatus(
+            this.status,
+        );
 
         let newDoneDate = null;
 
@@ -538,7 +557,7 @@ export class Task {
             dueDate: Moment | null;
         } | null = null;
 
-        if (newStatus !== Status.Todo) {
+        if (newStatus.isCompleted()) {
             // Set done date only if setting value is true
             const { setDoneDate } = getSettings();
             if (setDoneDate) {
@@ -555,7 +574,6 @@ export class Task {
             ...this,
             status: newStatus,
             doneDate: newDoneDate,
-            originalStatusCharacter: newStatus === Status.Done ? 'x' : ' ',
         });
 
         const newTasks: Task[] = [];

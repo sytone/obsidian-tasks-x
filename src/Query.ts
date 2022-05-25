@@ -5,7 +5,9 @@ import type { TaskGroups } from './Query/TaskGroups';
 import { getSettings } from './Settings';
 import { LayoutOptions } from './LayoutOptions';
 import { Sort } from './Sort';
-import { Priority, Status, Task } from './Task';
+import { Status } from './Status';
+import { Priority, Task } from './Task';
+import { StatusRegistry } from './StatusRegistry';
 
 export type SortingProperty =
     | 'urgency'
@@ -62,6 +64,8 @@ export class Query {
     private readonly notDoneString = 'not done';
     private readonly doneRegexp = /^done (before|after|on)? ?(.*)/;
 
+    private readonly statusRegexp = /^status (is not|is) (.*)/;
+
     private readonly pathRegexp = /^path (includes|does not include) (.*)/;
     private readonly descriptionRegexp =
         /^description (includes|does not include) (.*)/;
@@ -103,12 +107,12 @@ export class Query {
                         break;
                     case line === this.doneString:
                         this._filters.push(
-                            (task) => task.status === Status.Done,
+                            (task) => task.status === Status.DONE,
                         );
                         break;
                     case line === this.notDoneString:
                         this._filters.push(
-                            (task) => task.status !== Status.Done,
+                            (task) => task.status !== Status.DONE,
                         );
                         break;
                     case line === this.recurringString:
@@ -162,6 +166,9 @@ export class Query {
                         break;
                     case this.doneRegexp.test(line):
                         this.parseDoneFilter({ line });
+                        break;
+                    case this.statusRegexp.test(line):
+                        this.parseStatusFilter({ line });
                         break;
                     case this.pathRegexp.test(line):
                         this.parsePathFilter({ line });
@@ -463,6 +470,40 @@ export class Query {
             } else {
                 filter = (task: Task) =>
                     task.doneDate ? task.doneDate.isSame(filterDate) : false;
+            }
+
+            this._filters.push(filter);
+        }
+    }
+
+    /**
+     * Parses the status query, will fail if the status is not registered.
+     * Uses the RegEx: '^status (is|is not) (.*)'
+     *
+     * @private
+     * @param {{ line: string }} { line }
+     * @return {*}  {void}
+     * @memberof Query
+     */
+    private parseStatusFilter({ line }: { line: string }): void {
+        const statusMatch = line.match(this.statusRegexp);
+        if (statusMatch !== null) {
+            const filterStatus = statusMatch[2];
+
+            if (
+                StatusRegistry.getInstance().byIndicator(filterStatus) ===
+                Status.EMPTY
+            ) {
+                this._error =
+                    'status you are searching for is not registered in configuration.';
+                return;
+            }
+
+            let filter;
+            if (statusMatch[1] === 'is') {
+                filter = (task: Task) => task.status.indicator === filterStatus;
+            } else {
+                filter = (task: Task) => task.status.indicator !== filterStatus;
             }
 
             this._filters.push(filter);

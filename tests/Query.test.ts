@@ -4,7 +4,8 @@
 import moment from 'moment';
 import { getSettings, updateSettings } from '../src/Settings';
 import { Query } from '../src/Query';
-import { Priority, Status, Task } from '../src/Task';
+import { Status } from '../src/Status';
+import { Priority, Task } from '../src/Task';
 import { createTasksFromMarkdown } from './TestHelpers';
 
 window.moment = moment;
@@ -42,7 +43,7 @@ function shouldSupportFiltering(
 
     // Assert
     const filteredTaskLines = filteredTasks.map(
-        (task) => `- [ ] ${task.toString()}`,
+        (task) => task.toFileLineString(), //  `- [ ] ${task.toString()}`,
     );
     expect(filteredTaskLines).toMatchObject(expectedResult);
 }
@@ -53,13 +54,12 @@ describe('Query', () => {
             // Arrange
             const tasks = [
                 new Task({
-                    status: Status.Todo,
+                    status: Status.TODO,
                     description: 'description',
                     path: 'Ab/C D',
                     indentation: '',
                     sectionStart: 0,
                     sectionIndex: 0,
-                    originalStatusCharacter: ' ',
                     precedingHeader: null,
                     priority: Priority.None,
                     startDate: null,
@@ -71,13 +71,12 @@ describe('Query', () => {
                     tags: [],
                 }),
                 new Task({
-                    status: Status.Todo,
+                    status: Status.TODO,
                     description: 'description',
                     path: 'FF/C D',
                     indentation: '',
                     sectionStart: 0,
                     sectionIndex: 0,
-                    originalStatusCharacter: ' ',
                     precedingHeader: null,
                     priority: Priority.None,
                     startDate: null,
@@ -698,6 +697,60 @@ describe('Query', () => {
             // Assert
             expect(query.error).toBeUndefined();
         });
+    });
+
+    const defaultTasksWithStatus = [
+        '- [ ] Something to do',
+        '- [/] Something I am doing',
+        '- [x] Something I have done',
+        '- [-] Something I will no longer do',
+    ];
+    describe('filtering with "status"', () => {
+        const TagFilteringCases: Array<[string, FilteringCase]> = [
+            [
+                'by valid status is',
+                {
+                    filters: ['status is x'],
+                    tasks: defaultTasksWithStatus,
+                    expectedResult: ['- [x] Something I have done'],
+                },
+            ],
+            [
+                'by valid status is not',
+                {
+                    filters: ['status is not x'],
+                    tasks: defaultTasksWithStatus,
+                    expectedResult: [
+                        '- [ ] Something to do',
+                        '- [/] Something I am doing',
+                        '- [-] Something I will no longer do',
+                    ],
+                },
+            ],
+            [
+                'by valid status new',
+                {
+                    filters: ['status is /'],
+                    tasks: defaultTasksWithStatus,
+                    expectedResult: ['- [/] Something I am doing'],
+                },
+            ],
+            [
+                'by invalid status',
+                {
+                    filters: ['status is z'],
+                    tasks: defaultTasksWithStatus,
+                    expectedResult: defaultTasksWithStatus,
+                },
+            ],
+        ];
+
+        test.concurrent.each<[string, FilteringCase]>(TagFilteringCases)(
+            'should filter status %s',
+            (_, { tasks: allTaskLines, filters, expectedResult }) => {
+                shouldSupportFiltering(filters, allTaskLines, expectedResult);
+            },
+        );
     });
 
     // This tests the parsing of 'group by' instructions.
