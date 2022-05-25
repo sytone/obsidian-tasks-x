@@ -2842,6 +2842,11 @@ json5@^1.0.1:
   dependencies:
     minimist "^1.2.0"
 
+jsstore@^4.3.8:
+  version "4.3.8"
+  resolved "https://registry.yarnpkg.com/jsstore/-/jsstore-4.3.8.tgz#aa417d4982c4b98da78aadeb7091e3eaa4f7b4e4"
+  integrity sha512-+cWvRJFfYRSQm0Qq6JSoBPHkk5e7hoJts34Jz86AV7FCbETf60dM2VuAE1cU3H2EZw0JzQwZiOn56GfGtqQmaA==
+
 kleur@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
@@ -3861,6 +3866,16 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typescript-logging-category-style@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/typescript-logging-category-style/-/typescript-logging-category-style-2.0.1.tgz#e4bdd5c2ee6ab793a29059e699d5a85d7c4c1d7a"
+  integrity sha512-FYnh2BweI0IDeEnAqMYiK8PVPfosj9ZItpf2TAo8uZ56Fe3cG658znN07PhV3TNIoTJqCUqIP0nPmK0jx0oyxg==
+
+typescript-logging@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/typescript-logging/-/typescript-logging-2.0.1.tgz#1fab7bd59ccfc510027ccfd60f71944ea4c18c5d"
+  integrity sha512-tpgiIaPPviEDCKIxCUe1CCkzD/3fK3oUxcbHkeX2pFgJHzuE3VkAL3sJ4V8/CGh1DLJbFJPSSSo8Q0OFp4LLfw==
 
 typescript@*:
   version "4.4.4"

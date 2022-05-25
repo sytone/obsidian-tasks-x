@@ -5,7 +5,7 @@ import type { Status } from './Status';
 import { replaceTaskWithTasks } from './File';
 import { LayoutOptions } from './LayoutOptions';
 import { Recurrence } from './Recurrence';
-import { getSettings, isFeatureEnabled } from './Settings';
+import { getSettings, isFeatureEnabled } from './config/Settings';
 import { Urgency } from './Urgency';
 import { Feature } from './Feature';
 

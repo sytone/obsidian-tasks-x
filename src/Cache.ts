@@ -7,9 +7,13 @@ import {
     Vault,
 } from 'obsidian';
 import { Mutex } from 'async-mutex';
+import { Connection, DATA_TYPE, IDataBase, ITable } from 'jsstore';
 
 import { Task } from './Task';
 import type { Events } from './Events';
+import { isFeatureEnabled } from './config/Settings';
+import { Feature } from './Feature';
+import { rootDataStore } from './config/LogConfig';
 
 export enum State {
     Cold = 'Cold',
@@ -28,6 +32,8 @@ export class Cache {
     private readonly tasksMutex: Mutex;
     private state: State;
     private tasks: Task[];
+    idbConnection = new Connection();
+    databaseName = 'TasksX';
 
     /**
      * We cannot know if this class will be instantiated because obsidian started
@@ -38,6 +44,8 @@ export class Cache {
      * as the metadata cache would still be empty.
      */
     private loadedAfterFirstResolve: boolean;
+
+    log = rootDataStore.getChildCategory('Cache');
 
     constructor({
         metadataCache,
@@ -60,6 +68,19 @@ export class Cache {
         this.tasks = [];
 
         this.loadedAfterFirstResolve = false;
+
+        if (isFeatureEnabled(Feature.ENABLE_DB_STORE.internalName)) {
+            this.log.info(
+                'ENABLE_DB_STORE is enabled using IndexedDB backing store',
+            );
+
+            try {
+                const dataBase = this.getDatabaseSchema();
+                this.idbConnection.initDb(dataBase);
+            } catch (ex) {
+                this.log.error('Unable to initialize IndexedDB', ex);
+            }
+        }
 
         this.subscribeToCache();
         this.subscribeToVault();
@@ -90,6 +111,81 @@ export class Cache {
         return this.state;
     }
 
+    private getDatabaseSchema = () => {
+        const tblTasks: ITable = {
+            name: 'Tasks',
+            columns: {
+                id: {
+                    primaryKey: true,
+                    autoIncrement: true,
+                },
+                status: {
+                    notNull: true,
+                    dataType: DATA_TYPE.Object,
+                },
+                description: {
+                    notNull: true,
+                    dataType: DATA_TYPE.String,
+                },
+                path: {
+                    notNull: true,
+                    dataType: DATA_TYPE.String,
+                },
+                indentation: {
+                    notNull: true,
+                    dataType: DATA_TYPE.String,
+                },
+                sectionStart: {
+                    notNull: true,
+                    dataType: DATA_TYPE.Number,
+                },
+                sectionIndex: {
+                    notNull: true,
+                    dataType: DATA_TYPE.Number,
+                },
+                precedingHeader: {
+                    notNull: true,
+                    dataType: DATA_TYPE.String,
+                },
+                tags: {
+                    notNull: true,
+                    dataType: DATA_TYPE.Array,
+                },
+                blockLink: {
+                    dataType: DATA_TYPE.String,
+                },
+                priority: {
+                    dataType: DATA_TYPE.Number,
+                    notNull: true,
+                },
+                startDate: {
+                    dataType: DATA_TYPE.DateTime,
+                },
+                scheduledDate: {
+                    dataType: DATA_TYPE.DateTime,
+                },
+                dueDate: {
+                    dataType: DATA_TYPE.DateTime,
+                },
+                createdDate: {
+                    dataType: DATA_TYPE.DateTime,
+                },
+                doneDate: {
+                    dataType: DATA_TYPE.DateTime,
+                },
+                recurrence: {
+                    dataType: DATA_TYPE.Object,
+                },
+            },
+        };
+        const dataBase: IDataBase = {
+            name: this.databaseName,
+            tables: [tblTasks],
+            version: 1,
+        };
+        return dataBase;
+    };
+
     private notifySubscribers(): void {
         this.events.triggerCacheUpdate({
             tasks: this.tasks,
@@ -98,7 +194,7 @@ export class Cache {
     }
 
     private subscribeToCache(): void {
-        const resolvedEventeReference = this.metadataCache.on(
+        const resolvedEventReference = this.metadataCache.on(
             'resolved',
             async () => {
                 // Resolved fires on every change.
@@ -109,7 +205,7 @@ export class Cache {
                 }
             },
         );
-        this.metadataCacheEventReferences.push(resolvedEventeReference);
+        this.metadataCacheEventReferences.push(resolvedEventReference);
 
         // Does not fire when starting up obsidian and only works for changes.
         const changedEventReference = this.metadataCache.on(
@@ -146,9 +242,20 @@ export class Cache {
                 }
 
                 this.tasksMutex.runExclusive(() => {
-                    this.tasks = this.tasks.filter((task: Task) => {
-                        return task.path !== file.path;
-                    });
+                    if (
+                        isFeatureEnabled(Feature.ENABLE_DB_STORE.internalName)
+                    ) {
+                        return this.idbConnection.remove({
+                            from: 'databaseName',
+                            where: {
+                                path: file.path,
+                            },
+                        });
+                    } else {
+                        this.tasks = this.tasks.filter((task: Task) => {
+                            return task.path !== file.path;
+                        });
+                    }
 
                     this.notifySubscribers();
                 });
@@ -164,13 +271,24 @@ export class Cache {
                 }
 
                 this.tasksMutex.runExclusive(() => {
-                    this.tasks = this.tasks.map((task: Task): Task => {
-                        if (task.path === oldPath) {
-                            return new Task({ ...task, path: file.path });
-                        } else {
-                            return task;
-                        }
-                    });
+                    if (
+                        isFeatureEnabled(Feature.ENABLE_DB_STORE.internalName)
+                    ) {
+                        return this.idbConnection.remove({
+                            from: 'databaseName',
+                            where: {
+                                path: file.path,
+                            },
+                        });
+                    } else {
+                        this.tasks = this.tasks.map((task: Task): Task => {
+                            if (task.path === oldPath) {
+                                return new Task({ ...task, path: file.path });
+                            } else {
+                                return task;
+                            }
+                        });
+                    }
 
                     this.notifySubscribers();
                 });

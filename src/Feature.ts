@@ -28,6 +28,15 @@ export class Feature {
         false,
     );
 
+    static readonly ENABLE_DB_STORE = new Feature(
+        'ENABLE_DB_STORE',
+        0,
+        'Enable a store based in IndexedDB to allow better filtering and querying of the tasks and metadata.',
+        'Enabled IndexedDB store',
+        false,
+        false,
+    );
+
     static get values(): Feature[] {
         return [this.TASK_STATUS_MENU, this.TASK_STATUS_MENU];
     }

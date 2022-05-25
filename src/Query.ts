@@ -2,7 +2,7 @@ import * as chrono from 'chrono-node';
 import { Group } from './Query/Group';
 import type { TaskGroups } from './Query/TaskGroups';
 
-import { getSettings } from './Settings';
+import { getSettings } from './config/Settings';
 import { LayoutOptions } from './LayoutOptions';
 import { Sort } from './Sort';
 import { Status } from './Status';

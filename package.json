@@ -50,6 +50,9 @@
   },
   "dependencies": {
     "chrono-node": "2.2.6",
-    "rrule": "^2.6.8"
+    "jsstore": "^4.3.8",
+    "rrule": "^2.6.8",
+    "typescript-logging": "^2.0.1",
+    "typescript-logging-category-style": "^2.0.1"
   }
 }
