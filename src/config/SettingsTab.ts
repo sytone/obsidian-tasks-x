@@ -1,6 +1,6 @@
 import { Notice, PluginSettingTab, Setting } from 'obsidian';
-import { Feature } from '../Feature';
 import type TasksPlugin from '../main';
+import { Feature } from './Feature';
 import {
     getSettings,
     isFeatureEnabled,

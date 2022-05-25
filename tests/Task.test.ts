@@ -9,10 +9,19 @@ import {
     toggleFeature,
     updateSettings,
 } from '../src/config/Settings';
-import { Feature } from '../src/Feature';
+import { Feature } from '../src/config/Feature';
 
 jest.mock('obsidian');
 window.moment = moment;
+
+describe('conversions', () => {
+    it('parses a null value to moment', () => {
+        const setDate = moment(null);
+
+        // expect(setDate).toBe(null);
+        expect(setDate.isValid()).toBe(false);
+    });
+});
 
 describe('parsing', () => {
     it('parses a task from a line', () => {

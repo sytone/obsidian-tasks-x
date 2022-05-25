@@ -8,11 +8,12 @@ import {
 } from 'obsidian';
 import { Mutex } from 'async-mutex';
 import { Connection, DATA_TYPE, IDataBase, ITable } from 'jsstore';
+import workerInjector from 'jsstore/dist/worker_injector';
 
-import { Task } from './Task';
+import { Task, TaskRecord } from './Task';
 import type { Events } from './Events';
 import { isFeatureEnabled } from './config/Settings';
-import { Feature } from './Feature';
+import { Feature } from './config/Feature';
 import { rootDataStore } from './config/LogConfig';
 
 export enum State {
@@ -31,8 +32,9 @@ export class Cache {
 
     private readonly tasksMutex: Mutex;
     private state: State;
-    private tasks: Task[];
+    private _tasks: Task[];
     idbConnection = new Connection();
+
     databaseName = 'TasksX';
 
     /**
@@ -56,6 +58,8 @@ export class Cache {
         vault: Vault;
         events: Events;
     }) {
+        this.idbConnection.addPlugin(workerInjector);
+
         this.metadataCache = metadataCache;
         this.metadataCacheEventReferences = [];
         this.vault = vault;
@@ -65,7 +69,7 @@ export class Cache {
 
         this.tasksMutex = new Mutex();
         this.state = State.Cold;
-        this.tasks = [];
+        this._tasks = [];
 
         this.loadedAfterFirstResolve = false;
 
@@ -76,7 +80,11 @@ export class Cache {
 
             try {
                 const dataBase = this.getDatabaseSchema();
-                this.idbConnection.initDb(dataBase);
+                this.log.info('Creating database', dataBase);
+                //debugger;
+                this.idbConnection.initDb(dataBase).then((completed) => {
+                    this.log.info('Initialized Database', completed);
+                });
             } catch (ex) {
                 this.log.error('Unable to initialize IndexedDB', ex);
             }
@@ -104,7 +112,18 @@ export class Cache {
     }
 
     public getTasks(): Task[] {
-        return this.tasks;
+        if (isFeatureEnabled(Feature.ENABLE_DB_STORE.internalName)) {
+            this.idbConnection
+                .select<TaskRecord>({
+                    from: 'Tasks',
+                })
+                .then((tasks) => {
+                    this._tasks = tasks.map((taskRecord) => {
+                        return Task.fromTaskRecord(taskRecord);
+                    });
+                });
+        }
+        return this._tasks;
     }
 
     public getState(): State {
@@ -155,7 +174,7 @@ export class Cache {
                     dataType: DATA_TYPE.String,
                 },
                 priority: {
-                    dataType: DATA_TYPE.Number,
+                    dataType: DATA_TYPE.String,
                     notNull: true,
                 },
                 startDate: {
@@ -181,14 +200,13 @@ export class Cache {
         const dataBase: IDataBase = {
             name: this.databaseName,
             tables: [tblTasks],
-            version: 1,
         };
         return dataBase;
     };
 
-    private notifySubscribers(): void {
+    private notifySubscribers() {
         this.events.triggerCacheUpdate({
-            tasks: this.tasks,
+            tasks: this.getTasks(),
             state: this.state,
         });
     }
@@ -197,6 +215,9 @@ export class Cache {
         const resolvedEventReference = this.metadataCache.on(
             'resolved',
             async () => {
+                this.log.debug(
+                    `resolved event received, loadedAfterFirstResolve: ${this.loadedAfterFirstResolve}`,
+                );
                 // Resolved fires on every change.
                 // We only want to initialize if we haven't already.
                 if (!this.loadedAfterFirstResolve) {
@@ -212,6 +233,9 @@ export class Cache {
             'changed',
             (file: TFile) => {
                 this.tasksMutex.runExclusive(() => {
+                    this.log.debug(
+                        `changed event received, file: ${file.path}`,
+                    );
                     this.indexFile(file);
                 });
             },
@@ -223,6 +247,7 @@ export class Cache {
         const createdEventReference = this.vault.on(
             'create',
             (file: TAbstractFile) => {
+                this.log.debug(`create event received, file: ${file.path}`);
                 if (!(file instanceof TFile)) {
                     return;
                 }
@@ -237,22 +262,27 @@ export class Cache {
         const deletedEventReference = this.vault.on(
             'delete',
             (file: TAbstractFile) => {
+                this.log.debug(`delete event received, file: ${file.path}`);
+
                 if (!(file instanceof TFile)) {
                     return;
                 }
 
-                this.tasksMutex.runExclusive(() => {
+                this.tasksMutex.runExclusive(async () => {
                     if (
                         isFeatureEnabled(Feature.ENABLE_DB_STORE.internalName)
                     ) {
-                        return this.idbConnection.remove({
-                            from: 'databaseName',
+                        this.log.debug(
+                            `Removing ${file.path} tasks from 'Tasks'`,
+                        );
+                        await this.idbConnection.remove({
+                            from: 'Tasks',
                             where: {
                                 path: file.path,
                             },
                         });
                     } else {
-                        this.tasks = this.tasks.filter((task: Task) => {
+                        this._tasks = this._tasks.filter((task: Task) => {
                             return task.path !== file.path;
                         });
                     }
@@ -266,22 +296,29 @@ export class Cache {
         const renamedEventReference = this.vault.on(
             'rename',
             (file: TAbstractFile, oldPath: string) => {
+                this.log.debug(`rename event received, file: ${file.path}`);
                 if (!(file instanceof TFile)) {
                     return;
                 }
 
-                this.tasksMutex.runExclusive(() => {
+                this.tasksMutex.runExclusive(async () => {
                     if (
                         isFeatureEnabled(Feature.ENABLE_DB_STORE.internalName)
                     ) {
-                        return this.idbConnection.remove({
-                            from: 'databaseName',
-                            where: {
+                        this.log.debug(
+                            `Updating ${oldPath} to ${file.path} in 'Tasks'`,
+                        );
+                        await this.idbConnection.update({
+                            in: 'Tasks',
+                            set: {
                                 path: file.path,
+                            },
+                            where: {
+                                path: oldPath,
                             },
                         });
                     } else {
-                        this.tasks = this.tasks.map((task: Task): Task => {
+                        this._tasks = this._tasks.map((task: Task): Task => {
                             if (task.path === oldPath) {
                                 return new Task({ ...task, path: file.path });
                             } else {
@@ -299,7 +336,7 @@ export class Cache {
 
     private subscribeToEvents(): void {
         const requestReference = this.events.onRequestCacheUpdate((handler) => {
-            handler({ tasks: this.tasks, state: this.state });
+            handler({ tasks: this.getTasks(), state: this.state });
         });
         this.eventsEventReferences.push(requestReference);
     }
@@ -336,9 +373,20 @@ export class Cache {
 
         // Remove all tasks from this file from the cache before
         // adding the ones that are currently in the file.
-        this.tasks = this.tasks.filter((task: Task) => {
-            return task.path !== file.path;
-        });
+
+        if (isFeatureEnabled(Feature.ENABLE_DB_STORE.internalName)) {
+            this.log.trace(`Removing ${file.path} tasks from 'Tasks'`);
+            await this.idbConnection.remove({
+                from: 'Tasks',
+                where: {
+                    path: file.path,
+                },
+            });
+        } else {
+            this._tasks = this._tasks.filter((task: Task) => {
+                return task.path !== file.path;
+            });
+        }
 
         // We want to store section information with every task so
         // that we can use that when we post process the markdown
@@ -381,7 +429,20 @@ export class Cache {
 
                 if (task !== null) {
                     sectionIndex++;
-                    this.tasks.push(task);
+                    if (
+                        isFeatureEnabled(Feature.ENABLE_DB_STORE.internalName)
+                    ) {
+                        this.log.trace(
+                            `Inserting ${task.description} into 'Tasks'`,
+                            task.toValueTable(),
+                        );
+                        await this.idbConnection.insert({
+                            into: 'Tasks',
+                            values: [task.toValueTable()],
+                        });
+                    } else {
+                        this._tasks.push(task);
+                    }
                 }
             }
         }

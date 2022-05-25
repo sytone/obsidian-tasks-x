@@ -14,6 +14,7 @@ import type { GroupHeading } from './Query/GroupHeading';
 import { TaskModal } from './TaskModal';
 import type { Events } from './Events';
 import type { Task } from './Task';
+import { rootQueryService } from './config/LogConfig';
 
 export class QueryRenderer {
     private readonly app: App;
@@ -55,6 +56,7 @@ class QueryRenderChild extends MarkdownRenderChild {
 
     private renderEventRef: EventRef | undefined;
     private queryReloadTimeout: NodeJS.Timeout | undefined;
+    log = rootQueryService.getChildCategory('QueryRenderChild');
 
     constructor({
         app,
@@ -119,6 +121,9 @@ class QueryRenderChild extends MarkdownRenderChild {
     }
 
     private async render({ tasks, state }: { tasks: Task[]; state: State }) {
+        this.log.debug(
+            `Render called for ${tasks.length} tasks, state: ${state}`,
+        );
         const content = this.containerEl.createEl('div');
         if (state === State.Warm && this.query.error === undefined) {
             const tasksSortedLimitedGrouped =

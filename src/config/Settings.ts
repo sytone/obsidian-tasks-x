@@ -1,4 +1,4 @@
-import { Feature, FeatureFlag } from '../Feature';
+import { Feature, FeatureFlag } from './Feature';
 
 export interface Settings {
     globalFilter: string;

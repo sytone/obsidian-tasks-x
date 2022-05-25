@@ -1,13 +1,15 @@
 import type { Moment } from 'moment';
 import { Component, MarkdownRenderer } from 'obsidian';
+import moment from 'moment';
+
 import { StatusRegistry } from './StatusRegistry';
 import type { Status } from './Status';
 import { replaceTaskWithTasks } from './File';
 import { LayoutOptions } from './LayoutOptions';
-import { Recurrence } from './Recurrence';
+import { Recurrence, RecurrenceRecord } from './Recurrence';
 import { getSettings, isFeatureEnabled } from './config/Settings';
 import { Urgency } from './Urgency';
-import { Feature } from './Feature';
+import { Feature } from './config/Feature';
 
 /**
  * When sorting, make sure low always comes after none. This way any tasks with low will be below any exiting
@@ -22,6 +24,24 @@ export enum Priority {
     None = '3',
     Low = '4',
 }
+
+export type TaskRecord = {
+    status: Status;
+    description: string;
+    path: string;
+    indentation: string;
+    sectionStart: number;
+    sectionIndex: number;
+    precedingHeader: string | null;
+    priority: Priority;
+    startDate: Date | null;
+    scheduledDate: Date | null;
+    dueDate: Date | null;
+    doneDate: Date | null;
+    recurrence: RecurrenceRecord | null;
+    blockLink: string;
+    tags: string[] | [];
+};
 
 /**
  * Task encapsulates the properties of the MarkDown task along with
@@ -86,6 +106,31 @@ export class Task {
 
     private _urgency: number | null = null;
 
+    static fromTaskRecord(record: TaskRecord): Task {
+        return new Task({
+            status: record.status,
+            description: record.description,
+            path: record.path,
+            indentation: record.indentation,
+            sectionStart: record.sectionStart,
+            sectionIndex: record.sectionIndex,
+            precedingHeader: record.precedingHeader,
+            priority: record.priority,
+            startDate:
+                record.startDate !== null ? moment(record.startDate) : null,
+            scheduledDate:
+                record.scheduledDate !== null
+                    ? moment(record.scheduledDate)
+                    : null,
+            dueDate: record.dueDate !== null ? moment(record.dueDate) : null,
+            doneDate: record.doneDate !== null ? moment(record.doneDate) : null,
+            recurrence: record.recurrence
+                ? Recurrence.fromRecurrenceRecord(record.recurrence)
+                : null,
+            blockLink: record.blockLink,
+            tags: record.tags,
+        });
+    }
     constructor({
         status,
         description,
@@ -534,6 +579,27 @@ export class Task {
         return `${this.indentation}- [${
             this.status.indicator
         }] ${this.toString().trim()}`;
+    }
+
+    public toValueTable(): Object {
+        return {
+            status: this.status,
+            description: this.description,
+            path: this.path,
+            indentation: this.indentation,
+            sectionStart: this.sectionStart,
+            sectionIndex: this.sectionIndex,
+            precedingHeader: this.precedingHeader,
+            tags: this.tags,
+            blockLink: this.blockLink,
+            priority: this.priority,
+            startDate: this.startDate?.toDate(),
+            scheduledDate: this.scheduledDate?.toDate(),
+            dueDate: this.dueDate?.toDate(),
+            createdDate: this.startDate?.toDate(),
+            doneDate: this.doneDate?.toDate(),
+            recurrence: this.recurrence?.toRecord(),
+        };
     }
 
     /**

@@ -57,7 +57,7 @@ export class StatusRegistry {
      */
     public add(status: Status): void {
         if (!this.hasIndicator(status.indicator)) {
-            status.statusRegistry = this;
+            // status.statusRegistry = this;
             this._registeredStatuses.push(status);
         }
     }

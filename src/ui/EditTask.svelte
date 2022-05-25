@@ -6,7 +6,7 @@
     import { getSettings, isFeatureEnabled } from '../config/Settings';
     import { Priority, Task } from '../Task';
     import { StatusRegistry } from '../StatusRegistry';
-    import { Feature } from 'Feature';
+    import { Feature } from '../config/Feature';
 
     export let task: Task;
     export let onSubmit: (updatedTasks: Task[]) => void | Promise<void>;

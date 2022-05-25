@@ -1,4 +1,4 @@
-import type { StatusRegistry } from 'StatusRegistry';
+// import type { StatusRegistry } from 'StatusRegistry';
 
 /**
  * Tracks the possible states that a task can be in.
@@ -31,13 +31,13 @@ export class Status {
      */
     public readonly nextStatusIndicator: string;
 
-    /**
-     * Returns the next status for a task when toggled.
-     *
-     * @type {StatusRegistry}
-     * @memberof Status
-     */
-    public statusRegistry: StatusRegistry | undefined;
+    // /**
+    //  * Returns the next status for a task when toggled.
+    //  *
+    //  * @type {StatusRegistry}
+    //  * @memberof Status
+    //  */
+    // public statusRegistry: StatusRegistry | undefined;
 
     /**
      * The default Done status. Goes to Todo when toggled.
@@ -96,12 +96,12 @@ export class Status {
         indicator: string,
         name: string,
         nextStatusIndicator: string,
-        statusRegistry: StatusRegistry | undefined = undefined,
+        // statusRegistry: StatusRegistry | undefined = undefined,
     ) {
         this.indicator = indicator;
         this.name = name;
         this.nextStatusIndicator = nextStatusIndicator;
-        this.statusRegistry = statusRegistry;
+        // this.statusRegistry = statusRegistry;
     }
 
     /**

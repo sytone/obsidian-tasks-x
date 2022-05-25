@@ -1,5 +1,15 @@
 import type { Moment } from 'moment';
-import { RRule } from 'rrule';
+
+import { RRule, rrulestr } from 'rrule';
+
+export type RecurrenceRecord = {
+    rrule: string;
+    baseOnToday: boolean;
+    referenceDate: Date | null;
+    startDate: Date | null;
+    scheduledDate: Date | null;
+    dueDate: Date | null;
+};
 
 export class Recurrence {
     private readonly rrule: RRule;
@@ -22,6 +32,23 @@ export class Recurrence {
      * "starts one week before it is due".
      */
     private readonly referenceDate: Moment | null;
+
+    static fromRecurrenceRecord(record: RecurrenceRecord): Recurrence {
+        return new Recurrence({
+            rrule: rrulestr(record.rrule),
+            baseOnToday: record.baseOnToday,
+            referenceDate: record.referenceDate
+                ? window.moment(record.referenceDate)
+                : null,
+            startDate: record.startDate
+                ? window.moment(record.startDate)
+                : null,
+            scheduledDate: record.scheduledDate
+                ? window.moment(record.scheduledDate)
+                : null,
+            dueDate: record.dueDate ? window.moment(record.dueDate) : null,
+        });
+    }
 
     constructor({
         rrule,
@@ -120,6 +147,22 @@ export class Recurrence {
         }
 
         return text;
+    }
+
+    public toRecord(): RecurrenceRecord {
+        const rrr: RecurrenceRecord = {
+            rrule: this.rrule.toString(),
+            baseOnToday: this.baseOnToday,
+            referenceDate: this.referenceDate
+                ? this.referenceDate.toDate()
+                : null,
+            startDate: this.startDate ? this.startDate.toDate() : null,
+            scheduledDate: this.scheduledDate
+                ? this.scheduledDate.toDate()
+                : null,
+            dueDate: this.dueDate ? this.dueDate.toDate() : null,
+        };
+        return rrr;
     }
 
     /**
