@@ -30,7 +30,7 @@ export class QueryX implements IQuery {
     log = rootQueryService.getChildCategory('QueryX');
 
     constructor({ source }: { source: string }) {
-        this.source = source;
+        this.source = source.replace(/(^#.*$(\r\n|\r|\n)?)/gm, '');
         source
             .split('\n')
             .map((line: string) => line.trim())
