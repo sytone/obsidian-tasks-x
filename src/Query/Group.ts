@@ -14,6 +14,15 @@ type Grouper = (task: Task) => string;
 export class Group {
     static log = rootQueryService.getChildCategory('Group');
 
+    private static groupers: Record<GroupingProperty, Grouper> = {
+        backlink: Group.groupByBacklink,
+        filename: Group.groupByFileName,
+        folder: Group.groupByFolder,
+        heading: Group.groupByHeading,
+        path: Group.groupByPath,
+        status: Group.groupByStatus,
+    };
+
     /**
      * Group a list of tasks, according to one or more task properties
      * @param grouping 0 or more Grouping values, one per 'group by' line
@@ -62,15 +71,6 @@ export class Group {
         const grouper = Group.groupers[property];
         return grouper(task);
     }
-
-    private static groupers: Record<GroupingProperty, Grouper> = {
-        backlink: Group.groupByBacklink,
-        filename: Group.groupByFileName,
-        folder: Group.groupByFolder,
-        heading: Group.groupByHeading,
-        path: Group.groupByPath,
-        status: Group.groupByStatus,
-    };
 
     private static groupByPath(task: Task): string {
         // Does this need to be made stricter?

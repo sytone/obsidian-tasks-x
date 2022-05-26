@@ -38,6 +38,15 @@ export class Feature {
         false,
     );
 
+    private constructor(
+        public readonly internalName: string,
+        public readonly index: number,
+        public readonly description: string,
+        public readonly displayName: string,
+        public readonly enabledByDefault: boolean,
+        public readonly stable: boolean,
+    ) {}
+
     static get values(): Feature[] {
         return [this.TASK_STATUS_MENU, this.APPEND_GLOBAL_FILTER, this.ENABLE_SQL_QUERY];
     }
@@ -70,15 +79,6 @@ export class Feature {
             }`,
         );
     }
-
-    private constructor(
-        public readonly internalName: string,
-        public readonly index: number,
-        public readonly description: string,
-        public readonly displayName: string,
-        public readonly enabledByDefault: boolean,
-        public readonly stable: boolean,
-    ) {}
 
     /**
      * Called when converting the Feature value to a string using JSON.Stringify.

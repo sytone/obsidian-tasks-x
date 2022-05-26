@@ -14,11 +14,11 @@ import { StatusRegistry } from './StatusRegistry';
 import { rootMain } from './config/LogConfig';
 
 export default class TasksPlugin extends Plugin {
-    private cache: Cache | undefined;
     public inlineRenderer: InlineRenderer | undefined;
     public queryRenderer: QueryRenderer | undefined;
     public statusRegistry: StatusRegistry | undefined;
     log = rootMain.getChildCategory('TasksPlugin');
+    private cache: Cache | undefined;
 
     async onload(): Promise<void> {
         this.log.info(`loading plugin "${this.manifest.name}" v${this.manifest.version}`);

@@ -109,25 +109,6 @@ export class Task {
 
     private _urgency: number | null = null;
 
-    static fromTaskRecord(record: TaskRecord): Task {
-        return new Task({
-            status: record.status,
-            description: record.description,
-            path: record.path,
-            indentation: record.indentation,
-            sectionStart: record.sectionStart,
-            sectionIndex: record.sectionIndex,
-            precedingHeader: record.precedingHeader,
-            priority: record.priority,
-            startDate: record.startDate !== null ? moment(record.startDate) : null,
-            scheduledDate: record.scheduledDate !== null ? moment(record.scheduledDate) : null,
-            dueDate: record.dueDate !== null ? moment(record.dueDate) : null,
-            doneDate: record.doneDate !== null ? moment(record.doneDate) : null,
-            recurrence: record.recurrence ? Recurrence.fromRecurrenceRecord(record.recurrence) : null,
-            blockLink: record.blockLink,
-            tags: record.tags,
-        });
-    }
     constructor({
         status,
         description,
@@ -180,6 +161,43 @@ export class Task {
 
         this.recurrence = recurrence;
         this.blockLink = blockLink;
+    }
+
+    public get urgency(): number {
+        if (this._urgency === null) {
+            this._urgency = Urgency.calculate(this);
+        }
+
+        return this._urgency;
+    }
+
+    public get filename(): string | null {
+        const fileNameMatch = this.path.match(/([^/]+)\.md$/);
+        if (fileNameMatch !== null) {
+            return fileNameMatch[1];
+        } else {
+            return null;
+        }
+    }
+
+    static fromTaskRecord(record: TaskRecord): Task {
+        return new Task({
+            status: record.status,
+            description: record.description,
+            path: record.path,
+            indentation: record.indentation,
+            sectionStart: record.sectionStart,
+            sectionIndex: record.sectionIndex,
+            precedingHeader: record.precedingHeader,
+            priority: record.priority,
+            startDate: record.startDate !== null ? moment(record.startDate) : null,
+            scheduledDate: record.scheduledDate !== null ? moment(record.scheduledDate) : null,
+            dueDate: record.dueDate !== null ? moment(record.dueDate) : null,
+            doneDate: record.doneDate !== null ? moment(record.doneDate) : null,
+            recurrence: record.recurrence ? Recurrence.fromRecurrenceRecord(record.recurrence) : null,
+            blockLink: record.blockLink,
+            tags: record.tags,
+        });
     }
 
     /**
@@ -352,6 +370,12 @@ export class Task {
         });
 
         return task;
+    }
+
+    private static toTooltipDate({ signifier, date }: { signifier: string; date: Moment }): string {
+        return `${signifier} ${date.format(TaskRegularExpressions.dateFormat)} (${date.from(
+            window.moment().startOf('day'),
+        )})`;
     }
 
     /**
@@ -627,23 +651,6 @@ export class Task {
         return newTasks;
     }
 
-    public get urgency(): number {
-        if (this._urgency === null) {
-            this._urgency = Urgency.calculate(this);
-        }
-
-        return this._urgency;
-    }
-
-    public get filename(): string | null {
-        const fileNameMatch = this.path.match(/([^/]+)\.md$/);
-        if (fileNameMatch !== null) {
-            return fileNameMatch[1];
-        } else {
-            return null;
-        }
-    }
-
     /**
      * Returns the text that should be displayed to the user when linking to the origin of the task
      *
@@ -738,11 +745,5 @@ export class Task {
                 tooltip.remove();
             });
         });
-    }
-
-    private static toTooltipDate({ signifier, date }: { signifier: string; date: Moment }): string {
-        return `${signifier} ${date.format(TaskRegularExpressions.dateFormat)} (${date.from(
-            window.moment().startOf('day'),
-        )})`;
     }
 }

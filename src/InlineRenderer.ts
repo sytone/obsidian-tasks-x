@@ -4,11 +4,11 @@ import type { MarkdownPostProcessorContext, Plugin } from 'obsidian';
 import { Task } from './Task';
 
 export class InlineRenderer {
+    public markdownPostProcessor = this._markdownPostProcessor.bind(this);
+
     constructor({ plugin }: { plugin: Plugin }) {
         plugin.registerMarkdownPostProcessor(this._markdownPostProcessor.bind(this));
     }
-
-    public markdownPostProcessor = this._markdownPostProcessor.bind(this);
 
     private async _markdownPostProcessor(element: HTMLElement, context: MarkdownPostProcessorContext): Promise<void> {
         const { globalFilter } = getSettings();

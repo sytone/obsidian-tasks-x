@@ -8,6 +8,19 @@ type Comparator = (a: Task, b: Task) => number;
 export class Sort {
     static tagPropertyInstance: number = 1;
 
+    private static comparators: Record<SortingProperty, Comparator> = {
+        urgency: Sort.compareByUrgency,
+        description: Sort.compareByDescription,
+        priority: Sort.compareByPriority,
+        start: Sort.compareByStartDate,
+        scheduled: Sort.compareByScheduledDate,
+        due: Sort.compareByDueDate,
+        done: Sort.compareByDoneDate,
+        path: Sort.compareByPath,
+        status: Sort.compareByStatus,
+        tag: Sort.compareByTag,
+    };
+
     public static by(query: Pick<Query, 'sorting'>, tasks: Task[]): Task[] {
         const defaultComparators: Comparator[] = [
             Sort.compareByUrgency,
@@ -29,19 +42,6 @@ export class Sort {
 
         return tasks.sort(Sort.makeCompositeComparator([...userComparators, ...defaultComparators]));
     }
-
-    private static comparators: Record<SortingProperty, Comparator> = {
-        urgency: Sort.compareByUrgency,
-        description: Sort.compareByDescription,
-        priority: Sort.compareByPriority,
-        start: Sort.compareByStartDate,
-        scheduled: Sort.compareByScheduledDate,
-        due: Sort.compareByDueDate,
-        done: Sort.compareByDoneDate,
-        path: Sort.compareByPath,
-        status: Sort.compareByStatus,
-        tag: Sort.compareByTag,
-    };
 
     private static makeReversedComparator(comparator: Comparator): Comparator {
         return (a, b) => (comparator(a, b) * -1) as -1 | 0 | 1;

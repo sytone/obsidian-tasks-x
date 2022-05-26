@@ -12,6 +12,16 @@ export class StatusRegistry {
     private _registeredStatuses: Status[] = [];
 
     /**
+     * Creates an instance of Status and registers it for use. It will also check to see
+     * if the default todo and done are registered and if not handle it internally.
+     *
+     * @memberof StatusRegistry
+     */
+    private constructor() {
+        this.clearStatuses();
+    }
+
+    /**
      * Returns all the registered statuses minus the empty status.
      *
      * @readonly
@@ -20,16 +30,6 @@ export class StatusRegistry {
      */
     public get registeredStatuses(): Status[] {
         return this._registeredStatuses.filter(({ indicator }) => indicator !== Status.EMPTY.indicator);
-    }
-
-    /**
-     * Creates an instance of Status and registers it for use. It will also check to see
-     * if the default todo and done are registered and if not handle it internally.
-     *
-     * @memberof StatusRegistry
-     */
-    private constructor() {
-        this.clearStatuses();
     }
 
     /**

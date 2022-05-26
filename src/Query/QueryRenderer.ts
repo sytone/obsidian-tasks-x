@@ -11,9 +11,13 @@ import { IQuery, QueryX } from './QueryX';
 import type { GroupHeading } from './GroupHeading';
 
 export class QueryRenderer {
+    log = rootQueryService.getChildCategory('QueryRenderer');
+
+    public addQueryRenderChild = this._addQueryRenderChild.bind(this);
+    public addQueryXRenderChild = this._addQueryXRenderChild.bind(this);
+
     private readonly app: App;
     private readonly events: Events;
-    log = rootQueryService.getChildCategory('QueryRenderer');
 
     constructor({ plugin, events }: { plugin: Plugin; events: Events }) {
         this.app = plugin.app;
@@ -22,9 +26,6 @@ export class QueryRenderer {
         plugin.registerMarkdownCodeBlockProcessor('tasks', this._addQueryRenderChild.bind(this));
         plugin.registerMarkdownCodeBlockProcessor('taskx', this._addQueryXRenderChild.bind(this));
     }
-
-    public addQueryRenderChild = this._addQueryRenderChild.bind(this);
-    public addQueryXRenderChild = this._addQueryXRenderChild.bind(this);
 
     private async _addQueryRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
         this.log.debug(`Adding Query Render child to context ${context.docId}`);
@@ -54,6 +55,8 @@ export class QueryRenderer {
 }
 
 class QueryRenderChild extends MarkdownRenderChild {
+    log = rootQueryService.getChildCategory('QueryRenderChild');
+
     private readonly app: App;
     private readonly events: Events;
     private readonly source: string;
@@ -62,7 +65,6 @@ class QueryRenderChild extends MarkdownRenderChild {
 
     private renderEventRef: EventRef | undefined;
     private queryReloadTimeout: NodeJS.Timeout | undefined;
-    log = rootQueryService.getChildCategory('QueryRenderChild');
 
     constructor({
         app,
@@ -87,6 +89,41 @@ class QueryRenderChild extends MarkdownRenderChild {
 
         this.containerEl.className == 'block-language-taskx' ? (this.queryType = 'taskx') : (this.queryType = 'tasks');
         this.log.debug(`Query Render generated for class ${this.containerEl.className}`);
+    }
+
+    /**
+     * Display headings for a group of tasks.
+     * @param content
+     * @param groupHeadings - The headings to display. This can be an empty array,
+     *                        in which case no headings will be added.
+     * @private
+     */
+    private static addGroupHeadings(content: HTMLDivElement, groupHeadings: GroupHeading[]) {
+        for (const heading of groupHeadings) {
+            QueryRenderChild.addGroupHeading(content, heading);
+        }
+    }
+
+    private static addGroupHeading(content: HTMLDivElement, group: GroupHeading) {
+        let header: any;
+        // Is it possible to remove the repetition here?
+        // Ideally, by creating a variable that contains h4, h5 or h6
+        // and then only having one call to content.createEl().
+        if (group.nestingLevel === 0) {
+            header = content.createEl('h4', {
+                cls: 'tasks-group-heading',
+            });
+        } else if (group.nestingLevel === 1) {
+            header = content.createEl('h5', {
+                cls: 'tasks-group-heading',
+            });
+        } else {
+            // Headings nested to 2 or more levels are all displayed with 'h6:
+            header = content.createEl('h6', {
+                cls: 'tasks-group-heading',
+            });
+        }
+        header.appendText(group.name);
     }
 
     onload() {
@@ -227,41 +264,6 @@ class QueryRenderChild extends MarkdownRenderChild {
             });
             taskModal.open();
         });
-    }
-
-    /**
-     * Display headings for a group of tasks.
-     * @param content
-     * @param groupHeadings - The headings to display. This can be an empty array,
-     *                        in which case no headings will be added.
-     * @private
-     */
-    private static addGroupHeadings(content: HTMLDivElement, groupHeadings: GroupHeading[]) {
-        for (const heading of groupHeadings) {
-            QueryRenderChild.addGroupHeading(content, heading);
-        }
-    }
-
-    private static addGroupHeading(content: HTMLDivElement, group: GroupHeading) {
-        let header: any;
-        // Is it possible to remove the repetition here?
-        // Ideally, by creating a variable that contains h4, h5 or h6
-        // and then only having one call to content.createEl().
-        if (group.nestingLevel === 0) {
-            header = content.createEl('h4', {
-                cls: 'tasks-group-heading',
-            });
-        } else if (group.nestingLevel === 1) {
-            header = content.createEl('h5', {
-                cls: 'tasks-group-heading',
-            });
-        } else {
-            // Headings nested to 2 or more levels are all displayed with 'h6:
-            header = content.createEl('h6', {
-                cls: 'tasks-group-heading',
-            });
-        }
-        header.appendText(group.name);
     }
 
     private addBacklinks(

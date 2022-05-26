@@ -15,8 +15,9 @@ interface CacheUpdateData {
 }
 
 export class Events {
-    private obsidianEvents: ObsidianEvents;
     log = rootMain.getChildCategory('Events');
+
+    private obsidianEvents: ObsidianEvents;
 
     constructor({ obsidianEvents }: { obsidianEvents: ObsidianEvents }) {
         this.obsidianEvents = obsidianEvents;

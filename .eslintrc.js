@@ -45,5 +45,6 @@ module.exports = {
                 ignoreDeclarationSort: true,
             },
         ],
+        '@typescript-eslint/member-ordering': ['error'],
     },
 };

@@ -13,6 +13,8 @@ export enum State {
 }
 
 export class Cache {
+    log = rootDataStore.getChildCategory('Cache');
+
     private readonly metadataCache: MetadataCache;
     private readonly metadataCacheEventReferences: EventRef[];
     private readonly vault: Vault;
@@ -33,8 +35,6 @@ export class Cache {
      * as the metadata cache would still be empty.
      */
     private loadedAfterFirstResolve: boolean;
-
-    log = rootDataStore.getChildCategory('Cache');
 
     constructor({ metadataCache, vault, events }: { metadataCache: MetadataCache; vault: Vault; events: Events }) {
         this.metadataCache = metadataCache;

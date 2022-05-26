@@ -33,17 +33,6 @@ export class Recurrence {
      */
     private readonly referenceDate: Moment | null;
 
-    static fromRecurrenceRecord(record: RecurrenceRecord): Recurrence {
-        return new Recurrence({
-            rrule: rrulestr(record.rrule),
-            baseOnToday: record.baseOnToday,
-            referenceDate: record.referenceDate ? window.moment(record.referenceDate) : null,
-            startDate: record.startDate ? window.moment(record.startDate) : null,
-            scheduledDate: record.scheduledDate ? window.moment(record.scheduledDate) : null,
-            dueDate: record.dueDate ? window.moment(record.dueDate) : null,
-        });
-    }
-
     constructor({
         rrule,
         baseOnToday,
@@ -65,6 +54,17 @@ export class Recurrence {
         this.startDate = startDate;
         this.scheduledDate = scheduledDate;
         this.dueDate = dueDate;
+    }
+
+    public static fromRecurrenceRecord(record: RecurrenceRecord): Recurrence {
+        return new Recurrence({
+            rrule: rrulestr(record.rrule),
+            baseOnToday: record.baseOnToday,
+            referenceDate: record.referenceDate ? window.moment(record.referenceDate) : null,
+            startDate: record.startDate ? window.moment(record.startDate) : null,
+            scheduledDate: record.scheduledDate ? window.moment(record.scheduledDate) : null,
+            dueDate: record.dueDate ? window.moment(record.dueDate) : null,
+        });
     }
 
     public static fromText({

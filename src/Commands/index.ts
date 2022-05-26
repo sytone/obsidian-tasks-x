@@ -8,10 +8,6 @@ import { toggleDone } from './ToggleDone';
 export class Commands {
     private readonly plugin: Plugin;
 
-    private get app(): App {
-        return this.plugin.app;
-    }
-
     constructor({ plugin }: { plugin: Plugin }) {
         this.plugin = plugin;
 
@@ -37,5 +33,9 @@ export class Commands {
         //     icon: 'check-in-circle',
         //     editorCheckCallback: selectStatus,
         // });
+    }
+
+    private get app(): App {
+        return this.plugin.app;
     }
 }

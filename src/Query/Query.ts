@@ -27,65 +27,70 @@ type Sorting = {
     propertyInstance: number;
 };
 
+export class QueryRegularExpressions {
+    public static readonly priorityRegexp = /^priority (is )?(above|below)? ?(low|none|medium|high)/;
+
+    public static readonly happensRegexp = /^happens (before|after|on)? ?(.*)/;
+
+    public static readonly noStartString = 'no start date';
+    public static readonly hasStartString = 'has start date';
+    public static readonly startRegexp = /^starts (before|after|on)? ?(.*)/;
+
+    public static readonly noScheduledString = 'no scheduled date';
+    public static readonly hasScheduledString = 'has scheduled date';
+    public static readonly scheduledRegexp = /^scheduled (before|after|on)? ?(.*)/;
+
+    public static readonly noDueString = 'no due date';
+    public static readonly hasDueString = 'has due date';
+    public static readonly dueRegexp = /^due (before|after|on)? ?(.*)/;
+
+    public static readonly doneString = 'done';
+    public static readonly notDoneString = 'not done';
+    public static readonly doneRegexp = /^done (before|after|on)? ?(.*)/;
+
+    public static readonly statusRegexp = /^status (is not|is) (.*)/;
+
+    public static readonly pathRegexp = /^path (includes|does not include) (.*)/;
+    public static readonly descriptionRegexp = /^description (includes|does not include) (.*)/;
+
+    // Handles both ways of referencing the tags query.
+    public static readonly tagRegexp = /^(tag|tags) (includes|does not include|include|do not include) (.*)/;
+
+    // If a tag is specified the user can also add a number to specify
+    // which one to sort by if there is more than one.
+    public static readonly sortByRegexp =
+        /^sort by (urgency|status|priority|start|scheduled|due|done|path|description|tag)( reverse)?[\s]*(\d+)?/;
+
+    public static readonly groupByRegexp = /^group by (backlink|filename|folder|heading|path|status)/;
+
+    public static readonly headingRegexp = /^heading (includes|does not include) (.*)/;
+
+    public static readonly hideOptionsRegexp =
+        /^hide (task count|backlink|priority|start date|scheduled date|done date|due date|recurrence rule|edit button)/;
+    public static readonly shortModeRegexp = /^short/;
+
+    public static readonly recurringString = 'is recurring';
+    public static readonly notRecurringString = 'is not recurring';
+
+    public static readonly limitRegexp = /^limit (to )?(\d+)( tasks?)?/;
+    public static readonly excludeSubItemsString = 'exclude sub-items';
+
+    public static readonly commentRegexp = /^#.*/;
+    public static readonly commentReplacementRegexp = /(^#.*$(\r\n|\r|\n)?)/gm;
+}
+
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };
 
 export class Query implements IQuery {
+    public source: string;
+
     private _limit: number | undefined = undefined;
     private _layoutOptions: LayoutOptions = new LayoutOptions();
     private _filters: ((task: Task) => boolean)[] = [];
     private _error: string | undefined = undefined;
     private _sorting: Sorting[] = [];
     private _grouping: Grouping[] = [];
-    public source: string;
-    private readonly priorityRegexp = /^priority (is )?(above|below)? ?(low|none|medium|high)/;
-
-    private readonly happensRegexp = /^happens (before|after|on)? ?(.*)/;
-
-    private readonly noStartString = 'no start date';
-    private readonly hasStartString = 'has start date';
-    private readonly startRegexp = /^starts (before|after|on)? ?(.*)/;
-
-    private readonly noScheduledString = 'no scheduled date';
-    private readonly hasScheduledString = 'has scheduled date';
-    private readonly scheduledRegexp = /^scheduled (before|after|on)? ?(.*)/;
-
-    private readonly noDueString = 'no due date';
-    private readonly hasDueString = 'has due date';
-    private readonly dueRegexp = /^due (before|after|on)? ?(.*)/;
-
-    private readonly doneString = 'done';
-    private readonly notDoneString = 'not done';
-    private readonly doneRegexp = /^done (before|after|on)? ?(.*)/;
-
-    private readonly statusRegexp = /^status (is not|is) (.*)/;
-
-    private readonly pathRegexp = /^path (includes|does not include) (.*)/;
-    private readonly descriptionRegexp = /^description (includes|does not include) (.*)/;
-
-    // Handles both ways of referencing the tags query.
-    private readonly tagRegexp = /^(tag|tags) (includes|does not include|include|do not include) (.*)/;
-
-    // If a tag is specified the user can also add a number to specify
-    // which one to sort by if there is more than one.
-    private readonly sortByRegexp =
-        /^sort by (urgency|status|priority|start|scheduled|due|done|path|description|tag)( reverse)?[\s]*(\d+)?/;
-
-    private readonly groupByRegexp = /^group by (backlink|filename|folder|heading|path|status)/;
-
-    private readonly headingRegexp = /^heading (includes|does not include) (.*)/;
-
-    private readonly hideOptionsRegexp =
-        /^hide (task count|backlink|priority|start date|scheduled date|done date|due date|recurrence rule|edit button)/;
-    private readonly shortModeRegexp = /^short/;
-
-    private readonly recurringString = 'is recurring';
-    private readonly notRecurringString = 'is not recurring';
-
-    private readonly limitRegexp = /^limit (to )?(\d+)( tasks?)?/;
-    private readonly excludeSubItemsString = 'exclude sub-items';
-
-    private readonly commentRegexp = /^#.*/;
 
     constructor({ source }: { source: string }) {
         this.source = source;
@@ -96,88 +101,88 @@ export class Query implements IQuery {
                 switch (true) {
                     case line === '':
                         break;
-                    case line === this.doneString:
+                    case line === QueryRegularExpressions.doneString:
                         this._filters.push((task) => task.status === Status.DONE);
                         break;
-                    case line === this.notDoneString:
+                    case line === QueryRegularExpressions.notDoneString:
                         this._filters.push((task) => task.status !== Status.DONE);
                         break;
-                    case line === this.recurringString:
+                    case line === QueryRegularExpressions.recurringString:
                         this._filters.push((task) => task.recurrence !== null);
                         break;
-                    case line === this.notRecurringString:
+                    case line === QueryRegularExpressions.notRecurringString:
                         this._filters.push((task) => task.recurrence === null);
                         break;
-                    case line === this.excludeSubItemsString:
+                    case line === QueryRegularExpressions.excludeSubItemsString:
                         this._filters.push((task) => task.indentation === '');
                         break;
-                    case line === this.noStartString:
+                    case line === QueryRegularExpressions.noStartString:
                         this._filters.push((task) => task.startDate === null);
                         break;
-                    case line === this.noScheduledString:
+                    case line === QueryRegularExpressions.noScheduledString:
                         this._filters.push((task) => task.scheduledDate === null);
                         break;
-                    case line === this.noDueString:
+                    case line === QueryRegularExpressions.noDueString:
                         this._filters.push((task) => task.dueDate === null);
                         break;
-                    case line === this.hasStartString:
+                    case line === QueryRegularExpressions.hasStartString:
                         this._filters.push((task) => task.startDate !== null);
                         break;
-                    case line === this.hasScheduledString:
+                    case line === QueryRegularExpressions.hasScheduledString:
                         this._filters.push((task) => task.scheduledDate !== null);
                         break;
-                    case line === this.hasDueString:
+                    case line === QueryRegularExpressions.hasDueString:
                         this._filters.push((task) => task.dueDate !== null);
                         break;
-                    case this.shortModeRegexp.test(line):
+                    case QueryRegularExpressions.shortModeRegexp.test(line):
                         this._layoutOptions.shortMode = true;
                         break;
-                    case this.priorityRegexp.test(line):
+                    case QueryRegularExpressions.priorityRegexp.test(line):
                         this.parsePriorityFilter({ line });
                         break;
-                    case this.happensRegexp.test(line):
+                    case QueryRegularExpressions.happensRegexp.test(line):
                         this.parseHappensFilter({ line });
                         break;
-                    case this.startRegexp.test(line):
+                    case QueryRegularExpressions.startRegexp.test(line):
                         this.parseStartFilter({ line });
                         break;
-                    case this.scheduledRegexp.test(line):
+                    case QueryRegularExpressions.scheduledRegexp.test(line):
                         this.parseScheduledFilter({ line });
                         break;
-                    case this.dueRegexp.test(line):
+                    case QueryRegularExpressions.dueRegexp.test(line):
                         this.parseDueFilter({ line });
                         break;
-                    case this.doneRegexp.test(line):
+                    case QueryRegularExpressions.doneRegexp.test(line):
                         this.parseDoneFilter({ line });
                         break;
-                    case this.statusRegexp.test(line):
+                    case QueryRegularExpressions.statusRegexp.test(line):
                         this.parseStatusFilter({ line });
                         break;
-                    case this.pathRegexp.test(line):
+                    case QueryRegularExpressions.pathRegexp.test(line):
                         this.parsePathFilter({ line });
                         break;
-                    case this.descriptionRegexp.test(line):
+                    case QueryRegularExpressions.descriptionRegexp.test(line):
                         this.parseDescriptionFilter({ line });
                         break;
-                    case this.tagRegexp.test(line):
+                    case QueryRegularExpressions.tagRegexp.test(line):
                         this.parseTagFilter({ line });
                         break;
-                    case this.headingRegexp.test(line):
+                    case QueryRegularExpressions.headingRegexp.test(line):
                         this.parseHeadingFilter({ line });
                         break;
-                    case this.limitRegexp.test(line):
+                    case QueryRegularExpressions.limitRegexp.test(line):
                         this.parseLimit({ line });
                         break;
-                    case this.sortByRegexp.test(line):
+                    case QueryRegularExpressions.sortByRegexp.test(line):
                         this.parseSortBy({ line });
                         break;
-                    case this.groupByRegexp.test(line):
+                    case QueryRegularExpressions.groupByRegexp.test(line):
                         this.parseGroupBy({ line });
                         break;
-                    case this.hideOptionsRegexp.test(line):
+                    case QueryRegularExpressions.hideOptionsRegexp.test(line):
                         this.parseHideOptions({ line });
                         break;
-                    case this.commentRegexp.test(line):
+                    case QueryRegularExpressions.commentRegexp.test(line):
                         // Comment lines are ignored
                         break;
                     default:
@@ -210,6 +215,15 @@ export class Query implements IQuery {
         return this._error;
     }
 
+    private static parseDate(input: string): moment.Moment {
+        // Using start of day to correctly match on comparison with other dates (like equality).
+        return window.moment(chrono.parseDate(input)).startOf('day');
+    }
+
+    private static stringIncludesCaseInsensitive(haystack: string, needle: string): boolean {
+        return haystack.toLocaleLowerCase().includes(needle.toLocaleLowerCase());
+    }
+
     public applyQueryToTasks(tasks: Task[]): TaskGroups {
         this.filters.forEach((filter) => {
             tasks = tasks.filter(filter);
@@ -220,7 +234,7 @@ export class Query implements IQuery {
     }
 
     private parseHideOptions({ line }: { line: string }): void {
-        const hideOptionsMatch = line.match(this.hideOptionsRegexp);
+        const hideOptionsMatch = line.match(QueryRegularExpressions.hideOptionsRegexp);
         if (hideOptionsMatch !== null) {
             const option = hideOptionsMatch[1].trim().toLowerCase();
 
@@ -259,7 +273,7 @@ export class Query implements IQuery {
     }
 
     private parsePriorityFilter({ line }: { line: string }): void {
-        const priorityMatch = line.match(this.priorityRegexp);
+        const priorityMatch = line.match(QueryRegularExpressions.priorityRegexp);
         if (priorityMatch !== null) {
             const filterPriorityString = priorityMatch[3];
             let filterPriority: Priority | null = null;
@@ -300,7 +314,7 @@ export class Query implements IQuery {
     }
 
     private parseHappensFilter({ line }: { line: string }): void {
-        const happensMatch = line.match(this.happensRegexp);
+        const happensMatch = line.match(QueryRegularExpressions.happensRegexp);
         if (happensMatch !== null) {
             const filterDate = Query.parseDate(happensMatch[2]);
             if (!filterDate.isValid()) {
@@ -336,7 +350,7 @@ export class Query implements IQuery {
     }
 
     private parseStartFilter({ line }: { line: string }): void {
-        const startMatch = line.match(this.startRegexp);
+        const startMatch = line.match(QueryRegularExpressions.startRegexp);
         if (startMatch !== null) {
             const filterDate = Query.parseDate(startMatch[2]);
             if (!filterDate.isValid()) {
@@ -360,7 +374,7 @@ export class Query implements IQuery {
     }
 
     private parseScheduledFilter({ line }: { line: string }): void {
-        const scheduledMatch = line.match(this.scheduledRegexp);
+        const scheduledMatch = line.match(QueryRegularExpressions.scheduledRegexp);
         if (scheduledMatch !== null) {
             const filterDate = Query.parseDate(scheduledMatch[2]);
             if (!filterDate.isValid()) {
@@ -383,7 +397,7 @@ export class Query implements IQuery {
     }
 
     private parseDueFilter({ line }: { line: string }): void {
-        const dueMatch = line.match(this.dueRegexp);
+        const dueMatch = line.match(QueryRegularExpressions.dueRegexp);
         if (dueMatch !== null) {
             const filterDate = Query.parseDate(dueMatch[2]);
             if (!filterDate.isValid()) {
@@ -407,7 +421,7 @@ export class Query implements IQuery {
     }
 
     private parseDoneFilter({ line }: { line: string }): void {
-        const doneMatch = line.match(this.doneRegexp);
+        const doneMatch = line.match(QueryRegularExpressions.doneRegexp);
         if (doneMatch !== null) {
             const filterDate = Query.parseDate(doneMatch[2]);
             if (!filterDate.isValid()) {
@@ -438,7 +452,7 @@ export class Query implements IQuery {
      * @memberof Query
      */
     private parseStatusFilter({ line }: { line: string }): void {
-        const statusMatch = line.match(this.statusRegexp);
+        const statusMatch = line.match(QueryRegularExpressions.statusRegexp);
         if (statusMatch !== null) {
             const filterStatus = statusMatch[2];
 
@@ -459,7 +473,7 @@ export class Query implements IQuery {
     }
 
     private parsePathFilter({ line }: { line: string }): void {
-        const pathMatch = line.match(this.pathRegexp);
+        const pathMatch = line.match(QueryRegularExpressions.pathRegexp);
         if (pathMatch !== null) {
             const filterMethod = pathMatch[1];
             if (filterMethod === 'includes') {
@@ -483,7 +497,7 @@ export class Query implements IQuery {
      * @memberof Query
      */
     private parseTagFilter({ line }: { line: string }): void {
-        const tagMatch = line.match(this.tagRegexp);
+        const tagMatch = line.match(QueryRegularExpressions.tagRegexp);
         if (tagMatch !== null) {
             const filterMethod = tagMatch[2];
 
@@ -509,7 +523,7 @@ export class Query implements IQuery {
     }
 
     private parseDescriptionFilter({ line }: { line: string }): void {
-        const descriptionMatch = line.match(this.descriptionRegexp);
+        const descriptionMatch = line.match(QueryRegularExpressions.descriptionRegexp);
         if (descriptionMatch !== null) {
             const filterMethod = descriptionMatch[1];
             const globalFilter = getSettings().globalFilter;
@@ -544,7 +558,7 @@ export class Query implements IQuery {
     }
 
     private parseHeadingFilter({ line }: { line: string }): void {
-        const headingMatch = line.match(this.headingRegexp);
+        const headingMatch = line.match(QueryRegularExpressions.headingRegexp);
         if (headingMatch !== null) {
             const filterMethod = headingMatch[1].toLowerCase();
             if (filterMethod === 'includes') {
@@ -568,7 +582,7 @@ export class Query implements IQuery {
     }
 
     private parseLimit({ line }: { line: string }): void {
-        const limitMatch = line.match(this.limitRegexp);
+        const limitMatch = line.match(QueryRegularExpressions.limitRegexp);
         if (limitMatch !== null) {
             // limitMatch[2] is per regex always digits and therefore parsable.
             this._limit = Number.parseInt(limitMatch[2], 10);
@@ -578,7 +592,7 @@ export class Query implements IQuery {
     }
 
     private parseSortBy({ line }: { line: string }): void {
-        const fieldMatch = line.match(this.sortByRegexp);
+        const fieldMatch = line.match(QueryRegularExpressions.sortByRegexp);
         if (fieldMatch !== null) {
             this._sorting.push({
                 property: fieldMatch[1] as SortingProperty,
@@ -591,7 +605,7 @@ export class Query implements IQuery {
     }
 
     private parseGroupBy({ line }: { line: string }): void {
-        const fieldMatch = line.match(this.groupByRegexp);
+        const fieldMatch = line.match(QueryRegularExpressions.groupByRegexp);
         if (fieldMatch !== null) {
             this._grouping.push({
                 property: fieldMatch[1] as GroupingProperty,
@@ -599,14 +613,5 @@ export class Query implements IQuery {
         } else {
             this._error = 'do not understand query grouping';
         }
-    }
-
-    private static parseDate(input: string): moment.Moment {
-        // Using start of day to correctly match on comparison with other dates (like equality).
-        return window.moment(chrono.parseDate(input)).startOf('day');
-    }
-
-    private static stringIncludesCaseInsensitive(haystack: string, needle: string): boolean {
-        return haystack.toLocaleLowerCase().includes(needle.toLocaleLowerCase());
     }
 }
