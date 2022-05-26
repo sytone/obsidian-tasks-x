@@ -1,13 +1,14 @@
 import * as chrono from 'chrono-node';
-import { Group } from './Query/Group';
-import type { TaskGroups } from './Query/TaskGroups';
 
-import { getSettings } from './config/Settings';
-import { LayoutOptions } from './LayoutOptions';
+import { getSettings } from '../config/Settings';
+import { LayoutOptions } from '../LayoutOptions';
+import { Status } from '../Status';
+import { Priority, Task } from '../Task';
+import { StatusRegistry } from '../StatusRegistry';
 import { Sort } from './Sort';
-import { Status } from './Status';
-import { Priority, Task } from './Task';
-import { StatusRegistry } from './StatusRegistry';
+import type { TaskGroups } from './TaskGroups';
+import { Group } from './Group';
+import type { IQuery } from './QueryX';
 
 export type SortingProperty =
     | 'urgency'
@@ -29,14 +30,14 @@ type Sorting = {
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };
 
-export class Query {
+export class Query implements IQuery {
     private _limit: number | undefined = undefined;
     private _layoutOptions: LayoutOptions = new LayoutOptions();
     private _filters: ((task: Task) => boolean)[] = [];
     private _error: string | undefined = undefined;
     private _sorting: Sorting[] = [];
     private _grouping: Grouping[] = [];
-
+    public source: string;
     private readonly priorityRegexp = /^priority (is )?(above|below)? ?(low|none|medium|high)/;
 
     private readonly happensRegexp = /^happens (before|after|on)? ?(.*)/;
@@ -87,6 +88,7 @@ export class Query {
     private readonly commentRegexp = /^#.*/;
 
     constructor({ source }: { source: string }) {
+        this.source = source;
         source
             .split('\n')
             .map((line: string) => line.trim())

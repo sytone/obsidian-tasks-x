@@ -3,7 +3,7 @@
  */
 import moment from 'moment';
 import { getSettings, updateSettings } from '../src/config/Settings';
-import { Query } from '../src/Query';
+import { Query } from '../src/Query/Query';
 import { Status } from '../src/Status';
 import { Priority, Task } from '../src/Task';
 import { createTasksFromMarkdown } from './TestHelpers';

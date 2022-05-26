@@ -37,6 +37,7 @@ export type TaskRecord = {
     startDate: Date | null;
     scheduledDate: Date | null;
     dueDate: Date | null;
+    createdDate: Date | null;
     doneDate: Date | null;
     recurrence: RecurrenceRecord | null;
     blockLink: string;
@@ -540,7 +541,7 @@ export class Task {
         return `${this.indentation}- [${this.status.indicator}] ${this.toString().trim()}`;
     }
 
-    public toValueTable(): Object {
+    public toRecord(): TaskRecord {
         return {
             status: this.status,
             description: this.description,
@@ -552,12 +553,12 @@ export class Task {
             tags: this.tags,
             blockLink: this.blockLink,
             priority: this.priority,
-            startDate: this.startDate?.toDate(),
-            scheduledDate: this.scheduledDate?.toDate(),
-            dueDate: this.dueDate?.toDate(),
-            createdDate: this.startDate?.toDate(),
-            doneDate: this.doneDate?.toDate(),
-            recurrence: this.recurrence?.toRecord(),
+            startDate: this.startDate ? this.startDate.toDate() : null,
+            scheduledDate: this.scheduledDate ? this.scheduledDate.toDate() : null,
+            dueDate: this.dueDate ? this.dueDate.toDate() : null,
+            createdDate: this.startDate ? this.startDate.toDate() : null,
+            doneDate: this.doneDate ? this.doneDate.toDate() : null,
+            recurrence: this.recurrence ? this.recurrence.toRecord() : null,
         };
     }
 

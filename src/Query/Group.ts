@@ -1,5 +1,6 @@
-import type { Grouping, GroupingProperty } from '../Query';
 import type { Task } from '../Task';
+import { rootQueryService } from '../config/LogConfig';
+import type { Grouping, GroupingProperty } from './Query';
 import { TaskGroups } from './TaskGroups';
 
 /**
@@ -11,12 +12,16 @@ type Grouper = (task: Task) => string;
  * Implementation of the 'group by' instruction.
  */
 export class Group {
+    static log = rootQueryService.getChildCategory('Group');
+
     /**
      * Group a list of tasks, according to one or more task properties
      * @param grouping 0 or more Grouping values, one per 'group by' line
      * @param tasks The tasks that match the task block's Query
      */
     public static by(grouping: Grouping[], tasks: Task[]): TaskGroups {
+        this.log.debug('by executing query:', tasks);
+
         return new TaskGroups(grouping, tasks);
     }
 

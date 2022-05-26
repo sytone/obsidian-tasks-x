@@ -28,17 +28,18 @@ export class Feature {
         false,
     );
 
-    static readonly ENABLE_DB_STORE = new Feature(
-        'ENABLE_DB_STORE',
+    static readonly ENABLE_SQL_QUERY = new Feature(
+        'ENABLE_SQL_QUERY',
         0,
-        'Enable a store based in IndexedDB to allow better filtering and querying of the tasks and metadata.',
-        'Enabled IndexedDB store',
+        'Enable the ability to use SQL based queries to find tasks. This new syntax can be used by annotating the code block \n' +
+            ' with "taskx" instead of "task"',
+        'Enabled SQL based queries',
         false,
         false,
     );
 
     static get values(): Feature[] {
-        return [this.TASK_STATUS_MENU, this.TASK_STATUS_MENU, this.ENABLE_DB_STORE];
+        return [this.TASK_STATUS_MENU, this.APPEND_GLOBAL_FILTER, this.ENABLE_SQL_QUERY];
     }
 
     static get settingsFlags(): FeatureFlag {

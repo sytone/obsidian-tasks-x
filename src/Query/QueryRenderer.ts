@@ -1,30 +1,49 @@
 import { App, EventRef, MarkdownPostProcessorContext, MarkdownRenderChild, Plugin, TFile } from 'obsidian';
 
-import { State } from './Cache';
-//import { replaceTaskWithTasks } from './File';
-import { QueryX } from './QueryX';
-import type { GroupHeading } from './Query/GroupHeading';
-//import { TaskModal } from './TaskModal';
-import type { Events } from './Events';
-import type { Task } from './Task';
-import { rootQueryService } from './config/LogConfig';
+import { State } from '../Cache';
+import { replaceTaskWithTasks } from '../File';
+import { TaskModal } from '../TaskModal';
+import type { Events } from '../Events';
+import type { Task } from '../Task';
+import { rootQueryService } from '../config/LogConfig';
+import { Query } from './Query';
+import { IQuery, QueryX } from './QueryX';
+import type { GroupHeading } from './GroupHeading';
 
-export class QueryRendererX {
+export class QueryRenderer {
     private readonly app: App;
     private readonly events: Events;
+    log = rootQueryService.getChildCategory('QueryRenderer');
 
     constructor({ plugin, events }: { plugin: Plugin; events: Events }) {
         this.app = plugin.app;
         this.events = events;
 
-        plugin.registerMarkdownCodeBlockProcessor('tasksx', this._addQueryRenderChild.bind(this));
+        plugin.registerMarkdownCodeBlockProcessor('tasks', this._addQueryRenderChild.bind(this));
+        plugin.registerMarkdownCodeBlockProcessor('taskx', this._addQueryXRenderChild.bind(this));
     }
 
     public addQueryRenderChild = this._addQueryRenderChild.bind(this);
+    public addQueryXRenderChild = this._addQueryXRenderChild.bind(this);
 
     private async _addQueryRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
+        this.log.debug(`Adding Query Render child to context ${context.docId}`);
+
         context.addChild(
-            new QueryRenderChildX({
+            new QueryRenderChild({
+                app: this.app,
+                events: this.events,
+                container: element,
+                source,
+            }),
+        );
+    }
+
+    private async _addQueryXRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
+        this.log.debug(`Adding Query Render X child to context ${context.docId}`);
+
+        context.addChild(
+            new QueryRenderChild({
                 app: this.app,
                 events: this.events,
                 container: element,
@@ -34,15 +53,16 @@ export class QueryRendererX {
     }
 }
 
-class QueryRenderChildX extends MarkdownRenderChild {
+class QueryRenderChild extends MarkdownRenderChild {
     private readonly app: App;
     private readonly events: Events;
     private readonly source: string;
-    private query: QueryX;
+    private query: IQuery;
+    private queryType: string;
 
     private renderEventRef: EventRef | undefined;
     private queryReloadTimeout: NodeJS.Timeout | undefined;
-    log = rootQueryService.getChildCategory('QueryRenderChildX');
+    log = rootQueryService.getChildCategory('QueryRenderChild');
 
     constructor({
         app,
@@ -57,13 +77,16 @@ class QueryRenderChildX extends MarkdownRenderChild {
     }) {
         super(container);
 
-        this.log.info(`Creating QueryRenderChildX for source: ${source}`);
-
         this.app = app;
         this.events = events;
         this.source = source;
 
-        this.query = new QueryX({ source });
+        this.containerEl.className == 'block-language-taskx'
+            ? (this.query = new QueryX({ source: this.source }))
+            : (this.query = new Query({ source: this.source }));
+
+        this.containerEl.className == 'block-language-taskx' ? (this.queryType = 'taskx') : (this.queryType = 'tasks');
+        this.log.debug(`Query Render generated for class ${this.containerEl.className}`);
     }
 
     onload() {
@@ -101,7 +124,7 @@ class QueryRenderChildX extends MarkdownRenderChild {
         const millisecondsToMidnight = midnight.getTime() - now.getTime();
 
         this.queryReloadTimeout = setTimeout(() => {
-            this.query = new QueryX({ source: this.source });
+            this.query = new Query({ source: this.source });
             // Process the current cache state:
             this.events.triggerRequestCacheUpdate(this.render.bind(this));
             this.reloadQueryAtMidnight();
@@ -109,14 +132,16 @@ class QueryRenderChildX extends MarkdownRenderChild {
     }
 
     private async render({ tasks, state }: { tasks: Task[]; state: State }) {
-        this.log.debug(`Render called for ${tasks.length} tasks, state: ${state}`);
+        this.log.debug(`Render ${this.queryType} called for ${tasks.length} tasks, state: ${state}`);
         const content = this.containerEl.createEl('div');
         if (state === State.Warm && this.query.error === undefined) {
+            this.log.debug(`Applying query of type ${this.queryType}`);
             const tasksSortedLimitedGrouped = this.query.applyQueryToTasks(tasks);
+
             for (const group of tasksSortedLimitedGrouped.groups) {
                 // If there were no 'group by' instructions, group.groupHeadings
                 // will be empty, and no headings will be added.
-                QueryRenderChildX.addGroupHeadings(content, group.groupHeadings);
+                QueryRenderChild.addGroupHeadings(content, group.groupHeadings);
 
                 const { taskList } = await this.createTasksList({
                     tasks: group.tasks,
@@ -124,10 +149,12 @@ class QueryRenderChildX extends MarkdownRenderChild {
                 });
                 content.appendChild(taskList);
             }
-            //const totalTasksCount = tasksSortedLimitedGrouped.totalTasksCount();
-            // this.addTaskCount(content, totalTasksCount);
+            const totalTasksCount = tasksSortedLimitedGrouped.totalTasksCount();
+            this.addTaskCount(content, totalTasksCount);
         } else if (this.query.error !== undefined) {
-            content.setText(`Tasks query: ${this.query.error}`);
+            this.log.error(`Tasks query type ${this.queryType} error: ${this.query.error}`);
+            console.log(this.query);
+            content.setText(`Tasks query type ${this.queryType} error: ${this.query.error}`);
         } else {
             content.setText('Loading Tasks ...');
         }
@@ -153,7 +180,7 @@ class QueryRenderChildX extends MarkdownRenderChild {
             const listItem = await task.toLi({
                 parentUlElement: taskList,
                 listIndex: i,
-                layoutOptions: undefined, //this.query.layoutOptions,
+                layoutOptions: this.query.layoutOptions,
                 isFilenameUnique,
             });
 
@@ -161,16 +188,16 @@ class QueryRenderChildX extends MarkdownRenderChild {
             const footnotes = listItem.querySelectorAll('[data-footnote-id]');
             footnotes.forEach((footnote) => footnote.remove());
 
-            //const postInfo = listItem.createSpan();
-            // const shortMode = this.query.layoutOptions.shortMode;
+            const postInfo = listItem.createSpan();
+            const shortMode = this.query.layoutOptions.shortMode;
 
-            // if (!this.query.layoutOptions.hideBacklinks) {
-            //     this.addBacklinks(postInfo, task, shortMode, isFilenameUnique);
-            // }
+            if (!this.query.layoutOptions.hideBacklinks) {
+                this.addBacklinks(postInfo, task, shortMode, isFilenameUnique);
+            }
 
-            // if (!this.query.layoutOptions.hideEditButton) {
-            //     this.addEditButton(postInfo, task);
-            // }
+            if (!this.query.layoutOptions.hideEditButton) {
+                this.addEditButton(postInfo, task);
+            }
 
             taskList.appendChild(listItem);
         }
@@ -178,29 +205,29 @@ class QueryRenderChildX extends MarkdownRenderChild {
         return { taskList, tasksCount };
     }
 
-    // private addEditButton(postInfo: HTMLSpanElement, task: Task) {
-    //     const editTaskPencil = postInfo.createEl('a', {
-    //         cls: 'tasks-edit',
-    //     });
-    //     editTaskPencil.onClickEvent((event: MouseEvent) => {
-    //         event.preventDefault();
+    private addEditButton(postInfo: HTMLSpanElement, task: Task) {
+        const editTaskPencil = postInfo.createEl('a', {
+            cls: 'tasks-edit',
+        });
+        editTaskPencil.onClickEvent((event: MouseEvent) => {
+            event.preventDefault();
 
-    //         const onSubmit = (updatedTasks: Task[]): void => {
-    //             replaceTaskWithTasks({
-    //                 originalTask: task,
-    //                 newTasks: updatedTasks,
-    //             });
-    //         };
+            const onSubmit = (updatedTasks: Task[]): void => {
+                replaceTaskWithTasks({
+                    originalTask: task,
+                    newTasks: updatedTasks,
+                });
+            };
 
-    //         // Need to create a new instance every time, as cursor/task can change.
-    //         const taskModal = new TaskModal({
-    //             app: this.app,
-    //             task,
-    //             onSubmit,
-    //         });
-    //         taskModal.open();
-    //     });
-    // }
+            // Need to create a new instance every time, as cursor/task can change.
+            const taskModal = new TaskModal({
+                app: this.app,
+                task,
+                onSubmit,
+            });
+            taskModal.open();
+        });
+    }
 
     /**
      * Display headings for a group of tasks.
@@ -211,7 +238,7 @@ class QueryRenderChildX extends MarkdownRenderChild {
      */
     private static addGroupHeadings(content: HTMLDivElement, groupHeadings: GroupHeading[]) {
         for (const heading of groupHeadings) {
-            QueryRenderChildX.addGroupHeading(content, heading);
+            QueryRenderChild.addGroupHeading(content, heading);
         }
     }
 
@@ -237,53 +264,53 @@ class QueryRenderChildX extends MarkdownRenderChild {
         header.appendText(group.name);
     }
 
-    // private addBacklinks(
-    //     postInfo: HTMLSpanElement,
-    //     task: Task,
-    //     shortMode: boolean,
-    //     isFilenameUnique: boolean | undefined,
-    // ) {
-    //     postInfo.addClass('tasks-backlink');
-    //     if (!shortMode) {
-    //         postInfo.append(' (');
-    //     }
-    //     const link = postInfo.createEl('a');
+    private addBacklinks(
+        postInfo: HTMLSpanElement,
+        task: Task,
+        shortMode: boolean,
+        isFilenameUnique: boolean | undefined,
+    ) {
+        postInfo.addClass('tasks-backlink');
+        if (!shortMode) {
+            postInfo.append(' (');
+        }
+        const link = postInfo.createEl('a');
 
-    //     link.href = task.path;
-    //     link.setAttribute('data-href', task.path);
-    //     link.rel = 'noopener';
-    //     link.target = '_blank';
-    //     link.addClass('internal-link');
-    //     if (shortMode) {
-    //         link.addClass('internal-link-short-mode');
-    //     }
+        link.href = task.path;
+        link.setAttribute('data-href', task.path);
+        link.rel = 'noopener';
+        link.target = '_blank';
+        link.addClass('internal-link');
+        if (shortMode) {
+            link.addClass('internal-link-short-mode');
+        }
 
-    //     if (task.precedingHeader !== null) {
-    //         link.href = link.href + '#' + task.precedingHeader;
-    //         link.setAttribute('data-href', link.getAttribute('data-href') + '#' + task.precedingHeader);
-    //     }
+        if (task.precedingHeader !== null) {
+            link.href = link.href + '#' + task.precedingHeader;
+            link.setAttribute('data-href', link.getAttribute('data-href') + '#' + task.precedingHeader);
+        }
 
-    //     let linkText: string;
-    //     if (shortMode) {
-    //         linkText = ' 🔗';
-    //     } else {
-    //         linkText = task.getLinkText({ isFilenameUnique }) ?? '';
-    //     }
+        let linkText: string;
+        if (shortMode) {
+            linkText = ' 🔗';
+        } else {
+            linkText = task.getLinkText({ isFilenameUnique }) ?? '';
+        }
 
-    //     link.setText(linkText);
-    //     if (!shortMode) {
-    //         postInfo.append(')');
-    //     }
-    // }
+        link.setText(linkText);
+        if (!shortMode) {
+            postInfo.append(')');
+        }
+    }
 
-    // private addTaskCount(content: HTMLDivElement, tasksCount: number) {
-    //     if (!this.query.layoutOptions.hideTaskCount) {
-    //         content.createDiv({
-    //             text: `${tasksCount} task${tasksCount !== 1 ? 's' : ''}`,
-    //             cls: 'tasks-count',
-    //         });
-    //     }
-    // }
+    private addTaskCount(content: HTMLDivElement, tasksCount: number) {
+        if (!this.query.layoutOptions.hideTaskCount) {
+            content.createDiv({
+                text: `${tasksCount} task${tasksCount !== 1 ? 's' : ''}`,
+                cls: 'tasks-count',
+            });
+        }
+    }
 
     private isFilenameUnique({ task }: { task: Task }): boolean | undefined {
         // Will match the filename without extension (the file's "basename").

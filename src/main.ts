@@ -7,8 +7,7 @@ import { Events } from './Events';
 import { initializeFile } from './File';
 import { InlineRenderer } from './InlineRenderer';
 import { newLivePreviewExtension } from './LivePreviewExtension';
-import { QueryRenderer } from './QueryRenderer';
-import { QueryRendererX } from './QueryRendererX';
+import { QueryRenderer } from './Query/QueryRenderer';
 import { getSettings, updateSettings } from './config/Settings';
 import { SettingsTab } from './config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
@@ -18,7 +17,6 @@ export default class TasksPlugin extends Plugin {
     private cache: Cache | undefined;
     public inlineRenderer: InlineRenderer | undefined;
     public queryRenderer: QueryRenderer | undefined;
-    public queryRendererX: QueryRendererX | undefined;
     public statusRegistry: StatusRegistry | undefined;
     log = rootMain.getChildCategory('TasksPlugin');
 
@@ -48,7 +46,6 @@ export default class TasksPlugin extends Plugin {
             });
             this.inlineRenderer = new InlineRenderer({ plugin: this });
             this.queryRenderer = new QueryRenderer({ plugin: this, events });
-            this.queryRendererX = new QueryRendererX({ plugin: this, events });
             this.statusRegistry = StatusRegistry.getInstance();
 
             await this.loadTaskStatuses();
