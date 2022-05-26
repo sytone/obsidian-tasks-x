@@ -49,6 +49,7 @@
     },
     "dependencies": {
         "@codemix/ts-sql": "^1.0.0",
+        "alasql": "^1.7.3",
         "chrono-node": "2.2.6",
         "reflect-metadata": "^0.1.13",
         "rrule": "^2.6.8",

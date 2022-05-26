@@ -25,21 +25,19 @@ yarn run build:dev
 if ($?) {
     Write-Output 'Build successful'
 
-    $filesToLink = @('main.js', 'styles.css', 'manifest.json')
+    # if(-not (Test-Path $ObsidianPluginRoot/$PluginFolderName)) {
+    #     New-Item -Path $ObsidianPluginRoot/$PluginFolderName -ItemType Directory
+    # }
 
-    if(-not (Test-Path $ObsidianPluginRoot/$PluginFolderName)) {
-        New-Item -Path $ObsidianPluginRoot/$PluginFolderName -ItemType Directory
-    }
-
-    foreach ($file in $filesToLink ) {
-        if ((Get-Item "$ObsidianPluginRoot/$PluginFolderName/$file" ).LinkType -ne 'SymbolicLink') {
-            Write-Output "Removing $file from plugin folder and linking"
-            Remove-Item "$ObsidianPluginRoot/$PluginFolderName/$file" -Force
-            New-Item -ItemType SymbolicLink -Path "$ObsidianPluginRoot/$PluginFolderName/$file" -Target "$repoRoot/$file"
+    # foreach ($file in $filesToLink ) {
+        if ((Get-Item "$ObsidianPluginRoot/$PluginFolderName" ).LinkType -ne 'Junction') {
+            Write-Output "Removing $ObsidianPluginRoot/$PluginFolderName from plugin folder and linking"
+            Remove-Item "$ObsidianPluginRoot/$PluginFolderName" -Force
+            New-Item -ItemType Junction -Path "$ObsidianPluginRoot/$PluginFolderName" -Target "$repoRoot"
         } else {
             (Get-Item "$ObsidianPluginRoot/$PluginFolderName/$file" ).LinkType
         }
-    }
+    # }
 
     $hasHotReload = Test-Path "$ObsidianPluginRoot/$PluginFolderName/.hotreload"
 
