@@ -1,6 +1,6 @@
 import { Editor, MarkdownView, View } from 'obsidian';
 
-import { Task } from '../Task';
+import { Task, TaskRegularExpressions } from '../Task';
 
 export const toggleDone = (checking: boolean, editor: Editor, view: View) => {
     if (checking) {
@@ -64,7 +64,7 @@ const toggleLine = ({ line, path }: { line: string; path: string }): string => {
         // 3. a simple text line
 
         // The task regex will match checklist items.
-        const regexMatch = line.match(Task.taskRegex);
+        const regexMatch = line.match(TaskRegularExpressions.taskRegex);
         if (regexMatch !== null) {
             toggledLine = toggleChecklistItem({ regexMatch });
         } else {

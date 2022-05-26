@@ -2,7 +2,7 @@ import { App, Editor, MarkdownView, View } from 'obsidian';
 import { StatusRegistry } from 'StatusRegistry';
 import { TaskModal } from '../TaskModal';
 import { Status } from '../Status';
-import { Priority, Task } from '../Task';
+import { Priority, Task, TaskRegularExpressions } from '../Task';
 
 export const createOrEdit = (checking: boolean, editor: Editor, view: View, app: App) => {
     if (checking) {
@@ -83,11 +83,11 @@ const taskFromLine = ({ line, path }: { line: string; path: string }): Task => {
     const status = StatusRegistry.getInstance().byIndicator(statusString);
     let description: string = nonTaskMatch[4];
 
-    const blockLinkMatch = line.match(Task.blockLinkRegex);
+    const blockLinkMatch = line.match(TaskRegularExpressions.blockLinkRegex);
     const blockLink = blockLinkMatch !== null ? blockLinkMatch[0] : '';
 
     if (blockLink !== '') {
-        description = description.replace(Task.blockLinkRegex, '');
+        description = description.replace(TaskRegularExpressions.blockLinkRegex, '');
     }
 
     return new Task({
