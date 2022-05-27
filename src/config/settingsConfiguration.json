@@ -102,7 +102,7 @@
     "notice": {
       "class": "",
       "text": "",
-      "html": "<p>If you need help with this plugin, please check out the <a href='https://schemar.github.io/obsidian-tasks/'>Tasks documentation</a>. Click on issues below if you find something that the documentation does not explain or if you find something now working as expected.</p> <a href='https://github.com/schemar/obsidian-tasks/issues'><img alt='GitHub issues' src='https://img.shields.io/github/issues/schemar/obsidian-tasks?style=for-the-badge'></a> <img alt='GitHub package.json version' src='https://img.shields.io/github/package-json/v/schemar/obsidian-tasks?style=for-the-badge'> <img alt='GitHub all releases' src='https://img.shields.io/github/downloads/schemar/obsidian-tasks/total?style=for-the-badge'>"
+      "html": "<p>If you need help with this plugin, please check out the <a href='https://schemar.github.io/obsidian-tasks/'>Tasks documentation</a>. Click on issues below if you find something that the documentation does not explain or if you find something now working as expected.</p> <a href='https://github.com/sytone/obsidian-tasks-x/issues'><img alt='GitHub issues' src='https://img.shields.io/github/issues/sytone/obsidian-tasks-x?style=for-the-badge'></a> <img alt='GitHub package.json version' src='https://img.shields.io/github/package-json/v/sytone/obsidian-tasks-x?style=for-the-badge'> <img alt='GitHub all releases' src='https://img.shields.io/github/downloads/sytone/obsidian-tasks-x/total?style=for-the-badge'>"
     },
     "settings": []
   }

@@ -1,8 +1,10 @@
-<h1 align="center">Obsidian Tasks</h1>
+<h1 align="center">Obsidian Tasks X</h1>
 
-<p align="center">Task management for the <a href="https://obsidian.md/">Obsidian</a> knowledge base.</p>
+<p align="center">Task management for the <a href="https://obsidian.md/">Obsidian</a> knowledge base. With X Powers</p>
 
 <p align="center"><a href="https://schemar.github.io/obsidian-tasks/">Documentation</a></p>
+
+Note: This is a fork of the Tasks plugin for obsidian and will be kept in sync with it where possible. This for provides extended query capabilities and long term should be merged back into the main plugin. Until then enjoy the power of X.
 
 Track tasks across your entire vault. Query them and mark them as done wherever you want. Supports due dates, recurring tasks (repetition), done dates, sub-set of checklist items, and filtering.
 
@@ -10,40 +12,40 @@ _You can toggle the task status in any view or query and it will update the sour
 
 ---
 
-For changes in each release, please check the releases page: https://github.com/schemar/obsidian-tasks/releases
+For changes in each release, please check the releases page: <https://github.com/sytone/obsidian-tasks-x/releases>
 
 ---
 
 ## Screenshots
 
--   _All screenshots assume the [global filter](#filtering-checklist-items) `#task` which is not set by default (see also [installation](#installation))._
--   _The theme is [Obsidian Atom](https://github.com/kognise/obsidian-atom)._
+- _All screenshots assume the [global filter](#filtering-checklist-items) `#task` which is not set by default (see also [installation](#installation))._
+- _The theme is [Obsidian Atom](https://github.com/kognise/obsidian-atom)._
 
-![ACME Tasks](https://github.com/schemar/obsidian-tasks/raw/main/resources/screenshots/acme.png)
+![ACME Tasks](https://github.com/sytone/obsidian-tasks-x/raw/main/resources/screenshots/acme.png)
 The `ACME` note has some tasks.
 
-![Important Project Tasks](https://github.com/schemar/obsidian-tasks/raw/main/resources/screenshots/important_project.png)
+![Important Project Tasks](https://github.com/sytone/obsidian-tasks-x/raw/main/resources/screenshots/important_project.png)
 The `Important Project` note also has some tasks.
 
-![Tasks Queries](https://github.com/schemar/obsidian-tasks/raw/main/resources/screenshots/tasks_queries.png)
+![Tasks Queries](https://github.com/sytone/obsidian-tasks-x/raw/main/resources/screenshots/tasks_queries.png)
 The `Tasks` note gathers all tasks from the vault and displays them using queries.
 
-![Create or Edit Modal](https://github.com/schemar/obsidian-tasks/raw/main/resources/screenshots/modal.png)
+![Create or Edit Modal](https://github.com/sytone/obsidian-tasks-x/raw/main/resources/screenshots/modal.png)
 The `Tasks: Create or edit` command helps you when editing a task.
 
 ## Installation
 
 Follow the steps below to install Tasks.
 
-1. Search for "Tasks" in Obsidian's community plugins browser
-2. Enable the plugin in your Obsidian settings (find "Tasks" under "Community plugins").
+1. Search for "Tasks X" in Obsidian's community plugins browser
+2. Enable the plugin in your Obsidian settings (find "Tasks X" under "Community plugins").
 3. Check the settings. It makes sense to set the global filter early on (if you want one).
 4. Replace the "Toggle checklist status" hotkey with "Tasks: Toggle Done".
     - I recommend you remove the original toggle hotkey and set the "Tasks" toggle to `Ctrl + Enter` (or `Cmd + Enter` on a mac).
 
 ## Documentation
 
-For user documentation, please check [https://schemar.github.io/obsidian-tasks/](https://schemar.github.io/obsidian-tasks/).
+For user documentation, please check [https://sytone.github.io/obsidian-tasks-x/](https://sytone.github.io/obsidian-tasks-x/).
 
 ## Development
 
