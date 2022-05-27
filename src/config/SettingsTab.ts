@@ -1,9 +1,14 @@
 import { Notice, PluginSettingTab, Setting } from 'obsidian';
 import type TasksPlugin from '../main';
 import { Feature } from './Feature';
-import { getSettings, isFeatureEnabled, toggleFeature, updateSettings } from './Settings';
+import { getSettings, isFeatureEnabled, toggleFeature, updateGeneralSetting, updateSettings } from './Settings';
+import settingsJson from './settingsConfiguration.json';
 
 export class SettingsTab extends PluginSettingTab {
+    customFunctions: { [K: string]: Function } = {
+        insertTaskStatusSettings: this.insertTaskStatusSettings,
+        insertFeatureFlags: this.insertFeatureFlags,
+    };
     private readonly plugin: TasksPlugin;
 
     constructor({ plugin }: { plugin: TasksPlugin }) {
@@ -14,87 +19,101 @@ export class SettingsTab extends PluginSettingTab {
 
     public display(): void {
         const { containerEl } = this;
-        const { status_types } = getSettings();
+        this.containerEl.empty();
+        this.containerEl.addClass('tasks-settings');
+        settingsJson.forEach((heading) => {
+            const detailsContainer = containerEl.createEl('details', {
+                cls: 'tasks-nested-settings',
+                attr: {
+                    ...(heading.open ? { open: true } : {}),
+                },
+            });
+            detailsContainer.empty();
+            const summary = detailsContainer.createEl('summary');
+            new Setting(summary).setHeading().setName(heading.text);
+            summary.createDiv('collapser').createDiv('handle');
 
-        containerEl.empty();
-        containerEl.createEl('h2', { text: 'Tasks Settings' });
-        containerEl.createEl('p', {
-            cls: 'tasks-setting-important',
-            text: 'Changing any settings requires a restart of obsidian.',
+            // detailsContainer.createEl(heading.level as keyof HTMLElementTagNameMap, { text: heading.text });
+
+            if (heading.notice !== null) {
+                const notice = detailsContainer.createEl('div', {
+                    cls: heading.notice.class,
+                    text: heading.notice.text,
+                });
+                if (heading.notice.html !== null) {
+                    notice.insertAdjacentHTML('beforeend', heading.notice.html);
+                }
+            }
+
+            heading.settings.forEach((setting) => {
+                if (setting.type === 'checkbox') {
+                    new Setting(detailsContainer)
+                        .setName(setting.name)
+                        .setDesc(setting.description)
+                        .addToggle((toggle) => {
+                            const settings = getSettings();
+
+                            toggle
+                                .setValue(<boolean>settings.generalSettings[setting.settingName])
+                                .onChange(async (value) => {
+                                    updateGeneralSetting(setting.settingName, value);
+                                    await this.plugin.saveSettings();
+                                });
+                        });
+                } else if (setting.type === 'text') {
+                    new Setting(detailsContainer)
+                        .setName(setting.name)
+                        .setDesc(setting.description)
+                        .addText((text) => {
+                            const settings = getSettings();
+                            text.setPlaceholder(setting.placeholder.toString())
+                                .setValue(settings.generalSettings[setting.settingName].toString())
+                                .onChange(async (value) => {
+                                    updateGeneralSetting(setting.settingName, value);
+                                    await this.plugin.saveSettings();
+                                });
+                        });
+                } else if (setting.type === 'function') {
+                    this.customFunctions[setting.settingName](detailsContainer);
+                }
+
+                if (setting.notice !== null) {
+                    const notice = detailsContainer.createEl('p', {
+                        cls: setting.notice.class,
+                        text: setting.notice.text,
+                    });
+                    if (setting.notice.html !== null) {
+                        notice.insertAdjacentHTML('beforeend', setting.notice.html);
+                    }
+                }
+            });
         });
+    }
 
-        new Setting(containerEl)
-            .setName('Global task filter')
-            .setDesc('The global filter will be applied to all checklist items.')
-            .addText((text) => {
-                const settings = getSettings();
-
-                text.setPlaceholder('#task')
-                    .setValue(settings.globalFilter)
-                    .onChange(async (value) => {
-                        updateSettings({ globalFilter: value });
+    insertFeatureFlags(containerEl: HTMLElement) {
+        Feature.values.forEach((feature) => {
+            new Setting(containerEl)
+                .setName(feature.displayName)
+                .setDesc(feature.description + ' Is Stable? ' + feature.stable)
+                .addToggle((toggle) => {
+                    toggle.setValue(isFeatureEnabled(feature.internalName)).onChange(async (value) => {
+                        const updatedFeatures = toggleFeature(feature.internalName, value);
+                        updateSettings({ features: updatedFeatures });
 
                         await this.plugin.saveSettings();
+                        // Force refresh
+                        this.display();
                     });
-            });
-        containerEl.createEl('div', {
-            cls: 'setting-item-description',
-            text:
-                'The global filter will be applied to all checklist items to filter out "non-task" checklist items.\n' +
-                'A checklist item must include the specified string in its description in order to be considered a task.\n' +
-                'For example, if you set the global filter to `#task`, the Tasks plugin will only handle checklist items tagged with `#task`.\n' +
-                'Other checklist items will remain normal checklist items and not appear in queries or get a done date set.\n' +
-                'Leave empty if you want all checklist items from your vault to be tasks managed by this plugin.',
+                });
         });
-
-        new Setting(containerEl)
-            .setName('Remove global filter from description')
-            .setDesc(
-                'Enabling this removes the string that you set as global filter from the task description when displaying a task.',
-            )
-            .addToggle((toggle) => {
-                const settings = getSettings();
-
-                toggle.setValue(settings.removeGlobalFilter).onChange(async (value) => {
-                    updateSettings({ removeGlobalFilter: value });
-
-                    await this.plugin.saveSettings();
-                });
-            });
-
-        new Setting(containerEl)
-            .setName('Set done date on every completed task')
-            .setDesc('Enabling this will add a timestamp ✅ YYYY-MM-DD at the end when a task is toggled to done')
-            .addToggle((toogle) => {
-                const settings = getSettings();
-                toogle.setValue(settings.setDoneDate).onChange(async (value) => {
-                    updateSettings({ setDoneDate: value });
-                    await this.plugin.saveSettings();
-                });
-            });
-
+    }
+    insertTaskStatusSettings(containerEl: HTMLElement) {
         /* -------------------------------------------------------------------------- */
         /*                       Settings for Custom Task Status                      */
         /* -------------------------------------------------------------------------- */
-
-        containerEl.createEl('hr');
-        containerEl.createEl('h3', { text: 'Tasks Status Types' });
-        const customStatusIntro = containerEl.createEl('p', {
-            text: 'If you want to have the tasks support additional statuses outside of the default ones add them here with the status indicator. ',
-        });
-        customStatusIntro.insertAdjacentHTML(
-            'beforeend',
-            'By default the following statuses are supported:\n' +
-                '<ul>\n' +
-                '<li><strong>- [ ] Todo</strong> - This has a {space} between the brackets. Will toggle to In Progress.</li>\n' +
-                '<li><strong>- [/] In Progress</strong> - This has a {/} between the brackets. Will toggle to Done.</li>\n' +
-                '<li><strong>- [x] Done</strong> - This has a {x} between the brackets. Will toggle to Todo.</li>\n' +
-                '<li><strong>- [-] Cancelled</strong> - This has a {-} between the brackets. Will toggle to Todo.</li>\n' +
-                '</ul>\n',
-        );
-
+        const { status_types } = getSettings();
         status_types.forEach((status_type) => {
-            new Setting(this.containerEl)
+            new Setting(containerEl)
                 .addExtraButton((extra) => {
                     extra
                         .setIcon('cross')
@@ -157,7 +176,7 @@ export class SettingsTab extends PluginSettingTab {
 
         containerEl.createEl('div');
 
-        const setting = new Setting(this.containerEl).addButton((button) => {
+        const setting = new Setting(containerEl).addButton((button) => {
             button
                 .setButtonText('Add New Task Status')
                 .setCta()
@@ -173,7 +192,7 @@ export class SettingsTab extends PluginSettingTab {
         });
         setting.infoEl.remove();
 
-        const addStatusesSupportedByMinimalTheme = new Setting(this.containerEl).addButton((button) => {
+        const addStatusesSupportedByMinimalTheme = new Setting(containerEl).addButton((button) => {
             button
                 .setButtonText('Add all Status types supported by Minimal Theme')
                 .setCta()
@@ -226,48 +245,6 @@ export class SettingsTab extends PluginSettingTab {
                 });
         });
         addStatusesSupportedByMinimalTheme.infoEl.remove();
-
-        containerEl.createEl('hr');
-        containerEl.createEl('h3', { text: 'Documentation and Support' });
-        const supportAndInfoDiv = containerEl.createEl('div');
-
-        supportAndInfoDiv.insertAdjacentHTML(
-            'beforeend',
-            '<p>If you need help with this plugin, please check out the <a href="https://schemar.github.io/obsidian-tasks/">Tasks documentation</a>. Click on issues below if you find something that the documentation does not explain or if you find something now working as expected.</p>\n' +
-                '<a href="https://github.com/schemar/obsidian-tasks/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/schemar/obsidian-tasks?style=for-the-badge"></a>\n' +
-                '<img alt="GitHub package.json version" src="https://img.shields.io/github/package-json/v/schemar/obsidian-tasks?style=for-the-badge">\n' +
-                '<img alt="GitHub all releases" src="https://img.shields.io/github/downloads/schemar/obsidian-tasks/total?style=for-the-badge">\n' +
-                '',
-        );
-
-        containerEl.createEl('hr');
-        containerEl.createEl('h3', {
-            text: 'Optional or in development features',
-        });
-        const featureFlagEnablement = containerEl.createEl('div');
-
-        featureFlagEnablement.insertAdjacentHTML(
-            'beforeend',
-            '<p>The following features are in development or optional, stability is indicated \n' +
-                'next to the feature. While we try to make sure there is good test coverage and validation \n' +
-                'for every change there is always a chance of bugs.\n' +
-                '</p>',
-        );
-        Feature.values.forEach((feature) => {
-            new Setting(containerEl)
-                .setName(feature.displayName)
-                .setDesc(feature.description + ' Is Stable? ' + feature.stable)
-                .addToggle((toggle) => {
-                    toggle.setValue(isFeatureEnabled(feature.internalName)).onChange(async (value) => {
-                        const updatedFeatures = toggleFeature(feature.internalName, value);
-                        updateSettings({ features: updatedFeatures });
-
-                        await this.plugin.saveSettings();
-                        // Force refresh
-                        this.display();
-                    });
-                });
-        });
     }
 
     private async updateStatusSetting(

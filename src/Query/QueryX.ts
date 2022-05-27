@@ -72,8 +72,7 @@ export class QueryX implements IQuery {
             return task.toRecord();
         });
         const queryResult: TaskRecord[] = alasql(this.source, [records]);
-        console.log('queryResult', queryResult);
-        this.log.debug('applyQueryToTasks queryResult:', queryResult);
+        this.log.debug('applyQueryToTasks queryResult:', queryResult.length);
         const foundTasks: Task[] = queryResult.map((task) => {
             return Task.fromTaskRecord(task);
         });

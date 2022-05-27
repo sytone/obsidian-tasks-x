@@ -6,6 +6,11 @@ export interface Settings {
     setDoneDate: boolean;
     status_types: Array<[string, string, string]>;
     features: FeatureFlag;
+    generalSettings: SettingsMap;
+}
+
+interface SettingsMap {
+    [key: string]: string | boolean;
 }
 
 const defaultSettings: Settings = {
@@ -14,6 +19,11 @@ const defaultSettings: Settings = {
     setDoneDate: true,
     status_types: [['', '', '']],
     features: Feature.settingsFlags,
+    generalSettings: {
+        globalFilter: '',
+        removeGlobalFilter: false,
+        setDoneDate: true,
+    },
 };
 
 let settings: Settings = { ...defaultSettings };
@@ -31,6 +41,12 @@ export const getSettings = (): Settings => {
 
 export const updateSettings = (newSettings: Partial<Settings>): Settings => {
     settings = { ...settings, ...newSettings };
+
+    return getSettings();
+};
+
+export const updateGeneralSetting = (name: string, value: string | boolean): Settings => {
+    settings.generalSettings[name] = value;
 
     return getSettings();
 };

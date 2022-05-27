@@ -3,6 +3,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "inlineSources": true,
     "sourceMap": true,
