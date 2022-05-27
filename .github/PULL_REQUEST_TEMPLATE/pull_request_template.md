@@ -28,4 +28,4 @@
 - [ ] I have updated the documentation accordingly.
 - [ ] My change has adequate Unit Test coverage.
 
-By creating a Pull Request you agree to our [Code of Conduct](https://github.com/sytone/obsidian-tasks-x/blob/main/CODE_OF_CONDUCT.md). For further guidance on contributing please see [contributing guide](https://github.com/sytone/obsidian-tasks-x/blob/main/CONTRIBUTING.md)
+By creating a Pull Request you agree to our [Code of Conduct](https://github.com/sytone/obsidian-tasks-x/blob/tasks-x/main/CODE_OF_CONDUCT.md). For further guidance on contributing please see [contributing guide](https://github.com/sytone/obsidian-tasks-x/blob/tasks-x/main/CONTRIBUTING.md)

@@ -26,7 +26,7 @@ if ($DocumentationOnly) {
     $publish = Read-Host 'Update documentation? (y/n)'
     if ($publish -ieq 'y') {
         git switch gh-pages
-        git merge main
+        git merge tasks-x/main
         $env:LEFTHOOK = 0
         git push
         git switch -
@@ -70,7 +70,7 @@ if ($DocumentationOnly) {
     $publish = Read-Host 'Update documentation? (y/n)'
     if ($publish -ieq 'y') {
         git switch gh-pages
-        git merge main
+        git merge tasks-x/main
         $env:LEFTHOOK = 0
         git push
         git switch -
