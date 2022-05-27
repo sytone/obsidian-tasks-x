@@ -1,10 +1,10 @@
 {
   "id": "obsidian-tasks-x-plugin",
   "name": "Tasks X",
-  "version": "1.5.1",
+  "version": "2.0.0",
   "minAppVersion": "0.13.21",
-  "description": "Task management for Obsidian",
-  "author": "Martin Schenck",
-  "authorUrl": "https://github.com/schemar",
+  "description": "Task management for Obsidian, X powered. This is a fork of the Tasks plugin.",
+  "author": "Jon Bullen original by Martin Schenck",
+  "authorUrl": "https://github.com/sytone",
   "isDesktopOnly": false
 }

@@ -1,7 +1,7 @@
 {
-    "name": "obsidian-tasks",
-    "version": "1.5.1",
-    "description": "Task management for the Obsidian knowledge base",
+    "name": "obsidian-tasks-x",
+    "version": "2.0.0",
+    "description": "Task management for Obsidian, X powered. This is a fork of the Tasks plugin.",
     "main": "main.js",
     "scripts": {
         "dev": "node esbuild.config.mjs",
