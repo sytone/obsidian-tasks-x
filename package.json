@@ -49,6 +49,8 @@
     },
     "dependencies": {
         "@codemix/ts-sql": "^1.0.0",
+        "@commitlint/cli": "^17.0.1",
+        "@commitlint/config-conventional": "^17.0.0",
         "alasql": "^1.7.3",
         "chrono-node": "2.2.6",
         "reflect-metadata": "^0.1.13",
