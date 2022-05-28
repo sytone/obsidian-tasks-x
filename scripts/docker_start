@@ -8,6 +8,9 @@ message () {
     printf "\n#\n#\n# %s\n#\n#\n" "$1"
 }
 
+# move to the docs root to do the docker creation.
+cd ../docs
+
 # Check if a built image exists.
 # If not, we need to build it first.
 if [[ "$(docker images -q $TAG 2>/dev/null)" == "" ]]; then

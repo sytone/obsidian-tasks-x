@@ -1,6 +1,6 @@
 title: Obsidian Tasks X Powered
 description: Task management for Obsidian, X Powered
-baseurl: '/obsidian-tasks' # the subpath of your site, e.g. /blog
+baseurl: '/obsidian-tasks-x' # the subpath of your site, e.g. /blog
 url: 'https://sytone.github.io' # the base hostname & protocol for your site, e.g. http://example.com
 
 permalink: pretty
