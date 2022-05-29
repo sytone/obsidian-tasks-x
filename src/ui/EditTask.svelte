@@ -3,10 +3,10 @@
     import { Status } from '../Status';
     import { onMount } from 'svelte';
     import { Recurrence } from '../Recurrence';
-    import { getSettings, isFeatureEnabled } from '../config/Settings';
+    import { getSettings, isFeatureEnabled } from '../Config/Settings';
     import { Priority, Task } from '../Task';
     import { StatusRegistry } from '../StatusRegistry';
-    import { Feature } from '../config/Feature';
+    import { Feature } from '../Config/Feature';
 
     export let task: Task;
     export let onSubmit: (updatedTasks: Task[]) => void | Promise<void>;
@@ -43,13 +43,9 @@
         if (!editableTask.startDate) {
             parsedStartDate = '<i>no start date</>';
         } else {
-            const parsed = chrono.parseDate(
-                editableTask.startDate,
-                new Date(),
-                {
-                    forwardDate: true,
-                },
-            );
+            const parsed = chrono.parseDate(editableTask.startDate, new Date(), {
+                forwardDate: true,
+            });
             if (parsed !== null) {
                 parsedStartDate = window.moment(parsed).format('YYYY-MM-DD');
             } else {
@@ -62,17 +58,11 @@
         if (!editableTask.scheduledDate) {
             parsedScheduledDate = '<i>no scheduled date</>';
         } else {
-            const parsed = chrono.parseDate(
-                editableTask.scheduledDate,
-                new Date(),
-                {
-                    forwardDate: true,
-                },
-            );
+            const parsed = chrono.parseDate(editableTask.scheduledDate, new Date(), {
+                forwardDate: true,
+            });
             if (parsed !== null) {
-                parsedScheduledDate = window
-                    .moment(parsed)
-                    .format('YYYY-MM-DD');
+                parsedScheduledDate = window.moment(parsed).format('YYYY-MM-DD');
             } else {
                 parsedScheduledDate = '<i>invalid scheduled date</i>';
             }
@@ -124,10 +114,7 @@
 
     onMount(() => {
         const { globalFilter } = getSettings();
-        const description = task.description
-            .replace(globalFilter, '')
-            .replace('  ', ' ')
-            .trim();
+        const description = task.description.replace(globalFilter, '').replace('  ', ' ').trim();
 
         let priority: 'none' | 'low' | 'medium' | 'high' = 'none';
         if (task.priority === Priority.Low) {
@@ -143,12 +130,8 @@
             status: task.status,
             priority,
             recurrenceRule: task.recurrence ? task.recurrence.toText() : '',
-            startDate: task.startDate
-                ? task.startDate.format('YYYY-MM-DD')
-                : '',
-            scheduledDate: task.scheduledDate
-                ? task.scheduledDate.format('YYYY-MM-DD')
-                : '',
+            startDate: task.startDate ? task.startDate.format('YYYY-MM-DD') : '',
+            scheduledDate: task.scheduledDate ? task.scheduledDate.format('YYYY-MM-DD') : '',
             dueDate: task.dueDate ? task.dueDate.format('YYYY-MM-DD') : '',
             doneDate: task.doneDate ? task.doneDate.format('YYYY-MM-DD') : '',
         };
@@ -173,31 +156,19 @@
         }
 
         let startDate: moment.Moment | null = null;
-        const parsedStartDate = chrono.parseDate(
-            editableTask.startDate,
-            new Date(),
-            { forwardDate: true },
-        );
+        const parsedStartDate = chrono.parseDate(editableTask.startDate, new Date(), { forwardDate: true });
         if (parsedStartDate !== null) {
             startDate = window.moment(parsedStartDate);
         }
 
         let scheduledDate: moment.Moment | null = null;
-        const parsedScheduledDate = chrono.parseDate(
-            editableTask.scheduledDate,
-            new Date(),
-            { forwardDate: true },
-        );
+        const parsedScheduledDate = chrono.parseDate(editableTask.scheduledDate, new Date(), { forwardDate: true });
         if (parsedScheduledDate !== null) {
             scheduledDate = window.moment(parsedScheduledDate);
         }
 
         let dueDate: moment.Moment | null = null;
-        const parsedDueDate = chrono.parseDate(
-            editableTask.dueDate,
-            new Date(),
-            { forwardDate: true },
-        );
+        const parsedDueDate = chrono.parseDate(editableTask.dueDate, new Date(), { forwardDate: true });
         if (parsedDueDate !== null) {
             dueDate = window.moment(parsedDueDate);
         }
@@ -236,9 +207,7 @@
             startDate,
             scheduledDate,
             dueDate,
-            doneDate: window
-                .moment(editableTask.doneDate, 'YYYY-MM-DD')
-                .isValid()
+            doneDate: window.moment(editableTask.doneDate, 'YYYY-MM-DD').isValid()
                 ? window.moment(editableTask.doneDate, 'YYYY-MM-DD')
                 : null,
         });
@@ -263,11 +232,7 @@
         <hr />
         <div class="tasks-modal-section">
             <label for="priority">Priority</label>
-            <select
-                bind:value={editableTask.priority}
-                id="priority"
-                class="dropdown"
-            >
+            <select bind:value={editableTask.priority} id="priority" class="dropdown">
                 <option value="none">None</option>
                 <option value="high">⏫ High</option>
                 <option value="medium">🔼 Medium</option>
@@ -321,11 +286,7 @@
         <hr />
         <div class="tasks-modal-section">
             <label for="status">Status </label>
-            <select
-                bind:value={editableTask.status}
-                id="status"
-                class="dropdown"
-            >
+            <select bind:value={editableTask.status} id="status" class="dropdown">
                 {#each statusOptions as status}
                     <option value={status}>{status.name}</option>
                 {/each}
