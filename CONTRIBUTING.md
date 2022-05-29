@@ -18,7 +18,7 @@ see [docs/README.md](docs/README.md).
 For documentation changes to show up at <https://schemar.github.io/obsidian-tasks/> , they must be in the `gh-pages` branch.
 If you want to see your changes available immediately and not only after the next release, you should make your changes on the `gh-pages` branch.
 When you create a PR, it should merge into the `gh-pages` branch as well.
-If you document an unreleased feature, you should update the documentation on `tasks-x/main` instead. Ideally together with the related code changes.
+If you document an unreleased feature, you should update the documentation on `main-tasks-sql` instead. Ideally together with the related code changes.
 If this is confusing, don't worry.
 We will help you make this right once you opened the PR.
 
@@ -143,7 +143,7 @@ Obsidian writes the changes to disk at its own pace.
 
 ### How do I make a release?
 
-1. Check out the `tasks-x/main` branch
+1. Check out the `main-tasks-sql` branch
 2. Check for the current version in `package.json` (e.g. `1.4.1`) and decide on a next version
     - Backwards incompatible change: increase major version
     - New functionality: increase minor version
