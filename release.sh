@@ -61,7 +61,7 @@ then
   if [[ $REPLY =~ ^[Yy]$ ]]
   then
     git switch gh-pages
-    git merge tasks-x/main
+    git merge main-tasks-sql
     LEFTHOOK=0 git push
     git switch -
   fi
