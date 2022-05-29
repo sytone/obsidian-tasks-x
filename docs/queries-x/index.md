@@ -30,7 +30,6 @@ The following columns are available to be used in the WHERE clauses.
 | precedingHeader             | The heading that the task is under                                                  |
 | priority                    | The priority of the task. This has to be treated like a string ('1', '2', '3', '4') |
 
-
 CONVERT(int, duedate, 112)
 
 - startDate: Date | null;
@@ -97,8 +96,10 @@ The footnotes will *not* be carried over to documents with ```tasks blocks.
 
 The simplest way to query tasks is this:
 
-    ```tasks
-    ```
+````markdown
+```tasks
+```
+````
 
 In preview mode, this will list *all* tasks from your vault, regardless of their properties like status.
 

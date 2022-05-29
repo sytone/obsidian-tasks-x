@@ -1,4 +1,4 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param (
     [Parameter(HelpMessage = 'The path to the plugins folder under the .obsidian directory. For example: /mnt/d/obsidian/MyVault/.obsidian/plugins or D:\obsidian\MyVault\.obsidian\plugins')]
     [String]

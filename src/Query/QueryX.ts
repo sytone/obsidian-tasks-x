@@ -6,7 +6,6 @@ import { log, logCallDetails, loggingAliases } from '../Config/LogConfig';
 import type { IQuery } from '../IQuery';
 import { TaskGroups } from './TaskGroups';
 import { Group } from './Group';
-import { QueryRegularExpressions } from './Query';
 import { TaskGroup } from './TaskGroup';
 import { GroupHeading } from './GroupHeading';
 
@@ -22,11 +21,16 @@ export class QueryX implements IQuery {
     private _error: string | undefined = undefined;
     private _groupingPossible: boolean = false;
     private _groupByFields: [string, string][] = [];
+    private _commentReplacementRegexp = /(^#.*$(\r\n|\r|\n)?)/gm;
+    private _commentRegexp = /^#.*/;
+    private _hideOptionsRegexp =
+        /^hide (task count|backlink|priority|start date|scheduled date|done date|due date|recurrence rule|edit button)/;
+    private _shortModeRegexp = /^short/;
 
     constructor({ source }: { source: string }) {
         const queryPrefix = 'SELECT * FROM ?';
 
-        this.source = source.replace(QueryRegularExpressions.commentReplacementRegexp, '');
+        this.source = source.replace(this._commentReplacementRegexp, '');
         const sqlTokens = this.source.match(/[^\s,;]+|;/gi);
 
         // If there is a group by clause, then we can do grouping later on, no need to
@@ -69,7 +73,7 @@ export class QueryX implements IQuery {
                 switch (true) {
                     case line === '':
                         break;
-                    case QueryRegularExpressions.commentRegexp.test(line):
+                    case this._commentRegexp.test(line):
                         {
                             // Comment lines are rendering directives
                             // #hide (task count|backlink|priority|start date|scheduled date|done date|due date|recurrence rule|edit button)
@@ -77,9 +81,9 @@ export class QueryX implements IQuery {
                             // Will be used to filter the columns... probably...
                             const directive = line.slice(1).trim();
 
-                            if (QueryRegularExpressions.shortModeRegexp.test(directive)) {
+                            if (this._shortModeRegexp.test(directive)) {
                                 this._layoutOptions.shortMode = true;
-                            } else if (QueryRegularExpressions.hideOptionsRegexp.test(directive)) {
+                            } else if (this._hideOptionsRegexp.test(directive)) {
                                 this.parseHideOptions({ line: directive });
                             }
                         }
@@ -150,7 +154,7 @@ export class QueryX implements IQuery {
     }
 
     private parseHideOptions({ line }: { line: string }): void {
-        const hideOptionsMatch = line.match(QueryRegularExpressions.hideOptionsRegexp);
+        const hideOptionsMatch = line.match(this._hideOptionsRegexp);
         if (hideOptionsMatch !== null) {
             const option = hideOptionsMatch[1].trim().toLowerCase();
 
