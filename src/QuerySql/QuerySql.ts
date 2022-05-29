@@ -4,10 +4,10 @@ import { LayoutOptions } from '../LayoutOptions';
 import { Task, TaskRecord } from '../Task';
 import { log, logCall, loggingAliases } from '../Config/LogConfig';
 import type { IQuery } from '../IQuery';
-import { TaskGroups } from './TaskGroups';
-import { Group } from './Group';
-import { TaskGroup } from './TaskGroup';
-import { GroupHeading } from './GroupHeading';
+import { TaskGroups } from '../Query/TaskGroups';
+import { Group } from '../Query/Group';
+import { TaskGroup } from '../Query/TaskGroup';
+import { GroupHeading } from '../Query/GroupHeading';
 
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };

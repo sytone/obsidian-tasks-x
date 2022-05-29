@@ -7,8 +7,8 @@ import type { Events } from '../Events';
 import type { Task } from '../Task';
 import { log } from '../Config/LogConfig';
 import type { IQuery } from '../IQuery';
+import { QuerySql } from '../QuerySql/QuerySql';
 import { Query } from './Query';
-import { QuerySql } from './QuerySql';
 import type { GroupHeading } from './GroupHeading';
 
 export class QueryRenderer {
