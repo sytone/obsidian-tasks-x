@@ -11,17 +11,15 @@ import { QueryRenderer } from './Query/QueryRenderer';
 import { getSettings, updateSettings } from './Config/Settings';
 import { SettingsTab } from './Config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
-import { log, logCallDetails } from './Config/LogConfig';
-//import { rootMain } from './config/LogConfig';
+import { log, logCall } from './Config/LogConfig';
 
 export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;
     public queryRenderer: QueryRenderer | undefined;
     public statusRegistry: StatusRegistry | undefined;
-    //log = rootMain.getChildCategory('TasksPlugin');
     private cache: Cache | undefined;
 
-    @logCallDetails()
+    @logCall
     async onload(): Promise<void> {
         log('info', `loading plugin "${this.manifest.name}" v${this.manifest.version}`);
 
@@ -57,31 +55,31 @@ export default class TasksPlugin extends Plugin {
         });
     }
 
+    @logCall
     async loadTaskStatuses() {
         const { status_types } = getSettings();
 
         // Reset the registry as this may also come from a settings add/delete.
         this.statusRegistry?.clearStatuses();
-
+        log('info', 'main', `Adding ${status_types.length} custom status types`);
         status_types.forEach((status_type) => {
-            log(
-                'info',
-                `${this.manifest.name}: Adding custom status - [${status_type[0]}] ${status_type[1]} -> ${status_type[2]} `,
-            );
             this.statusRegistry?.add(new Status(status_type[0], status_type[1], status_type[2]));
         });
     }
 
+    @logCall
     onunload() {
-        log('info', `unloading plugin "${this.manifest.name}" v${this.manifest.version}`);
+        log('info', 'main', `unloading plugin "${this.manifest.name}" v${this.manifest.version}`);
         this.cache?.unload();
     }
 
+    @logCall
     async loadSettings() {
         const newSettings = await this.loadData();
         updateSettings(newSettings);
     }
 
+    @logCall
     async saveSettings() {
         await this.saveData(getSettings());
         await this.loadTaskStatuses();

@@ -2,7 +2,7 @@ import alasql from 'alasql';
 import { LayoutOptions } from '../LayoutOptions';
 
 import { Task, TaskRecord } from '../Task';
-import { log, logCallDetails, loggingAliases } from '../Config/LogConfig';
+import { log, logCall, loggingAliases } from '../Config/LogConfig';
 import type { IQuery } from '../IQuery';
 import { TaskGroups } from './TaskGroups';
 import { Group } from './Group';
@@ -107,7 +107,7 @@ export class QueryX implements IQuery {
     // public applyQueryToTasks(tasks: Task[]): TaskGroups {
     // }
 
-    @logCallDetails()
+    @logCall
     public applyQueryToTasks(tasks: Task[]): TaskGroups {
         log('debug', `'applyQueryToTasks executing query: <strong>[${this.source}]</strong>`);
         const records: TaskRecord[] = tasks.map((task) => {

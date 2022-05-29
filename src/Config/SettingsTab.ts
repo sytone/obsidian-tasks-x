@@ -19,16 +19,23 @@ export class SettingsTab extends PluginSettingTab {
 
     public display(): void {
         const { containerEl } = this;
+        const { headingOpened } = getSettings();
+
         this.containerEl.empty();
         this.containerEl.addClass('tasks-settings');
         settingsJson.forEach((heading) => {
             const detailsContainer = containerEl.createEl('details', {
                 cls: 'tasks-nested-settings',
                 attr: {
-                    ...(heading.open ? { open: true } : {}),
+                    ...(heading.open || headingOpened[heading.text] ? { open: true } : {}),
                 },
             });
             detailsContainer.empty();
+            detailsContainer.ontoggle = () => {
+                headingOpened[heading.text] = detailsContainer.open;
+                updateSettings({ headingOpened: headingOpened });
+                this.plugin.saveSettings();
+            };
             const summary = detailsContainer.createEl('summary');
             new Setting(summary).setHeading().setName(heading.text);
             summary.createDiv('collapser').createDiv('handle');
@@ -74,7 +81,7 @@ export class SettingsTab extends PluginSettingTab {
                                 });
                         });
                 } else if (setting.type === 'function') {
-                    this.customFunctions[setting.settingName](detailsContainer);
+                    this.customFunctions[setting.settingName](detailsContainer, this);
                 }
 
                 if (setting.notice !== null) {
@@ -90,7 +97,7 @@ export class SettingsTab extends PluginSettingTab {
         });
     }
 
-    insertFeatureFlags(containerEl: HTMLElement) {
+    insertFeatureFlags(containerEl: HTMLElement, settings: SettingsTab) {
         Feature.values.forEach((feature) => {
             new Setting(containerEl)
                 .setName(feature.displayName)
@@ -100,14 +107,14 @@ export class SettingsTab extends PluginSettingTab {
                         const updatedFeatures = toggleFeature(feature.internalName, value);
                         updateSettings({ features: updatedFeatures });
 
-                        await this.plugin.saveSettings();
+                        await settings.plugin.saveSettings();
                         // Force refresh
-                        this.display();
+                        settings.display();
                     });
                 });
         });
     }
-    insertTaskStatusSettings(containerEl: HTMLElement) {
+    insertTaskStatusSettings(containerEl: HTMLElement, settings: SettingsTab) {
         /* -------------------------------------------------------------------------- */
         /*                       Settings for Custom Task Status                      */
         /* -------------------------------------------------------------------------- */
@@ -125,9 +132,9 @@ export class SettingsTab extends PluginSettingTab {
                                 updateSettings({
                                     status_types: status_types,
                                 });
-                                await this.plugin.saveSettings();
+                                await settings.plugin.saveSettings();
                                 // Force refresh
-                                this.display();
+                                settings.display();
                             }
                         });
                 })
@@ -142,9 +149,9 @@ export class SettingsTab extends PluginSettingTab {
                                 updateSettings({
                                     status_types: status_types,
                                 });
-                                await this.plugin.saveSettings();
+                                await settings.plugin.saveSettings();
                                 // Force refresh
-                                this.display();
+                                settings.display();
                                 return;
                             }
 
@@ -185,9 +192,9 @@ export class SettingsTab extends PluginSettingTab {
                     updateSettings({
                         status_types: status_types,
                     });
-                    await this.plugin.saveSettings();
+                    await settings.plugin.saveSettings();
                     // Force refresh
-                    this.display();
+                    settings.display();
                 });
         });
         setting.infoEl.remove();
@@ -239,9 +246,9 @@ export class SettingsTab extends PluginSettingTab {
                     updateSettings({
                         status_types: status_types,
                     });
-                    await this.plugin.saveSettings();
+                    await settings.plugin.saveSettings();
                     // Force refresh
-                    this.display();
+                    settings.display();
                 });
         });
         addStatusesSupportedByMinimalTheme.infoEl.remove();

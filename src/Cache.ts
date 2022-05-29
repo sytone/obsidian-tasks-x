@@ -23,6 +23,7 @@ export class Cache {
     private readonly tasksMutex: Mutex;
     private state: State;
     private _tasks: Task[];
+    private _files: [string, number][];
 
     /**
      * We cannot know if this class will be instantiated because obsidian started
@@ -45,6 +46,7 @@ export class Cache {
         this.tasksMutex = new Mutex();
         this.state = State.Cold;
         this._tasks = [];
+        this._files = [];
 
         this.loadedAfterFirstResolve = false;
 
@@ -195,22 +197,45 @@ export class Cache {
             return;
         }
 
+        // Process this file if it has not been touched in the last 500ms
+        let pathFound = false;
+        for (let i = 0; i < this._files.length; i++) {
+            if (this._files[i][0] === file.path) {
+                pathFound = true;
+                if (this._files[i][1] <= Date.now() - 500) {
+                    // log('silly', 'Cache:indexFile:Debounce', `indexed file: ${file.path}`);
+                    return;
+                } else {
+                    this._files[i][1] = Date.now();
+                }
+            }
+        }
+
+        if (!pathFound) {
+            this._files.push([file.path, Date.now()]);
+        }
+
+        // Remove all tasks from this file from the cache before
+        // adding the ones that are currently in the file.
+        this._tasks = this._tasks.filter((task: Task) => {
+            return task.path !== file.path;
+        });
+
         let listItems = fileCache.listItems;
         if (listItems === undefined) {
-            // When there is no list items cache, there are no tasks.
-            // Still continue to notify watchers of removal.
             listItems = [];
+            // When there is no list items cache, there are no tasks.
+            // Still continue to notify watchers of potential removal.
+            if (this.state === State.Warm) {
+                this.notifySubscribers();
+            }
+            return;
+        } else {
+            // console.log(listItems.length);
         }
 
         const fileContent = await this.vault.cachedRead(file);
         const fileLines = fileContent.split('\n');
-
-        // Remove all tasks from this file from the cache before
-        // adding the ones that are currently in the file.
-
-        this._tasks = this._tasks.filter((task: Task) => {
-            return task.path !== file.path;
-        });
 
         // We want to store section information with every task so
         // that we can use that when we post process the markdown

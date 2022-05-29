@@ -7,11 +7,16 @@ export interface Settings {
     status_types: Array<[string, string, string]>;
     features: FeatureFlag;
     generalSettings: SettingsMap;
+    headingOpened: HeadingState;
 }
 
 interface SettingsMap {
     [key: string]: string | boolean;
 }
+
+type HeadingState = {
+    [id: string]: boolean;
+};
 
 const defaultSettings: Settings = {
     globalFilter: '',
@@ -24,6 +29,7 @@ const defaultSettings: Settings = {
         removeGlobalFilter: false,
         setDoneDate: true,
     },
+    headingOpened: {}, //;  { 'Documentation and Support': true },
 };
 
 let settings: Settings = { ...defaultSettings };
@@ -49,9 +55,9 @@ export const updateGeneralSetting = (name: string, value: string | boolean): Set
     settings.generalSettings[name] = value;
 
     // Mapping the old settings over on change to the new dynamic structure.
-    updateSettings({ globalFilter: <string>settings.generalSettings[name] });
-    updateSettings({ removeGlobalFilter: <boolean>settings.generalSettings[name] });
-    updateSettings({ setDoneDate: <boolean>settings.generalSettings[name] });
+    updateSettings({ globalFilter: <string>settings.generalSettings['globalFilter'] });
+    updateSettings({ removeGlobalFilter: <boolean>settings.generalSettings['removeGlobalFilter'] });
+    updateSettings({ setDoneDate: <boolean>settings.generalSettings['setDoneDate'] });
 
     return getSettings();
 };

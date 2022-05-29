@@ -43,6 +43,18 @@ Follow the steps below to install Tasks.
 4. Replace the "Toggle checklist status" hotkey with "Tasks: Toggle Done".
     - I recommend you remove the original toggle hotkey and set the "Tasks" toggle to `Ctrl + Enter` (or `Cmd + Enter` on a mac).
 
+### From BRAT
+
+To install a pre-release, download and enable the [Obsidian42 BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin, add the beta repository `sytone/obsidian-tasks-x`, and then have BRAT check for updates.
+
+### Manual installation
+
+1. Download the latest [release](https://github.com/sytone/obsidian-tasks-x/releases/latest)
+2. Extract the obsidian-tasks-x-plugin folder from the zip to your vault's plugins folder: `{vault}/.obsidian/plugins/`
+   Note: On some machines the `.obsidian` folder may be hidden. On MacOS you should be able to press `Command+Shift+Dot` to show the folder in Finder.
+3. Reload Obsidian
+4. If prompted about Safe Mode, you can disable safe mode and enable the plugin.
+
 ## Documentation
 
 For user documentation, please check [https://sytone.github.io/obsidian-tasks-x/](https://sytone.github.io/obsidian-tasks-x/).
