@@ -30,6 +30,7 @@ param (
 [Parameter(Position = 0, Mandatory = $true)]
 
 $pendingChanges = $(git status --porcelain)
+$mainBranchName = 'main-tasks-sql'
 
 if ($pendingChanges -ne '') {
     Write-Output 'There are pending changes in the working directory. Please commit or stash them before running this command.'
@@ -45,7 +46,7 @@ if ($DocumentationOnly) {
     $publish = Read-Host 'Update documentation? (y/n)'
     if ($publish -ieq 'y') {
         git switch gh-pages
-        git merge main-tasks-sql
+        git merge $mainBranchName
         $env:LEFTHOOK = 0
         git push
         git switch -
@@ -57,9 +58,7 @@ if ($DocumentationOnly) {
         Write-Output 'Updating package.json'
         $packageJson = Get-Content -Path './package.json' | ConvertFrom-Json
         $packageJson.version = $Version
-        $packageJson | ConvertTo-Json -Depth 100 |
-            ForEach-Object { $_ -replace '(?m)  (?<=^(?:  )*)', '    ' } |
-            Set-Content -Path './package.json'
+        $packageJson | ConvertTo-Json -Depth 100 | Set-Content -Path './package.json'
 
 
         Write-Output 'Updating manifest.json'
@@ -89,7 +88,7 @@ if ($DocumentationOnly) {
     $publish = Read-Host 'Update documentation? (y/n)'
     if ($publish -ieq 'y') {
         git switch gh-pages
-        git merge main-tasks-sql
+        git merge $mainBranchName
         $env:LEFTHOOK = 0
         git push
         git switch -
