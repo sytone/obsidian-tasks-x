@@ -1,5 +1,5 @@
 import type { EventRef, Events as ObsidianEvents } from 'obsidian';
-import { rootMain } from './config/LogConfig';
+import { log } from './Config/LogConfig';
 
 import type { State } from './Cache';
 import type { Task } from './Task';
@@ -15,8 +15,6 @@ interface CacheUpdateData {
 }
 
 export class Events {
-    log = rootMain.getChildCategory('Events');
-
     private obsidianEvents: ObsidianEvents;
 
     constructor({ obsidianEvents }: { obsidianEvents: ObsidianEvents }) {
@@ -24,27 +22,27 @@ export class Events {
     }
 
     public onCacheUpdate(handler: (cacheData: CacheUpdateData) => void): EventRef {
-        this.log.debug(`onCacheUpdate event "${Event.CacheUpdate}"`);
+        log('debug', `onCacheUpdate event "${Event.CacheUpdate}"`);
         return this.obsidianEvents.on(Event.CacheUpdate, handler);
     }
 
     public triggerCacheUpdate(cacheData: CacheUpdateData): void {
-        this.log.debug(`triggerCacheUpdate event "${Event.CacheUpdate}"`);
+        log('debug', `triggerCacheUpdate event "${Event.CacheUpdate}"`);
         this.obsidianEvents.trigger(Event.CacheUpdate, cacheData);
     }
 
     public onRequestCacheUpdate(handler: (fn: (cacheData: CacheUpdateData) => void) => void): EventRef {
-        this.log.debug(`onRequestCacheUpdate event "${Event.RequestCacheUpdate}"`);
+        log('debug', `onRequestCacheUpdate event "${Event.RequestCacheUpdate}"`);
         return this.obsidianEvents.on(Event.RequestCacheUpdate, handler);
     }
 
     public triggerRequestCacheUpdate(fn: (cacheData: CacheUpdateData) => void): void {
-        this.log.debug(`triggerRequestCacheUpdate event "${Event.RequestCacheUpdate}"`);
+        log('debug', `triggerRequestCacheUpdate event "${Event.RequestCacheUpdate}"`);
         this.obsidianEvents.trigger(Event.RequestCacheUpdate, fn);
     }
 
     public off(eventRef: EventRef): void {
-        this.log.debug(`off event "${eventRef}"`);
+        log('debug', `off event "${eventRef}"`);
         this.obsidianEvents.offref(eventRef);
     }
 }

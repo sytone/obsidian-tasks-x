@@ -1,5 +1,15 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
+  "typedocOptions": {
+    "entryPoints": [
+      "src/main.ts"
+    ],
+    "out": "docs/typedoc",
+    "plugin": "typedoc-plugin-markdown",
+    "entryDocument": "index.md",
+    "githubPages": false,
+    "readme": "none"
+  },
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
@@ -12,6 +22,7 @@
     "noUnusedParameters": true,
     "module": "ESNext",
     "target": "es6",
+    "experimentalDecorators": true,
     "allowJs": true,
     "noImplicitAny": true,
     "moduleResolution": "node",

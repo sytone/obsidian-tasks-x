@@ -5,14 +5,13 @@ import { replaceTaskWithTasks } from '../File';
 import { TaskModal } from '../TaskModal';
 import type { Events } from '../Events';
 import type { Task } from '../Task';
-import { rootQueryService } from '../config/LogConfig';
+import { log } from '../Config/LogConfig';
+import type { IQuery } from '../IQuery';
 import { Query } from './Query';
-import { IQuery, QueryX } from './QueryX';
+import { QueryX } from './QueryX';
 import type { GroupHeading } from './GroupHeading';
 
 export class QueryRenderer {
-    log = rootQueryService.getChildCategory('QueryRenderer');
-
     public addQueryRenderChild = this._addQueryRenderChild.bind(this);
     public addQueryXRenderChild = this._addQueryXRenderChild.bind(this);
 
@@ -28,7 +27,7 @@ export class QueryRenderer {
     }
 
     private async _addQueryRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        this.log.debug(`Adding Query Render child to context ${context.docId}`);
+        log('debug', `Adding Query Render child to context ${context.docId}`);
 
         context.addChild(
             new QueryRenderChild({
@@ -41,7 +40,7 @@ export class QueryRenderer {
     }
 
     private async _addQueryXRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        this.log.debug(`Adding Query Render X child to context ${context.docId}`);
+        log('debug', `Adding Query Render X child to context ${context.docId}`);
 
         context.addChild(
             new QueryRenderChild({
@@ -55,8 +54,6 @@ export class QueryRenderer {
 }
 
 class QueryRenderChild extends MarkdownRenderChild {
-    log = rootQueryService.getChildCategory('QueryRenderChild');
-
     private readonly app: App;
     private readonly events: Events;
     private readonly source: string;
@@ -88,7 +85,7 @@ class QueryRenderChild extends MarkdownRenderChild {
             : (this.query = new Query({ source: this.source }));
 
         this.containerEl.className == 'block-language-taskx' ? (this.queryType = 'taskx') : (this.queryType = 'tasks');
-        this.log.debug(`Query Render generated for class ${this.containerEl.className}`);
+        log('debug', `Query Render generated for class ${this.containerEl.className}`);
     }
 
     /**
@@ -169,10 +166,10 @@ class QueryRenderChild extends MarkdownRenderChild {
     }
 
     private async render({ tasks, state }: { tasks: Task[]; state: State }) {
-        this.log.debug(`Render ${this.queryType} called for ${tasks.length} tasks, state: ${state}`);
+        log('debug', `Render ${this.queryType} called for ${tasks.length} tasks, state: ${state}`);
         const content = this.containerEl.createEl('div');
         if (state === State.Warm && this.query.error === undefined) {
-            this.log.debug(`Applying query of type ${this.queryType}`);
+            log('debug', `Applying query of type ${this.queryType}`);
             const tasksSortedLimitedGrouped = this.query.applyQueryToTasks(tasks);
 
             for (const group of tasksSortedLimitedGrouped.groups) {
@@ -189,7 +186,7 @@ class QueryRenderChild extends MarkdownRenderChild {
             const totalTasksCount = tasksSortedLimitedGrouped.totalTasksCount();
             this.addTaskCount(content, totalTasksCount);
         } else if (this.query.error !== undefined) {
-            this.log.error(`Tasks query type ${this.queryType} error: ${this.query.error}`);
+            log('error', `Tasks query type ${this.queryType} error: ${this.query.error}`);
             console.log(this.query);
             content.setText(`Tasks query type ${this.queryType} error: ${this.query.error}`);
         } else {

@@ -1,4 +1,23 @@
-﻿[CmdletBinding()]
+﻿<#
+.SYNOPSIS
+    Published the plugin on github as a new version.
+.DESCRIPTION
+    This script wraps the process to publish a new version of the plugin on github. It will also update the documentation.
+.NOTES
+    This is designed to be cross platform and should work in linux, windows and macOS
+.LINK
+    Specify a URI to a help page, this will show when Get-Help -Online is used.
+.PARAMETER Version
+    The version of the plugin to publish. Follows SemVer formatting.
+.PARAMETER MinimumObsidianVersion
+    The minimum version of Obsidian that this plugin will work with.
+.PARAMETER DocumentationOnly
+    Will not tag or update version, just push the documentation updates.
+.EXAMPLE
+    Publish-Plugin -Version "1.2.3" -MinimumObsidianVersion "0.12.1"
+    This will create a tag called v1.2.3, update the manifest, package and versions files and publish the plugin on github.
+#>
+[CmdletBinding()]
 param (
     [Parameter(Mandatory = $true)]
     $Version,

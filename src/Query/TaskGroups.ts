@@ -19,7 +19,7 @@ export class TaskGroups {
      *                         matching the query, already in sort order
      */
     constructor(groups: Grouping[], tasks: Task[]) {
-        const initialGroups = new IntermediateTaskGroups(groups, tasks);
+        const initialGroups = new IntermediateTaskGroups(<Grouping[]>groups, tasks);
         this.addTasks(initialGroups);
     }
 
@@ -29,6 +29,16 @@ export class TaskGroups {
      */
     public get groups(): TaskGroup[] {
         return this._groups;
+    }
+
+    /**
+     * Set the TaskGroups to a custom collection. This is used in the
+     * new query process.
+     *
+     * @memberof TaskGroups
+     */
+    public set groups(value) {
+        this._groups = value;
     }
 
     /**

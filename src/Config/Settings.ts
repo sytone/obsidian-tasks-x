@@ -48,6 +48,11 @@ export const updateSettings = (newSettings: Partial<Settings>): Settings => {
 export const updateGeneralSetting = (name: string, value: string | boolean): Settings => {
     settings.generalSettings[name] = value;
 
+    // Mapping the old settings over on change to the new dynamic structure.
+    updateSettings({ globalFilter: <string>settings.generalSettings[name] });
+    updateSettings({ removeGlobalFilter: <boolean>settings.generalSettings[name] });
+    updateSettings({ setDoneDate: <boolean>settings.generalSettings[name] });
+
     return getSettings();
 };
 

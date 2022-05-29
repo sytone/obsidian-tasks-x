@@ -2,7 +2,9 @@
 param (
     [Parameter()]
     [string]
-    $Tag = 'obsidian-tasks-docs:latest'
+    $Tag = 'obsidian-tasks-docs:latest',
+    [switch]
+    $ResetImage
 )
 
 function message($message) {
@@ -11,6 +13,11 @@ function message($message) {
 
 # move to the docs root to do the docker creation.
 Push-Location "$PSScriptRoot/../docs"
+
+if ($ResetImage) {
+    message 'Removing old image'
+    docker rmi $Tag
+}
 
 # Check if a built image exists.
 # If not, we need to build it first.
@@ -27,6 +34,7 @@ message 'Stop the server with Ctrl-c'
 # Volume with :Z is required for linux users due to SELinux.
 docker run --rm `
     -it `
+    -e 'JEKYLL_ENV=docker' `
     --volume "${PWD}:/docs:Z" `
     --publish 4000:4000 `
     "$Tag"

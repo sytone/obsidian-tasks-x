@@ -20,8 +20,8 @@ export class Feature {
     static readonly APPEND_GLOBAL_FILTER = new Feature(
         'APPEND_GLOBAL_FILTER',
         0,
-        'Enabling this places the global filter at the end of the task description. Some plugins, such as Day Planner,\n' +
-            'might require this, or you might prefer how it looks. If you change this when tasks are modified using the\n' +
+        'Enabling this places the global filter at the end of the task description. Some plugins, such as Day Planner, \n' +
+            'might require this, or you might prefer how it looks. If you change this when tasks are modified using the \n' +
             'Task edit box they will have the tag moved to the beginning or end of the description.',
         'Creates / Supports tasks with the global filter at end',
         false,

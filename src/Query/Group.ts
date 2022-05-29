@@ -1,5 +1,5 @@
 import type { Task } from '../Task';
-import { rootQueryService } from '../config/LogConfig';
+import { log } from '../Config/LogConfig';
 import type { Grouping, GroupingProperty } from './Query';
 import { TaskGroups } from './TaskGroups';
 
@@ -12,8 +12,6 @@ type Grouper = (task: Task) => string;
  * Implementation of the 'group by' instruction.
  */
 export class Group {
-    static log = rootQueryService.getChildCategory('Group');
-
     private static groupers: Record<GroupingProperty, Grouper> = {
         backlink: Group.groupByBacklink,
         filename: Group.groupByFileName,
@@ -29,7 +27,7 @@ export class Group {
      * @param tasks The tasks that match the task block's Query
      */
     public static by(grouping: Grouping[], tasks: Task[]): TaskGroups {
-        this.log.debug('by executing query:', tasks.length);
+        log('debug', 'by executing query:', tasks.length);
 
         return new TaskGroups(grouping, tasks);
     }

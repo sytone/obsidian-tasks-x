@@ -4,7 +4,7 @@ import { Mutex } from 'async-mutex';
 import { Task } from './Task';
 import type { Events } from './Events';
 
-import { rootDataStore } from './config/LogConfig';
+import { log } from './Config/LogConfig';
 
 export enum State {
     Cold = 'Cold',
@@ -13,8 +13,6 @@ export enum State {
 }
 
 export class Cache {
-    log = rootDataStore.getChildCategory('Cache');
-
     private readonly metadataCache: MetadataCache;
     private readonly metadataCacheEventReferences: EventRef[];
     private readonly vault: Vault;
@@ -81,7 +79,7 @@ export class Cache {
 
     private notifySubscribers() {
         if (this.state === State.Warm) {
-            this.log.debug(`notifySubscribers, this.getTasks(): ${this.getTasks().length}, state: ${this.state}`);
+            log('debug', `notifySubscribers, this.getTasks(): ${this.getTasks().length}, state: ${this.state}`);
 
             this.events.triggerCacheUpdate({
                 tasks: this.getTasks(),
@@ -92,7 +90,7 @@ export class Cache {
 
     private subscribeToCache(): void {
         const resolvedEventReference = this.metadataCache.on('resolved', async () => {
-            this.log.debug(`resolved event received, loadedAfterFirstResolve: ${this.loadedAfterFirstResolve}`);
+            log('debug', `resolved event received, loadedAfterFirstResolve: ${this.loadedAfterFirstResolve}`);
             // Resolved fires on every change.
             // We only want to initialize if we haven't already.
             if (!this.loadedAfterFirstResolve) {
@@ -105,7 +103,7 @@ export class Cache {
         // Does not fire when starting up obsidian and only works for changes.
         const changedEventReference = this.metadataCache.on('changed', (file: TFile) => {
             this.tasksMutex.runExclusive(() => {
-                this.log.debug(`changed event received, file: ${file.path}`);
+                log('debug', `changed event received, file: ${file.path}`);
                 this.indexFile(file);
             });
         });
@@ -114,7 +112,7 @@ export class Cache {
 
     private subscribeToVault(): void {
         const createdEventReference = this.vault.on('create', (file: TAbstractFile) => {
-            this.log.debug(`create event received, file: ${file.path}`);
+            log('debug', `create event received, file: ${file.path}`);
             if (!(file instanceof TFile)) {
                 return;
             }
@@ -126,7 +124,7 @@ export class Cache {
         this.vaultEventReferences.push(createdEventReference);
 
         const deletedEventReference = this.vault.on('delete', (file: TAbstractFile) => {
-            this.log.debug(`delete event received, file: ${file.path}`);
+            log('debug', `delete event received, file: ${file.path}`);
 
             if (!(file instanceof TFile)) {
                 return;
@@ -143,7 +141,7 @@ export class Cache {
         this.vaultEventReferences.push(deletedEventReference);
 
         const renamedEventReference = this.vault.on('rename', (file: TAbstractFile, oldPath: string) => {
-            this.log.debug(`rename event received, file: ${file.path}`);
+            log('debug', `rename event received, file: ${file.path}`);
             if (!(file instanceof TFile)) {
                 return;
             }
@@ -165,7 +163,7 @@ export class Cache {
 
     private subscribeToEvents(): void {
         const requestReference = this.events.onRequestCacheUpdate((handler) => {
-            this.log.debug(`onRequestCacheUpdate, this.getTasks(): ${this.getTasks().length}, state: ${this.state}`);
+            log('debug', `onRequestCacheUpdate, this.getTasks(): ${this.getTasks().length}, state: ${this.state}`);
 
             handler({ tasks: this.getTasks(), state: this.state });
         });
@@ -173,7 +171,7 @@ export class Cache {
     }
 
     private loadVault(): Promise<void> {
-        this.log.debug('loading Vault:');
+        log('debug', 'loading Vault:');
 
         return this.tasksMutex.runExclusive(async () => {
             this.state = State.Initializing;
@@ -183,7 +181,7 @@ export class Cache {
                 }),
             );
 
-            this.log.debug('loaded Vault:');
+            log('debug', 'loaded Vault:');
 
             this.state = State.Warm;
             // Notify that the cache is now warm:

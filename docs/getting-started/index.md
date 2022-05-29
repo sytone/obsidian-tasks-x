@@ -12,11 +12,31 @@ The simplest way to create a new task is to create a new checklist item.
 The markdown syntax for checklist items is a list item that starts with spaced brackets: `- [ ] take out the trash`.
 Now Tasks tracks that you need to take out the trash!
 
+This plugin has a more advanced query and display system. It also supports the original structure so you can still use the old format. To use the new format use `taskx` as the code block tag.
+
+## Tasks X Powered
+
+To list all open tasks in a markdown file, simply add a [query]({{ site.baseurl }}{% link queries-x/index.md %}) as a tasks code block like so:
+
+````markdown
+```taskx
+SELECT * FROM ? WHERE status->indicator != "x"
+```
+````
+
+Now you have a list of all open tasks! This is enough to get started with tasks.
+
+This new language requires a bit more explination, this is covered in the [Queries X]({{ site.baseurl }}{% link queries-x/index.md %}) Section.
+
+## Tasks Orginal
+
 To list all open tasks in a markdown file, simply add a [query]({{ site.baseurl }}{% link queries/index.md %}) as a tasks code block like so:
 
-    ```tasks
-    not done
-    ```
+````markdown
+```tasks
+not done
+```
+````
 
 Now you have a list of all open tasks! This is enough to get started with tasks.
 You can _optionally_ start using one or more of the other features that Tasks offers.

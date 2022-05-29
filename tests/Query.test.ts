@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import moment from 'moment';
-import { getSettings, updateSettings } from '../src/config/Settings';
+import { getSettings, updateSettings } from '../src/Config/Settings';
 import { Query } from '../src/Query/Query';
 import { Status } from '../src/Status';
 import { Priority, Task } from '../src/Task';

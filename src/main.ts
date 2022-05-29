@@ -8,20 +8,22 @@ import { initializeFile } from './File';
 import { InlineRenderer } from './InlineRenderer';
 import { newLivePreviewExtension } from './LivePreviewExtension';
 import { QueryRenderer } from './Query/QueryRenderer';
-import { getSettings, updateSettings } from './config/Settings';
-import { SettingsTab } from './config/SettingsTab';
+import { getSettings, updateSettings } from './Config/Settings';
+import { SettingsTab } from './Config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
-import { rootMain } from './config/LogConfig';
+import { log, logCallDetails } from './Config/LogConfig';
+//import { rootMain } from './config/LogConfig';
 
 export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;
     public queryRenderer: QueryRenderer | undefined;
     public statusRegistry: StatusRegistry | undefined;
-    log = rootMain.getChildCategory('TasksPlugin');
+    //log = rootMain.getChildCategory('TasksPlugin');
     private cache: Cache | undefined;
 
+    @logCallDetails()
     async onload(): Promise<void> {
-        this.log.info(`loading plugin "${this.manifest.name}" v${this.manifest.version}`);
+        log('info', `loading plugin "${this.manifest.name}" v${this.manifest.version}`);
 
         // Load the settings and UI.
         await this.loadSettings();
@@ -32,7 +34,7 @@ export default class TasksPlugin extends Plugin {
          * avoids trying to create an index while obsidian is indexing files
          */
         this.app.workspace.onLayoutReady(async () => {
-            this.log.info(`Layout is ready for workspace: ${this.app.vault.getName()}`);
+            log('info', `Layout is ready for workspace: ${this.app.vault.getName()}`);
             initializeFile({
                 metadataCache: this.app.metadataCache,
                 vault: this.app.vault,
@@ -62,7 +64,8 @@ export default class TasksPlugin extends Plugin {
         this.statusRegistry?.clearStatuses();
 
         status_types.forEach((status_type) => {
-            this.log.info(
+            log(
+                'info',
                 `${this.manifest.name}: Adding custom status - [${status_type[0]}] ${status_type[1]} -> ${status_type[2]} `,
             );
             this.statusRegistry?.add(new Status(status_type[0], status_type[1], status_type[2]));
@@ -70,7 +73,7 @@ export default class TasksPlugin extends Plugin {
     }
 
     onunload() {
-        this.log.info(`unloading plugin "${this.manifest.name}" v${this.manifest.version}`);
+        log('info', `unloading plugin "${this.manifest.name}" v${this.manifest.version}`);
         this.cache?.unload();
     }
 

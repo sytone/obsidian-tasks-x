@@ -7,9 +7,9 @@ import type { Status } from './Status';
 import { replaceTaskWithTasks } from './File';
 import { LayoutOptions } from './LayoutOptions';
 import { Recurrence, RecurrenceRecord } from './Recurrence';
-import { getSettings, isFeatureEnabled } from './config/Settings';
+import { getSettings, isFeatureEnabled } from './Config/Settings';
 import { Urgency } from './Urgency';
-import { Feature } from './config/Feature';
+import { Feature } from './Config/Feature';
 
 /**
  * When sorting, make sure low always comes after none. This way any tasks with low will be below any exiting

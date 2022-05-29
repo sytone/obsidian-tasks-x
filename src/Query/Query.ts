@@ -1,14 +1,14 @@
 import * as chrono from 'chrono-node';
 
-import { getSettings } from '../config/Settings';
+import { getSettings } from '../Config/Settings';
 import { LayoutOptions } from '../LayoutOptions';
 import { Status } from '../Status';
 import { Priority, Task } from '../Task';
 import { StatusRegistry } from '../StatusRegistry';
+import type { IQuery } from '../IQuery';
 import { Sort } from './Sort';
 import type { TaskGroups } from './TaskGroups';
 import { Group } from './Group';
-import type { IQuery } from './QueryX';
 
 export type SortingProperty =
     | 'urgency'

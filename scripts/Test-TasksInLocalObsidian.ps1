@@ -1,6 +1,6 @@
 ﻿[CmdletBinding()]
 param (
-    [Parameter(HelpMessage = 'The path to the plugins folder uner the .obsidian directory.')]
+    [Parameter(HelpMessage = 'The path to the plugins folder under the .obsidian directory. For example: /mnt/d/obsidian/MyVault/.obsidian/plugins or D:\obsidian\MyVault\.obsidian\plugins')]
     [String]
     $ObsidianPluginRoot = $env:OBSIDIAN_PLUGIN_ROOT,
     [Parameter(HelpMessage = 'The folder name of the plugin to copy the files to.')]
@@ -30,13 +30,13 @@ if ($?) {
     # }
 
     # foreach ($file in $filesToLink ) {
-        if ((Get-Item "$ObsidianPluginRoot/$PluginFolderName" ).LinkType -ne 'Junction') {
-            Write-Output "Removing $ObsidianPluginRoot/$PluginFolderName from plugin folder and linking"
-            Remove-Item "$ObsidianPluginRoot/$PluginFolderName" -Force
-            New-Item -ItemType Junction -Path "$ObsidianPluginRoot/$PluginFolderName" -Target "$repoRoot"
-        } else {
+    if (-not (Test-Path "$ObsidianPluginRoot/$PluginFolderName") -or (Get-Item "$ObsidianPluginRoot/$PluginFolderName" ).LinkType -ne 'Junction') {
+        Write-Output "Removing $ObsidianPluginRoot/$PluginFolderName from plugin folder and linking"
+        Remove-Item "$ObsidianPluginRoot/$PluginFolderName" -Force -ErrorAction SilentlyContinue
+        New-Item -ItemType Junction -Path "$ObsidianPluginRoot/$PluginFolderName" -Target "$repoRoot"
+    } else {
             (Get-Item "$ObsidianPluginRoot/$PluginFolderName/$file" ).LinkType
-        }
+    }
     # }
 
     $hasHotReload = Test-Path "$ObsidianPluginRoot/$PluginFolderName/.hotreload"
