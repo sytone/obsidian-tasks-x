@@ -1,7 +1,7 @@
 import type { LayoutOptions } from './LayoutOptions';
 import type { Task } from './Task';
 import type { TaskGroups } from './Query/TaskGroups';
-import type { Grouping } from './Query/QueryX';
+import type { Grouping } from './Query/Query';
 
 /**
  * Standard interface for the query engine used by Tasks, multiple
@@ -54,8 +54,10 @@ export interface IQuery {
      * from the cache and returns a TaskGroup collection. If there is no grouping
      * then the TaskGroup collection will contain a single TaskGroup with all tasks
      * found using the query.
-     *      *
-     * @memberof IQuery
+     *
+     * @param {Task[]} tasks
+     * @return {*}  {TaskGroups}
+     * @memberof Query
      */
     applyQueryToTasks: (tasks: Task[]) => TaskGroups;
 }

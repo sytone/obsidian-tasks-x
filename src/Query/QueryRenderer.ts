@@ -80,47 +80,27 @@ class QueryRenderChild extends MarkdownRenderChild {
         this.events = events;
         this.source = source;
 
-        this.containerEl.className == 'block-language-taskx'
-            ? (this.query = new QueryX({ source: this.source }))
-            : (this.query = new Query({ source: this.source }));
+        // The engine is chosen on the basis of the code block language. Currently
+        // there is only the main engine for the plugin, this allows others to be
+        // added later.
+        switch (this.containerEl.className) {
+            case 'block-language-tasks':
+                this.query = new Query({ source });
+                this.queryType = 'tasks';
+                break;
 
-        this.containerEl.className == 'block-language-taskx' ? (this.queryType = 'taskx') : (this.queryType = 'tasks');
+            case 'block-language-taskx':
+                this.query = new QueryX({ source });
+                this.queryType = 'taskx';
+                break;
+
+            default:
+                this.query = new Query({ source });
+                this.queryType = 'tasks';
+                break;
+        }
+
         log('debug', `Query Render generated for class ${this.containerEl.className}`);
-    }
-
-    /**
-     * Display headings for a group of tasks.
-     * @param content
-     * @param groupHeadings - The headings to display. This can be an empty array,
-     *                        in which case no headings will be added.
-     * @private
-     */
-    private static addGroupHeadings(content: HTMLDivElement, groupHeadings: GroupHeading[]) {
-        for (const heading of groupHeadings) {
-            QueryRenderChild.addGroupHeading(content, heading);
-        }
-    }
-
-    private static addGroupHeading(content: HTMLDivElement, group: GroupHeading) {
-        let header: any;
-        // Is it possible to remove the repetition here?
-        // Ideally, by creating a variable that contains h4, h5 or h6
-        // and then only having one call to content.createEl().
-        if (group.nestingLevel === 0) {
-            header = content.createEl('h4', {
-                cls: 'tasks-group-heading',
-            });
-        } else if (group.nestingLevel === 1) {
-            header = content.createEl('h5', {
-                cls: 'tasks-group-heading',
-            });
-        } else {
-            // Headings nested to 2 or more levels are all displayed with 'h6:
-            header = content.createEl('h6', {
-                cls: 'tasks-group-heading',
-            });
-        }
-        header.appendText(group.name);
     }
 
     onload() {
@@ -261,6 +241,41 @@ class QueryRenderChild extends MarkdownRenderChild {
             });
             taskModal.open();
         });
+    }
+
+    /**
+     * Display headings for a group of tasks.
+     * @param content
+     * @param groupHeadings - The headings to display. This can be an empty array,
+     *                        in which case no headings will be added.
+     * @private
+     */
+    private static addGroupHeadings(content: HTMLDivElement, groupHeadings: GroupHeading[]) {
+        for (const heading of groupHeadings) {
+            QueryRenderChild.addGroupHeading(content, heading);
+        }
+    }
+
+    private static addGroupHeading(content: HTMLDivElement, group: GroupHeading) {
+        let header: any;
+        // Is it possible to remove the repetition here?
+        // Ideally, by creating a variable that contains h4, h5 or h6
+        // and then only having one call to content.createEl().
+        if (group.nestingLevel === 0) {
+            header = content.createEl('h4', {
+                cls: 'tasks-group-heading',
+            });
+        } else if (group.nestingLevel === 1) {
+            header = content.createEl('h5', {
+                cls: 'tasks-group-heading',
+            });
+        } else {
+            // Headings nested to 2 or more levels are all displayed with 'h6:
+            header = content.createEl('h6', {
+                cls: 'tasks-group-heading',
+            });
+        }
+        header.appendText(group.name);
     }
 
     private addBacklinks(
