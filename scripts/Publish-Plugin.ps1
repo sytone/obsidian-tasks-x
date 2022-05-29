@@ -30,6 +30,7 @@ param (
 [Parameter(Position = 0, Mandatory = $true)]
 
 $pendingChanges = $(git status --porcelain)
+$mainBranchName = 'main-tasks-sql'
 
 if ($pendingChanges -ne '') {
     Write-Output 'There are pending changes in the working directory. Please commit or stash them before running this command.'
@@ -45,7 +46,7 @@ if ($DocumentationOnly) {
     $publish = Read-Host 'Update documentation? (y/n)'
     if ($publish -ieq 'y') {
         git switch gh-pages
-        git merge tasks-x/main
+        git merge $mainBranchName
         $env:LEFTHOOK = 0
         git push
         git switch -
@@ -57,9 +58,9 @@ if ($DocumentationOnly) {
         Write-Output 'Updating package.json'
         $packageJson = Get-Content -Path './package.json' | ConvertFrom-Json
         $packageJson.version = $Version
-        $packageJson | ConvertTo-Json -Depth 100 |
-            ForEach-Object { $_ -replace '(?m)  (?<=^(?:  )*)', '    ' } |
-            Set-Content -Path './package.json'
+        $packageJson | ConvertTo-Json -Depth 100 | Set-Content -Path './package.json'
+        # ForEach-Object { $_ -replace '(?m)  (?<=^(?:  )*)', '    ' } |
+        # Set-Content -Path './package.json'
 
 
         Write-Output 'Updating manifest.json'
@@ -79,7 +80,7 @@ if ($DocumentationOnly) {
     $publish = Read-Host 'Create git commit, tag, and push? (y/n)'
     if ($publish -ieq 'y') {
         git add -A
-        git commit -m"Update to version ${Version}"
+        git commit -m "chore: update to version ${Version}"
         git tag "${Version}"
         git push
         $env:LEFTHOOK = 0
@@ -89,7 +90,7 @@ if ($DocumentationOnly) {
     $publish = Read-Host 'Update documentation? (y/n)'
     if ($publish -ieq 'y') {
         git switch gh-pages
-        git merge tasks-x/main
+        git merge $mainBranchName
         $env:LEFTHOOK = 0
         git push
         git switch -
