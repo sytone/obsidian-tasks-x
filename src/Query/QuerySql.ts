@@ -12,8 +12,8 @@ import { GroupHeading } from './GroupHeading';
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };
 
-@loggingAliases('QueryX')
-export class QueryX implements IQuery {
+@loggingAliases('QuerySql')
+export class QuerySql implements IQuery {
     public source: string;
 
     private _layoutOptions: LayoutOptions = new LayoutOptions();

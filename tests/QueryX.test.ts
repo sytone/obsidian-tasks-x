@@ -4,7 +4,7 @@
 import moment from 'moment';
 import alasql from 'alasql';
 
-import { QueryX } from '../src/Query/QueryX';
+import { QuerySql } from '../src/Query/QuerySql';
 //import { getSettings, updateSettings } from '../src/config/Settings';
 import { Status } from '../src/Status';
 import { Priority, Task } from '../src/Task';
@@ -19,7 +19,7 @@ window.moment = moment;
 
 // function shouldSupportFiltering(filters: Array<string>, allTaskLines: Array<string>, expectedResult: Array<string>) {
 //     // Arrange
-//     const query = new QueryX({ source: filters.join('\n') });
+//     const query = new QuerySql({ source: filters.join('\n') });
 
 //     const tasks = allTaskLines.map(
 //         (taskLine) =>
@@ -45,7 +45,7 @@ window.moment = moment;
 //     expect(filteredTaskLines).toMatchObject(expectedResult);
 // }
 
-describe('QueryX', () => {
+describe('QuerySql', () => {
     describe('filtering', () => {
         it('generic alasql test', () => {
             // Arrange
@@ -106,7 +106,7 @@ describe('QueryX', () => {
                 }),
             ];
             const input = 'SELECT * FROM Tasks WHERE Path LIKE "ab/c d"';
-            const query = new QueryX({ source: input });
+            const query = new QuerySql({ source: input });
 
             // Act
             const groupedTasks = query.applyQueryToTasks(tasks);
@@ -154,7 +154,7 @@ describe('QueryX', () => {
                 }),
             ];
             const input = 'SELECT * FROM Tasks WHERE status->indicator = "x"';
-            const query = new QueryX({ source: input });
+            const query = new QuerySql({ source: input });
 
             // Act
             const groupedTasks = query.applyQueryToTasks(tasks);

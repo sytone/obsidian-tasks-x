@@ -8,12 +8,12 @@ import type { Task } from '../Task';
 import { log } from '../Config/LogConfig';
 import type { IQuery } from '../IQuery';
 import { Query } from './Query';
-import { QueryX } from './QueryX';
+import { QuerySql } from './QuerySql';
 import type { GroupHeading } from './GroupHeading';
 
 export class QueryRenderer {
     public addQueryRenderChild = this._addQueryRenderChild.bind(this);
-    public addQueryXRenderChild = this._addQueryXRenderChild.bind(this);
+    public addQuerySqlRenderChild = this._addQuerySqlRenderChild.bind(this);
 
     private readonly app: App;
     private readonly events: Events;
@@ -23,7 +23,7 @@ export class QueryRenderer {
         this.events = events;
 
         plugin.registerMarkdownCodeBlockProcessor('tasks', this._addQueryRenderChild.bind(this));
-        plugin.registerMarkdownCodeBlockProcessor('taskx', this._addQueryXRenderChild.bind(this));
+        plugin.registerMarkdownCodeBlockProcessor('taskx', this._addQuerySqlRenderChild.bind(this));
     }
 
     private async _addQueryRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
@@ -39,7 +39,7 @@ export class QueryRenderer {
         );
     }
 
-    private async _addQueryXRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
+    private async _addQuerySqlRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
         log('debug', `Adding Query Render X child to context ${context.docId}`);
 
         context.addChild(
@@ -90,7 +90,7 @@ class QueryRenderChild extends MarkdownRenderChild {
                 break;
 
             case 'block-language-taskx':
-                this.query = new QueryX({ source });
+                this.query = new QuerySql({ source });
                 this.queryType = 'taskx';
                 break;
 
