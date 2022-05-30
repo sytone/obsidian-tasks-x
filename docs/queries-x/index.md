@@ -14,23 +14,40 @@ Compared to the previous query language the new X version is more complex and po
 - The language is SQL based, if you know SQL you can use pretty much any query you can use in SQL. Please create an issue [here](https://github.com/sytone/obsidian-tasks-x/issues) if you hit a problem.
 - If you want to make a fully custom query you need to select all the columns `*` at the moment unless you are grouping by. Selection of individual fields to generate a table is a future feature.
 
-By default you should only need the conditions of the SQL query, that is everything after the `WHERE` cluse inclusing the `WHERE` for example `WHERE status->indicator != "x" AND path LIKE '%Journal%' LIMIT 10` which will return all tasks not completed (`x`) with `Journal` in the path.
+By default you should only need the conditions of the SQL query, that is everything after the `WHERE` clause including the `WHERE` for example `WHERE status->indicator != "x" AND path LIKE '%Journal%' LIMIT 10` which will return all tasks not completed (`x`) with `Journal` in the path.
 
 ## General Queries
 
 The following columns are available to be used in the WHERE clauses.
 
-| Column Name                 | Description                                                                         |
-| --------------------------- | ----------------------------------------------------------------------------------- |
-| status->indicator           | The value between the square brackets. ('x', ' ', '-', '/', etc)                    |
-| status->name                | The display name for the status. ('Done', 'Todo', 'Cancelled', 'In Progress')       |
-| status->nextStatusIndicator | The next indicator to be used when clicked on.  ('x', ' ', '/', etc)                |
-| description                 | The description of the task.                                                        |
-| path                        | The path to the note the task is in.                                                |
-| precedingHeader             | The heading that the task is under                                                  |
-| priority                    | The priority of the task. This has to be treated like a string ('1', '2', '3', '4') |
+| Column Name                 | Description                                                                         | Type |
+| --------------------------- | ----------------------------------------------------------------------------------- | ---- |
+| status->indicator           | The value between the square brackets. ('x', ' ', '-', '/', etc)                    |      |
+| status->name                | The display name for the status. ('Done', 'Todo', 'Cancelled', 'In Progress')       |      |
+| status->nextStatusIndicator | The next indicator to be used when clicked on.  ('x', ' ', '/', etc)                |      |
+| description                 | The description of the task.                                                        |      |
+| path                        | The path to the note the task is in.                                                |      |
+| precedingHeader             | The heading that the task is under                                                  |      |
+| priority                    | The priority of the task. This has to be treated like a string ('1', '2', '3', '4') |      |
 
-CONVERT(int, duedate, 112)
+| startDate: Date | null;
+| scheduledDate: Date | null;
+| dueDate: Date | null;
+| createdDate: Date | null;
+| doneDate: Date | null;
+| recurrence: RecurrenceRecord | null;
+| blockLink: string;
+| tags: string[] | [];
+
+### Date Columns
+
+When using the date columns you can use javascript commands in the WHERE clause. The example below will pull all tasks that were done in 2021.
+
+````markdown
+```task-sql
+WHERE ((dueDate->getUTCFullYear() = 2021 AND status->indicator = 'x') OR (dueDate->getUTCFullYear() = 2022 AND status->indicator = ' ')) AND description LIKE '%#%'
+```
+````
 
 - startDate: Date | null;
 - scheduledDate: Date | null;
@@ -40,6 +57,8 @@ CONVERT(int, duedate, 112)
 - recurrence: RecurrenceRecord | null;
 - blockLink: string;
 - tags: string[] | [];
+
+Look at the [SQL Compatibility](https://github.com/AlaSQL/alasql/wiki/SQL%20keywords) table to see what SQL commands are supported.
 
 ### Object Properties & Functions
 

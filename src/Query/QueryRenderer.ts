@@ -23,31 +23,29 @@ export class QueryRenderer {
         this.events = events;
 
         plugin.registerMarkdownCodeBlockProcessor('tasks', this._addQueryRenderChild.bind(this));
-        plugin.registerMarkdownCodeBlockProcessor('taskx', this._addQuerySqlRenderChild.bind(this));
+        plugin.registerMarkdownCodeBlockProcessor('task-sql', this._addQuerySqlRenderChild.bind(this));
     }
 
     private async _addQueryRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        log('debug', `Adding Query Render child to context ${context.docId}`);
-
+        log('debug', '_addQueryRenderChild', `Adding Query Render for ${source} to context ${context.docId}`);
         context.addChild(
             new QueryRenderChild({
                 app: this.app,
                 events: this.events,
                 container: element,
-                source,
+                queryEngine: new Query({ source }),
             }),
         );
     }
 
     private async _addQuerySqlRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        log('debug', `Adding Query Render X child to context ${context.docId}`);
-
+        log('debug', '_addQuerySqlRenderChild', `Adding Query Render for ${source} to context ${context.docId}`);
         context.addChild(
             new QueryRenderChild({
                 app: this.app,
                 events: this.events,
                 container: element,
-                source,
+                queryEngine: new QuerySql({ source }),
             }),
         );
     }
@@ -56,9 +54,7 @@ export class QueryRenderer {
 class QueryRenderChild extends MarkdownRenderChild {
     private readonly app: App;
     private readonly events: Events;
-    private readonly source: string;
-    private query: IQuery;
-    private queryType: string;
+    private readonly queryEngine: IQuery;
 
     private renderEventRef: EventRef | undefined;
     private queryReloadTimeout: NodeJS.Timeout | undefined;
@@ -67,40 +63,20 @@ class QueryRenderChild extends MarkdownRenderChild {
         app,
         events,
         container,
-        source,
+        queryEngine,
     }: {
         app: App;
         events: Events;
         container: HTMLElement;
-        source: string;
+        queryEngine: IQuery;
     }) {
         super(container);
 
         this.app = app;
         this.events = events;
-        this.source = source;
+        this.queryEngine = queryEngine;
 
-        // The engine is chosen on the basis of the code block language. Currently
-        // there is only the main engine for the plugin, this allows others to be
-        // added later.
-        switch (this.containerEl.className) {
-            case 'block-language-tasks':
-                this.query = new Query({ source });
-                this.queryType = 'tasks';
-                break;
-
-            case 'block-language-taskx':
-                this.query = new QuerySql({ source });
-                this.queryType = 'taskx';
-                break;
-
-            default:
-                this.query = new Query({ source });
-                this.queryType = 'tasks';
-                break;
-        }
-
-        log('debug', `Query Render generated for class ${this.containerEl.className}`);
+        log('debug', 'QueryRenderChild:ctor', `Query Render generated for class ${this.containerEl.className}`);
     }
 
     onload() {
@@ -138,7 +114,6 @@ class QueryRenderChild extends MarkdownRenderChild {
         const millisecondsToMidnight = midnight.getTime() - now.getTime();
 
         this.queryReloadTimeout = setTimeout(() => {
-            this.query = new Query({ source: this.source });
             // Process the current cache state:
             this.events.triggerRequestCacheUpdate(this.render.bind(this));
             this.reloadQueryAtMidnight();
@@ -146,11 +121,10 @@ class QueryRenderChild extends MarkdownRenderChild {
     }
 
     private async render({ tasks, state }: { tasks: Task[]; state: State }) {
-        log('debug', `Render ${this.queryType} called for ${tasks.length} tasks, state: ${state}`);
+        log('debug', `Render called for ${tasks.length} tasks, state: ${state}. Using ${this.queryEngine.name}`);
         const content = this.containerEl.createEl('div');
-        if (state === State.Warm && this.query.error === undefined) {
-            log('debug', `Applying query of type ${this.queryType}`);
-            const tasksSortedLimitedGrouped = this.query.applyQueryToTasks(tasks);
+        if (state === State.Warm && this.queryEngine.error === undefined) {
+            const tasksSortedLimitedGrouped = this.queryEngine.applyQueryToTasks(tasks);
 
             for (const group of tasksSortedLimitedGrouped.groups) {
                 // If there were no 'group by' instructions, group.groupHeadings
@@ -165,10 +139,9 @@ class QueryRenderChild extends MarkdownRenderChild {
             }
             const totalTasksCount = tasksSortedLimitedGrouped.totalTasksCount();
             this.addTaskCount(content, totalTasksCount);
-        } else if (this.query.error !== undefined) {
-            log('error', `Tasks query type ${this.queryType} error: ${this.query.error}`);
-            console.log(this.query);
-            content.setText(`Tasks query type ${this.queryType} error: ${this.query.error}`);
+        } else if (this.queryEngine.error !== undefined) {
+            log('error', `Tasks query (${this.queryEngine.name}) error: ${this.queryEngine.error}`);
+            content.setText(`Tasks query error: ${this.queryEngine.error}`);
         } else {
             content.setText('Loading Tasks ...');
         }
@@ -194,7 +167,7 @@ class QueryRenderChild extends MarkdownRenderChild {
             const listItem = await task.toLi({
                 parentUlElement: taskList,
                 listIndex: i,
-                layoutOptions: this.query.layoutOptions,
+                layoutOptions: this.queryEngine.layoutOptions,
                 isFilenameUnique,
             });
 
@@ -203,13 +176,13 @@ class QueryRenderChild extends MarkdownRenderChild {
             footnotes.forEach((footnote) => footnote.remove());
 
             const postInfo = listItem.createSpan();
-            const shortMode = this.query.layoutOptions.shortMode;
+            const shortMode = this.queryEngine.layoutOptions.shortMode;
 
-            if (!this.query.layoutOptions.hideBacklinks) {
+            if (!this.queryEngine.layoutOptions.hideBacklinks) {
                 this.addBacklinks(postInfo, task, shortMode, isFilenameUnique);
             }
 
-            if (!this.query.layoutOptions.hideEditButton) {
+            if (!this.queryEngine.layoutOptions.hideEditButton) {
                 this.addEditButton(postInfo, task);
             }
 
@@ -318,7 +291,7 @@ class QueryRenderChild extends MarkdownRenderChild {
     }
 
     private addTaskCount(content: HTMLDivElement, tasksCount: number) {
-        if (!this.query.layoutOptions.hideTaskCount) {
+        if (!this.queryEngine.layoutOptions.hideTaskCount) {
             content.createDiv({
                 text: `${tasksCount} task${tasksCount !== 1 ? 's' : ''}`,
                 cls: 'tasks-count',

@@ -38,6 +38,7 @@ export type Grouping = { property: GroupingProperty };
 
 export class Query implements IQuery {
     public source: string;
+    public name: string;
 
     private _limit: number | undefined = undefined;
     private _layoutOptions: LayoutOptions = new LayoutOptions();
@@ -90,6 +91,7 @@ export class Query implements IQuery {
     private readonly commentRegexp = /^#.*/;
 
     constructor({ source }: { source: string }) {
+        this.name = 'Query';
         this.source = source;
         source
             .split('\n')

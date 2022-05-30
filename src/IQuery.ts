@@ -13,6 +13,14 @@ import type { Grouping } from './Query/Query';
  */
 export interface IQuery {
     /**
+     * The name of the engine used in UI and logging.
+     *
+     * @type {string}
+     * @memberof IQuery
+     */
+    name: string;
+
+    /**
      * This is the text from the code block in markdown and contains
      * the query to be used by a implementation of the IQuery.
      *

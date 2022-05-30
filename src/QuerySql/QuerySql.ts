@@ -15,6 +15,7 @@ export type Grouping = { property: GroupingProperty };
 @loggingAliases('QuerySql')
 export class QuerySql implements IQuery {
     public source: string;
+    public name: string;
 
     private _layoutOptions: LayoutOptions = new LayoutOptions();
     private _grouping: Grouping[] = [];
@@ -28,6 +29,7 @@ export class QuerySql implements IQuery {
     private _shortModeRegexp = /^short/;
 
     constructor({ source }: { source: string }) {
+        this.name = 'QuerySql';
         const queryPrefix = 'SELECT * FROM ?';
 
         this.source = source.replace(this._commentReplacementRegexp, '');
