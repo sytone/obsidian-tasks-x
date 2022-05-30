@@ -78,7 +78,7 @@ if ($DocumentationOnly) {
     $publish = Read-Host 'Create git commit, tag, and push? (y/n)'
     if ($publish -ieq 'y') {
         git add -A
-        git commit -m"Update to version ${Version}"
+        git commit -m "chore: update to version ${Version}"
         git tag "${Version}"
         git push
         $env:LEFTHOOK = 0
