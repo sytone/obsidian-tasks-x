@@ -1,5 +1,5 @@
-title: Obsidian Tasks X Powered
-description: Task management for Obsidian, X Powered
+title: Obsidian Tasks SQL Powered
+description: Task management for Obsidian, SQL Powered
 baseurl: '/obsidian-tasks-x' # the subpath of your site, e.g. /blog
 url: 'https://sytone.github.io' # the base hostname & protocol for your site, e.g. http://example.com
 
@@ -11,7 +11,7 @@ back_to_top_text: 'Back to top'
 
 # Aux links for the upper right navigation
 aux_links:
-  'Obsidian Tasks X Powered on GitHub':
+  'Obsidian Tasks SQL Powered on GitHub':
     - '//github.com/sytone/obsidian-tasks-x'
 
 # Footer "Edit this page on GitHub" link text

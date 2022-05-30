@@ -1,4 +1,5 @@
 import { Editor, MarkdownView, View } from 'obsidian';
+import { StatusRegistry } from '../StatusRegistry';
 
 import { Task, TaskRegularExpressions } from '../Task';
 
@@ -100,7 +101,9 @@ const toggleChecklistItem = ({ regexMatch }: { regexMatch: RegExpMatchArray }): 
     const statusString = regexMatch[2].toLowerCase();
     const body = regexMatch[3];
 
-    const toggledStatusString = statusString === ' ' ? 'x' : ' ';
+    const status = StatusRegistry.getInstance().byIndicator(statusString);
+
+    const toggledStatusString = status.nextStatusIndicator;
 
     const toggledLine = `${indentation}- [${toggledStatusString}] ${body}`;
 

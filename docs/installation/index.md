@@ -9,9 +9,9 @@ has_toc: false
 
 Follow the steps below to install Tasks.
 
-1. Search for "Tasks X Powered" in Obsidian's community plugins browser
-2. Enable the plugin in your Obsidian settings (find "Tasks X Powered" under "Community plugins").
+1. Search for "Tasks SQL Powered" in Obsidian's community plugins browser
+2. Enable the plugin in your Obsidian settings (find "Tasks SQL Powered" under "Community plugins").
 3. Check the settings. It makes sense to set the global filter early on (if you want one).
 4. Replace the "Toggle checklist status" hotkey with "Tasks: Toggle Done".
     - I recommend you remove the original toggle hotkey and set the "Tasks" toggle to `Ctrl + Enter` (or `Cmd + Enter` on a mac).
-5. Optional: bind a hotkey to the command `Tasks X Powered: Create or edit` to have quick access to the Tasks modal.
+5. Optional: bind a hotkey to the command `Tasks SQL Powered: Create or edit` to have quick access to the Tasks modal.

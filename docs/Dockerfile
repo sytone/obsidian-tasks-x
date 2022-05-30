@@ -6,4 +6,4 @@ WORKDIR /docs
 
 RUN bundle install
 
-CMD bundle exec jekyll serve --config _config.yml,_config.docker.yml --watch -H 0.0.0.0 -P 4000
+CMD bundle exec jekyll serve --config _config.yml,_config.docker.yml --force_polling -H 0.0.0.0 -P 4000

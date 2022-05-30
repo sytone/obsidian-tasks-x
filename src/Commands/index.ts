@@ -1,4 +1,6 @@
-import type { App, Editor, Plugin, View } from 'obsidian';
+import type TasksPlugin from 'main';
+import type { App, Editor, View } from 'obsidian';
+import { log } from '../Config/LogConfig';
 
 import { createOrEdit } from './CreateOrEdit';
 //import { selectStatus } from './SelectStatus';
@@ -6,9 +8,9 @@ import { createOrEdit } from './CreateOrEdit';
 import { toggleDone } from './ToggleDone';
 
 export class Commands {
-    private readonly plugin: Plugin;
+    private readonly plugin: TasksPlugin;
 
-    constructor({ plugin }: { plugin: Plugin }) {
+    constructor({ plugin }: { plugin: TasksPlugin }) {
         this.plugin = plugin;
 
         plugin.addCommand({
@@ -33,6 +35,21 @@ export class Commands {
         //     icon: 'check-in-circle',
         //     editorCheckCallback: selectStatus,
         // });
+
+        plugin.addCommand({
+            id: 'debug-export-tasks',
+            name: 'Debug: Export tasks to console log',
+            icon: 'pencil',
+            editorCheckCallback: (checking: boolean, editor: Editor, view: View) => {
+                if (checking) {
+                    log('silly', 'Command:debug-export-tasks', 'Checking if command is available.', editor, view);
+                    return true;
+                }
+                this.plugin.cache?.getTasks().forEach((task) => {
+                    console.log(task.toString());
+                });
+            },
+        });
     }
 
     private get app(): App {

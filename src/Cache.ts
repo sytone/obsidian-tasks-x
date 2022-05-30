@@ -4,7 +4,7 @@ import { Mutex } from 'async-mutex';
 import { Task } from './Task';
 import type { Events } from './Events';
 
-import { log } from './Config/LogConfig';
+import { log, logCall } from './Config/LogConfig';
 
 export enum State {
     Cold = 'Cold',
@@ -21,6 +21,8 @@ export class Cache {
     private readonly eventsEventReferences: EventRef[];
 
     private readonly tasksMutex: Mutex;
+    private readonly vaultLoadMutex: Mutex;
+
     private state: State;
     private _tasks: Task[];
     private _files: [string, number][];
@@ -44,6 +46,7 @@ export class Cache {
         this.eventsEventReferences = [];
 
         this.tasksMutex = new Mutex();
+        this.vaultLoadMutex = new Mutex();
         this.state = State.Cold;
         this._tasks = [];
         this._files = [];
@@ -54,7 +57,9 @@ export class Cache {
         this.subscribeToVault();
         this.subscribeToEvents();
 
-        this.loadVault();
+        this.vaultLoadMutex.runExclusive(() => {
+            this.loadVault();
+        });
     }
 
     public unload(): void {
@@ -79,10 +84,9 @@ export class Cache {
         return this.state;
     }
 
+    @logCall
     private notifySubscribers() {
         if (this.state === State.Warm) {
-            log('debug', `notifySubscribers, this.getTasks(): ${this.getTasks().length}, state: ${this.state}`);
-
             this.events.triggerCacheUpdate({
                 tasks: this.getTasks(),
                 state: this.state,
@@ -95,18 +99,23 @@ export class Cache {
             log('debug', `resolved event received, loadedAfterFirstResolve: ${this.loadedAfterFirstResolve}`);
             // Resolved fires on every change.
             // We only want to initialize if we haven't already.
-            if (!this.loadedAfterFirstResolve) {
-                this.loadedAfterFirstResolve = true;
-                this.loadVault();
-            }
+
+            this.vaultLoadMutex.runExclusive(() => {
+                if (!this.loadedAfterFirstResolve && this.state !== State.Warm && this.state !== State.Initializing) {
+                    this.loadedAfterFirstResolve = true;
+                    this.loadVault();
+                }
+            });
         });
         this.metadataCacheEventReferences.push(resolvedEventReference);
 
         // Does not fire when starting up obsidian and only works for changes.
         const changedEventReference = this.metadataCache.on('changed', (file: TFile) => {
             this.tasksMutex.runExclusive(() => {
-                log('debug', `changed event received, file: ${file.path}`);
-                this.indexFile(file);
+                if (this.state === State.Warm) {
+                    log('debug', `changed event received, file: ${file.path}`);
+                    this.indexFile(file);
+                }
             });
         });
         this.metadataCacheEventReferences.push(changedEventReference);
@@ -120,7 +129,9 @@ export class Cache {
             }
 
             this.tasksMutex.runExclusive(() => {
-                this.indexFile(file);
+                if (this.state === State.Warm) {
+                    this.indexFile(file);
+                }
             });
         });
         this.vaultEventReferences.push(createdEventReference);
@@ -133,11 +144,13 @@ export class Cache {
             }
 
             this.tasksMutex.runExclusive(async () => {
-                this._tasks = this._tasks.filter((task: Task) => {
-                    return task.path !== file.path;
-                });
+                if (this.state === State.Warm) {
+                    this._tasks = this._tasks.filter((task: Task) => {
+                        return task.path !== file.path;
+                    });
 
-                this.notifySubscribers();
+                    this.notifySubscribers();
+                }
             });
         });
         this.vaultEventReferences.push(deletedEventReference);
@@ -149,15 +162,17 @@ export class Cache {
             }
 
             this.tasksMutex.runExclusive(async () => {
-                this._tasks = this._tasks.map((task: Task): Task => {
-                    if (task.path === oldPath) {
-                        return new Task({ ...task, path: file.path });
-                    } else {
-                        return task;
-                    }
-                });
+                if (this.state === State.Warm) {
+                    this._tasks = this._tasks.map((task: Task): Task => {
+                        if (task.path === oldPath) {
+                            return new Task({ ...task, path: file.path });
+                        } else {
+                            return task;
+                        }
+                    });
 
-                this.notifySubscribers();
+                    this.notifySubscribers();
+                }
             });
         });
         this.vaultEventReferences.push(renamedEventReference);
@@ -172,47 +187,25 @@ export class Cache {
         this.eventsEventReferences.push(requestReference);
     }
 
-    private loadVault(): Promise<void> {
-        log('debug', 'loading Vault:');
+    @logCall
+    private async loadVault() {
+        this.state = State.Initializing;
+        await Promise.all(
+            this.vault.getMarkdownFiles().map((file: TFile) => {
+                return this.indexFile(file);
+            }),
+        );
 
-        return this.tasksMutex.runExclusive(async () => {
-            this.state = State.Initializing;
-            await Promise.all(
-                this.vault.getMarkdownFiles().map((file: TFile) => {
-                    return this.indexFile(file);
-                }),
-            );
-
-            log('debug', 'loaded Vault:');
-
-            this.state = State.Warm;
-            // Notify that the cache is now warm:
-            this.notifySubscribers();
-        });
+        this.state = State.Warm;
+        log('info', 'Load Vault', `Loaded ${this.getTasks().length} tasks`);
+        // Notify that the cache is now warm:
+        this.notifySubscribers();
     }
 
     private async indexFile(file: TFile): Promise<void> {
         const fileCache = this.metadataCache.getFileCache(file);
         if (fileCache === null || fileCache === undefined) {
             return;
-        }
-
-        // Process this file if it has not been touched in the last 500ms
-        let pathFound = false;
-        for (let i = 0; i < this._files.length; i++) {
-            if (this._files[i][0] === file.path) {
-                pathFound = true;
-                if (this._files[i][1] <= Date.now() - 500) {
-                    // log('silly', 'Cache:indexFile:Debounce', `indexed file: ${file.path}`);
-                    return;
-                } else {
-                    this._files[i][1] = Date.now();
-                }
-            }
-        }
-
-        if (!pathFound) {
-            this._files.push([file.path, Date.now()]);
         }
 
         // Remove all tasks from this file from the cache before
@@ -230,8 +223,25 @@ export class Cache {
                 this.notifySubscribers();
             }
             return;
-        } else {
-            // console.log(listItems.length);
+        }
+
+        // If we are initalizing, only touch the file once.
+        let pathFound = false;
+        for (let i = 0; i < this._files.length; i++) {
+            if (this._files[i][0] === file.path) {
+                pathFound = true;
+            }
+        }
+        if (this.state === State.Initializing && pathFound) {
+            return;
+        }
+        if (!pathFound) {
+            // log(
+            //     'silly',
+            //     'indexFile',
+            //     `${this.state}: indexed file: ${file.path} with ${fileCache?.listItems?.length} tasks`,
+            // );
+            this._files.push([file.path, Date.now()]);
         }
 
         const fileContent = await this.vault.cachedRead(file);

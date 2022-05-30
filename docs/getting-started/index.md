@@ -14,7 +14,7 @@ Now Tasks tracks that you need to take out the trash!
 
 This plugin has a more advanced query and display system. It also supports the original structure so you can still use the old format. To use the new format use `taskx` as the code block tag.
 
-## Tasks X Powered
+## Tasks SQL Powered
 
 To list all open tasks in a markdown file, simply add a [query]({{ site.baseurl }}{% link queries-x/index.md %}) as a tasks code block like so:
 

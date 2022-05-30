@@ -2,6 +2,29 @@ import moment from 'moment';
 import { ILogObject, Logger, TLogLevelName, TTransportLogger } from 'tslog';
 import 'reflect-metadata';
 
+/**
+ * Writes TSLog Pretty Print messages to the vscode debug console. It requires the logger during construction to import
+ * its pretty print preferences
+ *
+ * @class DebugConsoleTransport
+ * @implements {TTransportLogger<(ILogObject) => void>}
+ */
+class DebugConsoleTransport implements TTransportLogger<(logObject: ILogObject) => void> {
+    silly = this.log;
+    debug = this.log;
+    trace = this.log;
+    info = this.log;
+    warn = this.log;
+    error = this.log;
+    fatal = this.log;
+    // private readonly debugConsoleOutput = new DebugConsoleOutput();
+    constructor() {}
+    log(logObject: ILogObject): void {
+        logToDebugConsole(logObject);
+        // this.logger.printPrettyLog(this.debugConsoleOutput, logObject);
+    }
+}
+
 // export const logCall = (category: string) => (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
 export const logCall = (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
@@ -57,13 +80,14 @@ export function loggingAliases(loggerName: string) {
 }
 
 const logger: Logger = new Logger({ name: 'Tasks X', minLevel: 'silly' });
+logger.attachTransport(new DebugConsoleTransport(), 'silly');
 
 export function log(logLevel: TLogLevelName, loggerChildName?: string, ...logArguments: unknown[]) {
     let finalLogger: Logger = logger;
     if (loggerChildName !== undefined) {
         finalLogger = logger.getChildLogger({ name: loggerChildName });
     }
-    finalLogger.attachTransport(new DebugConsoleTransport(), 'silly');
+    //finalLogger.attachTransport(new DebugConsoleTransport(), 'silly');
     switch (logLevel) {
         case 'silly':
             finalLogger.silly(logArguments);
@@ -123,27 +147,4 @@ function logToDebugConsole(logObject: ILogObject) {
         whiteWithBlackText,
     );
     // transportLogs.push(logObject);
-}
-
-/**
- * Writes TSLog Pretty Print messages to the vscode debug console. It requires the logger during construction to import
- * its pretty print preferences
- *
- * @class DebugConsoleTransport
- * @implements {TTransportLogger<(ILogObject) => void>}
- */
-class DebugConsoleTransport implements TTransportLogger<(logObject: ILogObject) => void> {
-    silly = this.log;
-    debug = this.log;
-    trace = this.log;
-    info = this.log;
-    warn = this.log;
-    error = this.log;
-    fatal = this.log;
-    // private readonly debugConsoleOutput = new DebugConsoleOutput();
-    constructor() {}
-    log(logObject: ILogObject): void {
-        logToDebugConsole(logObject);
-        // this.logger.printPrettyLog(this.debugConsoleOutput, logObject);
-    }
 }

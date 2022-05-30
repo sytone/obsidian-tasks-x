@@ -17,7 +17,7 @@ export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;
     public queryRenderer: QueryRenderer | undefined;
     public statusRegistry: StatusRegistry | undefined;
-    private cache: Cache | undefined;
+    public cache: Cache | undefined;
 
     @logCall
     async onload(): Promise<void> {

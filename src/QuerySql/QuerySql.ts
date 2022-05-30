@@ -111,11 +111,12 @@ export class QuerySql implements IQuery {
 
     @logCall
     public applyQueryToTasks(tasks: Task[]): TaskGroups {
-        log('debug', `'applyQueryToTasks executing query: <strong>[${this.source}]</strong>`);
+        log('debug', 'QuerySql:applyQueryToTasks', `Executing query: [${this.source}]`);
         const records: TaskRecord[] = tasks.map((task) => {
             return task.toRecord();
         });
         let queryResult: TaskRecord[] = alasql(this.source, [records]);
+        log('debug', 'QuerySql:applyQueryToTasks', `queryResult: ${queryResult.length}`);
 
         if (this._groupingPossible) {
             // There may be sub groups in the returned data. This would be
@@ -148,7 +149,6 @@ export class QuerySql implements IQuery {
             queryResult = <TaskRecord[]>queryResult;
         }
 
-        log('debug', 'applyQueryToTasks queryResult:', queryResult.length);
         const foundTasks: Task[] = queryResult.map((task) => {
             return Task.fromTaskRecord(task);
         });

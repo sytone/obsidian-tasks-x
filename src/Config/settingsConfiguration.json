@@ -1,12 +1,12 @@
 [
   {
-    "text": "Tasks, X Powered",
+    "text": "Tasks, SQL Powered",
     "level": "h1",
     "class": "",
     "open": true,
     "notice": {
       "class": "",
-      "text": "Tasks, X Powered is a fork of the Tasks plugin that has an alternative query language, it is backwards compatible and should be merged back to Tasks at some point in the future. Until then you can use this version of the plugin for advanced management of tasks in Obsidian.",
+      "text": "Tasks, SQL Powered is a fork of the Tasks plugin that has an alternative query language, it is backwards compatible and should be merged back to Tasks at some point in the future. Until then you can use this version of the plugin for advanced management of tasks in Obsidian.",
       "html": ""
     },
     "settings": []

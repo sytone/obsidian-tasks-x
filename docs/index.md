@@ -27,7 +27,7 @@ Supports due dates, recurring tasks (repetition), done dates, sub-set of checkli
 
 You can toggle the task status in any view or query and it will update the source file.
 
-Tasks X Powered is a for of the Tasks plugin. It has support for more advanced queries using the SQL query syntax.
+Tasks SQL Powered is a for of the Tasks plugin. It has support for more advanced queries using the SQL query syntax.
 
 > Please submit bugs [here](https://github.com/sytone/obsidian-tasks-x/issues).
 >

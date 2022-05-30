@@ -208,7 +208,7 @@ export class SettingsTab extends PluginSettingTab {
                         ['>', 'Forwarded', 'x'],
                         ['<', 'Schedule', 'x'],
                         ['?', 'Question', 'x'],
-                        ['/', 'Incomplete', 'x'],
+                        // ['/', 'Incomplete', 'x'], This is used for In Progress
                         ['!', 'Important', 'x'],
                         ['"', 'Quote', 'x'],
                         ['-', 'Canceled', 'x'],
