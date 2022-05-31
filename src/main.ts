@@ -26,8 +26,8 @@ export default class TasksPlugin extends Plugin {
         logging
             .configure({
                 minLevels: {
-                    '': 'info',
-                    core: 'warn',
+                    taskssql: 'debug',
+                    'taskssql.querysql.QuerySql': 'debug',
                 },
             })
             .registerConsoleLogger();

@@ -4,12 +4,13 @@ import moment from 'moment';
 import { LayoutOptions } from '../LayoutOptions';
 
 import { Task, TaskRecord } from '../Task';
-import { log, logCall } from '../Config/LogConfig';
+import { logCall } from '../Config/LogConfig';
 import type { IQuery } from '../IQuery';
 import { TaskGroups } from '../Query/TaskGroups';
 import { Group } from '../Query/Group';
 import { TaskGroup } from '../Query/TaskGroup';
 import { GroupHeading } from '../Query/GroupHeading';
+import { logging } from '../lib/logging';
 
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };
@@ -25,6 +26,7 @@ export class QuerySql implements IQuery {
     private _groupByFields: [string, string][] = [];
     private _rawMode: boolean = false;
     private _rawWithTasksMode: boolean = false;
+    logger = logging.getLogger('taskssql.querysql.QuerySql');
 
     private _commentReplacementRegexp = /(^#.*$(\r\n|\r|\n)?)/gm;
     private _commentRegexp = /^#.*/;
@@ -131,7 +133,7 @@ export class QuerySql implements IQuery {
 
     @logCall
     public applyQueryToTasks(tasks: Task[]): TaskGroups {
-        log('debug', `Executing query: [${this.source}]`);
+        this.logger.debug(`Executing query: [${this.source}]`);
         const records: TaskRecord[] = tasks.map((task) => {
             return task.toRecord();
         });
@@ -147,7 +149,7 @@ export class QuerySql implements IQuery {
         }
 
         let queryResult: TaskRecord[] = alasql(this.source, [records]);
-        log('debug', `queryResult: ${queryResult.length}`);
+        this.logger.debug(`queryResult: ${queryResult.length}`);
 
         if (this._rawMode && this._rawWithTasksMode) {
             console.log('RAW Data result from AlaSQL query');
