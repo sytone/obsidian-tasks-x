@@ -24,17 +24,61 @@ export class QuerySql implements IQuery {
     private _error: string | undefined = undefined;
     private _groupingPossible: boolean = false;
     private _groupByFields: [string, string][] = [];
+    private _rawMode: boolean = false;
+    private _rawWithTasksMode: boolean = false;
+
     private _commentReplacementRegexp = /(^#.*$(\r\n|\r|\n)?)/gm;
     private _commentRegexp = /^#.*/;
     private _hideOptionsRegexp =
         /^hide (task count|backlink|priority|start date|scheduled date|done date|due date|recurrence rule|edit button)/;
     private _shortModeRegexp = /^short/;
+    private _rawQuery = /^raw (empty|tasks)/;
 
     constructor({ source }: { source: string }) {
         this.name = 'QuerySql';
+
+        source
+            .split('\n')
+            .map((line: string) => line.trim())
+            .forEach((line: string) => {
+                switch (true) {
+                    case line === '':
+                        break;
+                    case this._commentRegexp.test(line):
+                        {
+                            // Comment lines are rendering directives
+                            // #hide (task count|backlink|priority|start date|scheduled date|done date|due date|recurrence rule|edit button)
+                            // #short
+                            // #raw (empty|tasks)
+                            // Will be used to filter the columns... probably...
+                            const directive = line.slice(1).trim();
+
+                            if (this._shortModeRegexp.test(directive)) {
+                                this._layoutOptions.shortMode = true;
+                            } else if (this._hideOptionsRegexp.test(directive)) {
+                                this.parseHideOptions({ line: directive });
+                            } else if (this._rawQuery.test(directive)) {
+                                this._rawMode = true;
+                                const rawOptions = directive.match(this._rawQuery);
+                                if (rawOptions !== null && rawOptions[1].trim().toLowerCase() === 'empty') {
+                                    this._rawWithTasksMode = false;
+                                } else {
+                                    this._rawWithTasksMode = true;
+                                }
+                            }
+                        }
+                        break;
+                }
+            });
+
         const queryPrefix = 'SELECT * FROM ?';
 
         this.source = source.replace(this._commentReplacementRegexp, '');
+
+        // Exit out if raw with no set table to query.
+        if (this._rawMode && !this._rawWithTasksMode) {
+            return;
+        }
         const sqlTokens = this.source.match(/[^\s,;]+|;/gi);
 
         // If there is a group by clause, then we can do grouping later on, no need to
@@ -69,31 +113,6 @@ export class QuerySql implements IQuery {
                 this.source = `${queryPrefix} ${this.source}`;
             }
         }
-
-        source
-            .split('\n')
-            .map((line: string) => line.trim())
-            .forEach((line: string) => {
-                switch (true) {
-                    case line === '':
-                        break;
-                    case this._commentRegexp.test(line):
-                        {
-                            // Comment lines are rendering directives
-                            // #hide (task count|backlink|priority|start date|scheduled date|done date|due date|recurrence rule|edit button)
-                            // #short
-                            // Will be used to filter the columns... probably...
-                            const directive = line.slice(1).trim();
-
-                            if (this._shortModeRegexp.test(directive)) {
-                                this._layoutOptions.shortMode = true;
-                            } else if (this._hideOptionsRegexp.test(directive)) {
-                                this.parseHideOptions({ line: directive });
-                            }
-                        }
-                        break;
-                }
-            });
     }
 
     public get grouping(): Grouping[] {
@@ -120,8 +139,21 @@ export class QuerySql implements IQuery {
 
         // Run the query in AlaSQL.
         alasql.fn.moment = moment; // Set moment() function available to AlaSQL
+
+        if (this._rawMode && !this._rawWithTasksMode) {
+            const rawResult = alasql(this.source);
+            console.log('RAW Data result from AlaSQL query');
+            console.log(rawResult);
+            return new TaskGroups([], []);
+        }
+
         let queryResult: TaskRecord[] = alasql(this.source, [records]);
         log('debug', 'QuerySql:applyQueryToTasks', `queryResult: ${queryResult.length}`);
+
+        if (this._rawMode && this._rawWithTasksMode) {
+            console.log('RAW Data result from AlaSQL query');
+            console.log(queryResult);
+        }
 
         if (this._groupingPossible) {
             // There may be sub groups in the returned data. This would be
