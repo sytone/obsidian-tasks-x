@@ -2,6 +2,33 @@ import moment from 'moment';
 import { ILogObject, Logger, TLogLevelName, TTransportLogger } from 'tslog';
 import 'reflect-metadata';
 
+import { Platform, Plugin } from 'obsidian';
+
+// Call this method inside your plugin's `onLoad` function
+export function monkeyPatchConsole(plugin: Plugin) {
+    if (!Platform.isMobile) {
+        return;
+    }
+
+    const logFile = `${plugin.manifest.dir}/tasks-sql-logs.txt`;
+    const logs: string[] = [];
+    const logMessages =
+        (prefix: string) =>
+        (...messages: unknown[]) => {
+            logs.push(`\n[${prefix}]`);
+            for (const message of messages) {
+                logs.push(String(message));
+            }
+            plugin.app.vault.adapter.write(logFile, logs.join(' '));
+        };
+
+    console.debug = logMessages('debug');
+    console.error = logMessages('error');
+    console.info = logMessages('info');
+    console.log = logMessages('log');
+    console.warn = logMessages('warn');
+}
+
 /**
  * Writes TSLog Pretty Print messages to the vscode debug console. It requires the logger during construction to import
  * its pretty print preferences

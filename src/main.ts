@@ -11,7 +11,7 @@ import { QueryRenderer } from './Query/QueryRenderer';
 import { getSettings, updateSettings } from './Config/Settings';
 import { SettingsTab } from './Config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
-import { log, logCall } from './Config/LogConfig';
+import { log, logCall, monkeyPatchConsole } from './Config/LogConfig';
 
 export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;
@@ -21,6 +21,7 @@ export default class TasksPlugin extends Plugin {
 
     @logCall
     async onload(): Promise<void> {
+        monkeyPatchConsole(this);
         log('info', `loading plugin "${this.manifest.name}" v${this.manifest.version}`);
 
         // Load the settings and UI.
