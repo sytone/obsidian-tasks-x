@@ -56,7 +56,6 @@
   "dependencies": {
     "alasql": "^1.7.3",
     "chrono-node": "2.2.6",
-    "rrule": "^2.6.8",
-    "tslog": "^3.3.3"
+    "rrule": "^2.6.8"
   }
 }

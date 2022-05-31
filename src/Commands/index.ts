@@ -42,7 +42,7 @@ export class Commands {
             icon: 'pencil',
             editorCheckCallback: (checking: boolean, editor: Editor, view: View) => {
                 if (checking) {
-                    log('silly', 'Command:debug-export-tasks', 'Checking if command is available.', editor, view);
+                    log('silly', `Checking if command is available. ${editor}${view}`);
                     return true;
                 }
                 this.plugin.cache?.getTasks().forEach((task) => {

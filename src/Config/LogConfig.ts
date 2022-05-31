@@ -1,6 +1,10 @@
-import moment from 'moment';
-import { ILogObject, Logger, TLogLevelName, TTransportLogger } from 'tslog';
 import { Platform, Plugin } from 'obsidian';
+import { TLogLevelName, logging } from '../lib/logging';
+
+const logger = logging.getLogger('core.module-name');
+
+// Later on
+logger.info('This is my log message');
 
 // Call this method inside your plugin's `onLoad` function
 export function monkeyPatchConsole(plugin: Plugin) {
@@ -27,29 +31,6 @@ export function monkeyPatchConsole(plugin: Plugin) {
     console.warn = logMessages('warn');
 }
 
-/**
- * Writes TSLog Pretty Print messages to the vscode debug console. It requires the logger during construction to import
- * its pretty print preferences
- *
- * @class DebugConsoleTransport
- * @implements {TTransportLogger<(ILogObject) => void>}
- */
-class DebugConsoleTransport implements TTransportLogger<(logObject: ILogObject) => void> {
-    silly = this.log;
-    debug = this.log;
-    trace = this.log;
-    info = this.log;
-    warn = this.log;
-    error = this.log;
-    fatal = this.log;
-    // private readonly debugConsoleOutput = new DebugConsoleOutput();
-    constructor() {}
-    log(logObject: ILogObject): void {
-        logToDebugConsole(logObject);
-        // this.logger.printPrettyLog(this.debugConsoleOutput, logObject);
-    }
-}
-
 // export const logCall = (category: string) => (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
 export const logCall = (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
@@ -60,8 +41,9 @@ export const logCall = (target: Object, propertyKey: string, descriptor: Propert
         const endTime = new Date(Date.now());
         log(
             'silly',
-            `${target?.constructor?.name}:${propertyKey}`,
-            `called with ${args.length} arguments. Took: ${endTime.getTime() - startTime.getTime()}ms`,
+            `${target?.constructor?.name}:${propertyKey}:called with ${args.length} arguments. Took: ${
+                endTime.getTime() - startTime.getTime()
+            }ms`,
             // JSON.stringify(args),
         );
         return result;
@@ -70,7 +52,7 @@ export const logCall = (target: Object, propertyKey: string, descriptor: Propert
     return descriptor;
 };
 
-export function logCallDetails(loggerName?: string) {
+export function logCallDetails() {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
         descriptor.value = async function (...args: any[]) {
@@ -81,9 +63,9 @@ export function logCallDetails(loggerName?: string) {
 
             log(
                 'silly',
-                loggerName,
-                `${typeof target}:${propertyKey} called with ${args.length} arguments. Took: ${elapsed}ms`,
-                JSON.stringify(args),
+                `${typeof target}:${propertyKey} called with ${
+                    args.length
+                } arguments. Took: ${elapsed}ms ${JSON.stringify(args)}`,
             );
             return result;
         };
@@ -92,36 +74,30 @@ export function logCallDetails(loggerName?: string) {
 }
 
 // Setup the logger for the plugin.
-const logger: Logger = new Logger({ name: 'Tasks X', minLevel: 'silly' });
-logger.attachTransport(new DebugConsoleTransport(), 'silly');
-
-export function log(logLevel: TLogLevelName, loggerChildName?: string, ...logArguments: unknown[]) {
-    let finalLogger: Logger = logger;
-    if (loggerChildName !== undefined) {
-        finalLogger = logger.getChildLogger({ name: loggerChildName });
-    }
+export function log(logLevel: TLogLevelName, message: string) {
+    const finalLogger = logger;
     //finalLogger.attachTransport(new DebugConsoleTransport(), 'silly');
     switch (logLevel) {
         case 'silly':
-            finalLogger.silly(logArguments);
+            finalLogger.trace(message);
             break;
         case 'trace':
-            finalLogger.trace(logArguments);
+            finalLogger.trace(message);
             break;
         case 'debug':
-            finalLogger.debug(logArguments);
+            finalLogger.debug(message);
             break;
         case 'info':
-            finalLogger.info(logArguments);
+            finalLogger.info(message);
             break;
         case 'warn':
-            finalLogger.warn(logArguments);
+            finalLogger.warn(message);
             break;
         case 'error':
-            finalLogger.error(logArguments);
+            finalLogger.error(message);
             break;
         case 'fatal':
-            finalLogger.fatal(logArguments);
+            finalLogger.error(message);
             break;
         default:
             break;
@@ -134,30 +110,30 @@ export function log(logLevel: TLogLevelName, loggerChildName?: string, ...logArg
 //     }
 // }
 
-function logToDebugConsole(logObject: ILogObject) {
-    const blackWithYellowText = 'background: #222; color: #bada55;';
-    const whiteWithBlackText = 'background: #fff; color: #000;';
-    const whiteWithPurpleText = 'background: #ccc; color: #663399;';
-    const bold = 'font-weight: bold;';
-    // const lightGrey = 'background: #ebebeb;';
+// function logToDebugConsole(logObject: ILogObject) {
+//     const blackWithYellowText = 'background: #222; color: #bada55;';
+//     const whiteWithBlackText = 'background: #fff; color: #000;';
+//     const whiteWithPurpleText = 'background: #ccc; color: #663399;';
+//     const bold = 'font-weight: bold;';
+//     // const lightGrey = 'background: #ebebeb;';
 
-    let logLevel: string = whiteWithBlackText;
+//     let logLevel: string = whiteWithBlackText;
 
-    switch (logObject.logLevel.toUpperCase()) {
-        case 'DEBUG':
-            logLevel = blackWithYellowText;
-            break;
-        case 'SILLY':
-            logLevel = whiteWithPurpleText;
-            break;
-    }
-    console.log(
-        `%c[${moment().format('YYYYMMDD hh:mm:ss')}]%c[${logObject.logLevel.toUpperCase()}]%c[${
-            logObject.loggerName
-        }] ${logObject.argumentsArray.join(',')}`,
-        bold,
-        logLevel,
-        whiteWithBlackText,
-    );
-    // transportLogs.push(logObject);
-}
+//     switch (logObject.logLevel.toUpperCase()) {
+//         case 'DEBUG':
+//             logLevel = blackWithYellowText;
+//             break;
+//         case 'SILLY':
+//             logLevel = whiteWithPurpleText;
+//             break;
+//     }
+//     console.log(
+//         `%c[${moment().format('YYYYMMDD hh:mm:ss')}]%c[${logObject.logLevel.toUpperCase()}]%c[${
+//             logObject.loggerName
+//         }] ${logObject.argumentsArray.join(',')}`,
+//         bold,
+//         logLevel,
+//         whiteWithBlackText,
+//     );
+//     // transportLogs.push(logObject);
+// }

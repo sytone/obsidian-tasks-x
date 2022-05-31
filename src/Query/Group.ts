@@ -27,7 +27,7 @@ export class Group {
      * @param tasks The tasks that match the task block's Query
      */
     public static by(grouping: Grouping[], tasks: Task[]): TaskGroups {
-        log('debug', 'by executing query:', tasks.length);
+        log('debug', `${tasks.length}`);
 
         return new TaskGroups(grouping, tasks);
     }

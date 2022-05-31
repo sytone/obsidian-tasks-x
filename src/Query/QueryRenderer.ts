@@ -3,7 +3,7 @@ import { App, EventRef, MarkdownPostProcessorContext, MarkdownRenderChild, Plugi
 import { State } from '../Cache';
 import { replaceTaskWithTasks } from '../File';
 import { TaskModal } from '../TaskModal';
-import type { Events } from '../Events';
+import type { TasksEvents } from '../TasksEvents';
 import type { Task } from '../Task';
 import { log } from '../Config/LogConfig';
 import type { IQuery } from '../IQuery';
@@ -16,9 +16,9 @@ export class QueryRenderer {
     public addQuerySqlRenderChild = this._addQuerySqlRenderChild.bind(this);
 
     private readonly app: App;
-    private readonly events: Events;
+    private readonly events: TasksEvents;
 
-    constructor({ plugin, events }: { plugin: Plugin; events: Events }) {
+    constructor({ plugin, events }: { plugin: Plugin; events: TasksEvents }) {
         this.app = plugin.app;
         this.events = events;
 
@@ -27,7 +27,7 @@ export class QueryRenderer {
     }
 
     private async _addQueryRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        log('debug', '_addQueryRenderChild', `Adding Query Render for ${source} to context ${context.docId}`);
+        log('debug', `Adding Query Render for ${source} to context ${context.docId}`);
         context.addChild(
             new QueryRenderChild({
                 app: this.app,
@@ -39,7 +39,7 @@ export class QueryRenderer {
     }
 
     private async _addQuerySqlRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        log('debug', '_addQuerySqlRenderChild', `Adding Query Render for ${source} to context ${context.docId}`);
+        log('debug', `Adding Query Render for ${source} to context ${context.docId}`);
         context.addChild(
             new QueryRenderChild({
                 app: this.app,
@@ -53,7 +53,7 @@ export class QueryRenderer {
 
 class QueryRenderChild extends MarkdownRenderChild {
     private readonly app: App;
-    private readonly events: Events;
+    private readonly events: TasksEvents;
     private readonly queryEngine: IQuery;
 
     private renderEventRef: EventRef | undefined;
@@ -66,7 +66,7 @@ class QueryRenderChild extends MarkdownRenderChild {
         queryEngine,
     }: {
         app: App;
-        events: Events;
+        events: TasksEvents;
         container: HTMLElement;
         queryEngine: IQuery;
     }) {
@@ -76,7 +76,7 @@ class QueryRenderChild extends MarkdownRenderChild {
         this.events = events;
         this.queryEngine = queryEngine;
 
-        log('debug', 'QueryRenderChild:ctor', `Query Render generated for class ${this.containerEl.className}`);
+        log('debug', `Query Render generated for class ${this.containerEl.className}`);
     }
 
     onload() {

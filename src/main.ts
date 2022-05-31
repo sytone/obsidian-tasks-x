@@ -3,7 +3,7 @@ import { Status } from './Status';
 
 import { Cache } from './Cache';
 import { Commands } from './Commands';
-import { Events } from './Events';
+import { TasksEvents } from './TasksEvents';
 import { initializeFile } from './File';
 import { InlineRenderer } from './InlineRenderer';
 import { newLivePreviewExtension } from './LivePreviewExtension';
@@ -12,6 +12,7 @@ import { getSettings, updateSettings } from './Config/Settings';
 import { SettingsTab } from './Config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
 import { log, logCall, monkeyPatchConsole } from './Config/LogConfig';
+import { logging } from './lib/logging';
 
 export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;
@@ -22,6 +23,14 @@ export default class TasksPlugin extends Plugin {
     @logCall
     async onload(): Promise<void> {
         monkeyPatchConsole(this);
+        logging
+            .configure({
+                minLevels: {
+                    '': 'info',
+                    core: 'warn',
+                },
+            })
+            .registerConsoleLogger();
         log('info', `loading plugin "${this.manifest.name}" v${this.manifest.version}`);
 
         // Load the settings and UI.
@@ -39,7 +48,7 @@ export default class TasksPlugin extends Plugin {
                 vault: this.app.vault,
             });
 
-            const events = new Events({ obsidianEvents: this.app.workspace });
+            const events = new TasksEvents({ obsidianEvents: this.app.workspace });
             this.cache = new Cache({
                 metadataCache: this.app.metadataCache,
                 vault: this.app.vault,
@@ -62,7 +71,7 @@ export default class TasksPlugin extends Plugin {
 
         // Reset the registry as this may also come from a settings add/delete.
         this.statusRegistry?.clearStatuses();
-        log('info', 'main', `Adding ${status_types.length} custom status types`);
+        log('info', `Adding ${status_types.length} custom status types`);
         status_types.forEach((status_type) => {
             this.statusRegistry?.add(new Status(status_type[0], status_type[1], status_type[2]));
         });
@@ -70,7 +79,7 @@ export default class TasksPlugin extends Plugin {
 
     @logCall
     onunload() {
-        log('info', 'main', `unloading plugin "${this.manifest.name}" v${this.manifest.version}`);
+        log('info', `unloading plugin "${this.manifest.name}" v${this.manifest.version}`);
         this.cache?.unload();
     }
 

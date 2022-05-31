@@ -14,7 +14,7 @@ interface CacheUpdateData {
     state: State;
 }
 
-export class Events {
+export class TasksEvents {
     private obsidianEvents: ObsidianEvents;
 
     constructor({ obsidianEvents }: { obsidianEvents: ObsidianEvents }) {
@@ -22,22 +22,22 @@ export class Events {
     }
 
     public onCacheUpdate(handler: (cacheData: CacheUpdateData) => void): EventRef {
-        log('debug', 'Events', `onCacheUpdate event "${Event.CacheUpdate}"`);
+        log('debug', `onCacheUpdate event "${Event.CacheUpdate}"`);
         return this.obsidianEvents.on(Event.CacheUpdate, handler);
     }
 
     public triggerCacheUpdate(cacheData: CacheUpdateData): void {
-        log('debug', 'Events', `triggerCacheUpdate event "${Event.CacheUpdate}"`);
+        log('debug', `triggerCacheUpdate event "${Event.CacheUpdate}"`);
         this.obsidianEvents.trigger(Event.CacheUpdate, cacheData);
     }
 
     public onRequestCacheUpdate(handler: (fn: (cacheData: CacheUpdateData) => void) => void): EventRef {
-        log('debug', 'Events', `onRequestCacheUpdate event "${Event.RequestCacheUpdate}"`);
+        log('debug', `onRequestCacheUpdate event "${Event.RequestCacheUpdate}"`);
         return this.obsidianEvents.on(Event.RequestCacheUpdate, handler);
     }
 
     public triggerRequestCacheUpdate(fn: (cacheData: CacheUpdateData) => void): void {
-        log('debug', 'Events', `triggerRequestCacheUpdate event "${Event.RequestCacheUpdate}"`);
+        log('debug', `triggerRequestCacheUpdate event "${Event.RequestCacheUpdate}"`);
         this.obsidianEvents.trigger(Event.RequestCacheUpdate, fn);
     }
 

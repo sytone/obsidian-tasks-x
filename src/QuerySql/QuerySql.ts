@@ -131,7 +131,7 @@ export class QuerySql implements IQuery {
 
     @logCall
     public applyQueryToTasks(tasks: Task[]): TaskGroups {
-        log('debug', 'QuerySql:applyQueryToTasks', `Executing query: [${this.source}]`);
+        log('debug', `Executing query: [${this.source}]`);
         const records: TaskRecord[] = tasks.map((task) => {
             return task.toRecord();
         });
@@ -147,7 +147,7 @@ export class QuerySql implements IQuery {
         }
 
         let queryResult: TaskRecord[] = alasql(this.source, [records]);
-        log('debug', 'QuerySql:applyQueryToTasks', `queryResult: ${queryResult.length}`);
+        log('debug', `queryResult: ${queryResult.length}`);
 
         if (this._rawMode && this._rawWithTasksMode) {
             console.log('RAW Data result from AlaSQL query');

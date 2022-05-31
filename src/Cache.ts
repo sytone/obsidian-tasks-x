@@ -2,7 +2,7 @@ import { EventRef, MetadataCache, SectionCache, TAbstractFile, TFile, Vault } fr
 import { Mutex } from 'async-mutex';
 
 import { Task } from './Task';
-import type { Events } from './Events';
+import type { TasksEvents } from './TasksEvents';
 
 import { log, logCall } from './Config/LogConfig';
 
@@ -17,7 +17,7 @@ export class Cache {
     private readonly metadataCacheEventReferences: EventRef[];
     private readonly vault: Vault;
     private readonly vaultEventReferences: EventRef[];
-    private readonly events: Events;
+    private readonly events: TasksEvents;
     private readonly eventsEventReferences: EventRef[];
 
     private readonly tasksMutex: Mutex;
@@ -37,7 +37,7 @@ export class Cache {
      */
     private loadedAfterFirstResolve: boolean;
 
-    constructor({ metadataCache, vault, events }: { metadataCache: MetadataCache; vault: Vault; events: Events }) {
+    constructor({ metadataCache, vault, events }: { metadataCache: MetadataCache; vault: Vault; events: TasksEvents }) {
         this.metadataCache = metadataCache;
         this.metadataCacheEventReferences = [];
         this.vault = vault;
@@ -197,7 +197,7 @@ export class Cache {
         );
 
         this.state = State.Warm;
-        log('info', 'Load Vault', `Loaded ${this.getTasks().length} tasks`);
+        log('info', `Loaded ${this.getTasks().length} tasks`);
         // Notify that the cache is now warm:
         this.notifySubscribers();
     }
