@@ -2,7 +2,7 @@
 
 <p align="center">Task management for the <a href="https://obsidian.md/">Obsidian</a> knowledge base. With X Powers</p>
 
-<p align="center"><a href="https://schemar.github.io/obsidian-tasks/">Documentation</a></p>
+<p align="center"><a href="https://sytone.github.io/obsidian-tasks-x/">Documentation</a></p>
 
 Note: This is a fork of the Tasks plugin for obsidian and will be kept in sync with it where possible. This for provides extended query capabilities and long term should be merged back into the main plugin. Until then enjoy the power of X.
 

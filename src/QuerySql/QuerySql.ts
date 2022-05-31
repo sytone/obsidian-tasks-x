@@ -1,4 +1,6 @@
 import alasql from 'alasql';
+import moment from 'moment';
+
 import { LayoutOptions } from '../LayoutOptions';
 
 import { Task, TaskRecord } from '../Task';
@@ -115,6 +117,9 @@ export class QuerySql implements IQuery {
         const records: TaskRecord[] = tasks.map((task) => {
             return task.toRecord();
         });
+
+        // Run the query in AlaSQL.
+        alasql.fn.moment = moment; // Set moment() function available to AlaSQL
         let queryResult: TaskRecord[] = alasql(this.source, [records]);
         log('debug', 'QuerySql:applyQueryToTasks', `queryResult: ${queryResult.length}`);
 
