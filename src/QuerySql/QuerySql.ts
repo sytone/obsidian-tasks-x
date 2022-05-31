@@ -4,7 +4,7 @@ import moment from 'moment';
 import { LayoutOptions } from '../LayoutOptions';
 
 import { Task, TaskRecord } from '../Task';
-import { log, logCall, loggingAliases } from '../Config/LogConfig';
+import { log, logCall } from '../Config/LogConfig';
 import type { IQuery } from '../IQuery';
 import { TaskGroups } from '../Query/TaskGroups';
 import { Group } from '../Query/Group';
@@ -14,7 +14,6 @@ import { GroupHeading } from '../Query/GroupHeading';
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };
 
-@loggingAliases('QuerySql')
 export class QuerySql implements IQuery {
     public source: string;
     public name: string;

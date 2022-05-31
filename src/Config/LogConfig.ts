@@ -1,7 +1,5 @@
 import moment from 'moment';
 import { ILogObject, Logger, TLogLevelName, TTransportLogger } from 'tslog';
-import 'reflect-metadata';
-
 import { Platform, Plugin } from 'obsidian';
 
 // Call this method inside your plugin's `onLoad` function
@@ -93,19 +91,7 @@ export function logCallDetails(loggerName?: string) {
     };
 }
 
-// export function loggingAliases<T extends { new (...args: any[]): {} }>(loggerName: string) {
-//     return (target: T) => {
-//         Reflect.defineMetadata('TasksLoggerName', loggerName, target);
-//         return class extends target {};
-//     };
-// }
-
-export function loggingAliases(loggerName: string) {
-    return (constructor: Function) => {
-        Reflect.defineMetadata('TasksLoggerName', loggerName, constructor);
-    };
-}
-
+// Setup the logger for the plugin.
 const logger: Logger = new Logger({ name: 'Tasks X', minLevel: 'silly' });
 logger.attachTransport(new DebugConsoleTransport(), 'silly');
 

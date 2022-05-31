@@ -326,11 +326,6 @@
     style-mod "^4.0.0"
     w3c-keyname "^2.2.4"
 
-"@codemix/ts-sql@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@codemix/ts-sql/-/ts-sql-1.0.0.tgz#e3dc3d0121209f69e4bf471cd071c5e2445561cc"
-  integrity sha512-vA+UQH9kRtFE8p5spQTq17b2KqMceQgXUG0VX42UPDfUUiFYN04j8BFd6kKRXsvdv+JWxrYcSQ5GzuJQUEd5Kg==
-
 "@commitlint/cli@^17.0.1":
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-17.0.1.tgz#88c5ad3f297760ded589c3a33ed49321242e7ab0"
@@ -4324,11 +4319,6 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-reflect-metadata@^0.1.13:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
-  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
-
 regexp.prototype.flags@^1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/regexp.prototype.flags/-/regexp.prototype.flags-1.4.3.tgz#87cab30f80f66660181a3bb7bf5981a872b367ac"
@@ -5072,16 +5062,6 @@ typedoc@^0.22.15:
     marked "^4.0.12"
     minimatch "^5.0.1"
     shiki "^0.10.1"
-
-typescript-logging-category-style@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/typescript-logging-category-style/-/typescript-logging-category-style-2.0.1.tgz#e4bdd5c2ee6ab793a29059e699d5a85d7c4c1d7a"
-  integrity sha512-FYnh2BweI0IDeEnAqMYiK8PVPfosj9ZItpf2TAo8uZ56Fe3cG658znN07PhV3TNIoTJqCUqIP0nPmK0jx0oyxg==
-
-typescript-logging@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/typescript-logging/-/typescript-logging-2.0.1.tgz#1fab7bd59ccfc510027ccfd60f71944ea4c18c5d"
-  integrity sha512-tpgiIaPPviEDCKIxCUe1CCkzD/3fK3oUxcbHkeX2pFgJHzuE3VkAL3sJ4V8/CGh1DLJbFJPSSSo8Q0OFp4LLfw==
 
 typescript@*, typescript@^4.4.4, typescript@^4.6.4:
   version "4.7.2"
