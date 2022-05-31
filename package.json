@@ -1,6 +1,6 @@
 {
   "name": "obsidian-tasks-x",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "Task management for Obsidian, SQL Powered. This is a fork of the Tasks plugin.",
   "main": "main.js",
   "scripts": {
