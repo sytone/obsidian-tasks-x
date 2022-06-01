@@ -61,7 +61,7 @@ of one or all snapshot failures.
 
 ## Setting up build environment
 
-This project uses Node 14.x, if you need to use a different version, look at using `nvm` to manage your Node versions. If you are using `nvm`, you can install the 14.x version of Node with `nvm install 14.19.1; nvm use 14.19.1`.
+This project uses Node 16.x, if you need to use a different version, look at using `nvm` to manage your Node versions. If you are using `nvm`, you can install the 16.x version of Node with `nvm install 16.19.1; nvm use 16.19.1`.
 
 To setup the local environment after cloning the repository, run the following commands:
 

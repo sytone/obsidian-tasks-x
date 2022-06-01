@@ -1,32 +1,40 @@
-import { EventEmitter } from 'events';
+import { EventEmitter2 } from 'eventemitter2';
+/*
+ * EventEmitter2 is an implementation of the EventEmitter module found in Node.js.
+ * In addition to having a better benchmark performance than EventEmitter and being
+ * browser-compatible, it also extends the interface of EventEmitter with many
+ * additional non-breaking features.
+ *
+ * This has been added as EventEmitter in Node.JS is not available in the browser.
+ * https://www.npmjs.com/package/eventemitter2
+ */
+import { Platform, Plugin } from 'obsidian';
 
 /**
  * All possible log levels
  * @public
  */
 export interface ILogLevel {
-    0: 'silly';
     1: 'trace';
     2: 'debug';
     3: 'info';
     4: 'warn';
     5: 'error';
-    6: 'fatal';
 }
 
 /**
- * Log level IDs (0 - 6)
+ * Log level IDs (1 - 5)
  * @public
  */
 export type TLogLevelId = keyof ILogLevel;
 
 /**
- * Log level names (silly - fatal)
+ * Log level names (trace - error)
  * @public
  */
 export type TLogLevelName = ILogLevel[TLogLevelId];
 
-export class LogManager extends EventEmitter {
+export class LogManager extends EventEmitter2 {
     private options: LogOptions = {
         minLevels: {
             '': 'info',
@@ -105,7 +113,7 @@ export interface LogOptions {
 export const logging = new LogManager();
 
 export class Logger {
-    private logManager: EventEmitter;
+    private logManager: EventEmitter2;
     private minLevel: number;
     private module: string;
     private readonly levels: { [key: string]: number } = {
@@ -116,7 +124,7 @@ export class Logger {
         error: 5,
     };
 
-    constructor(logManager: EventEmitter, module: string, minLevel: string) {
+    constructor(logManager: EventEmitter2, module: string, minLevel: string) {
         this.logManager = logManager;
         this.module = module;
         this.minLevel = this.levelToInt(minLevel);
@@ -174,4 +182,29 @@ export class Logger {
     public error(message: string): void {
         this.log('error', message);
     }
+}
+
+// Call this method inside your plugin's `onLoad` function
+export function monkeyPatchConsole(plugin: Plugin) {
+    if (!Platform.isMobile) {
+        return;
+    }
+
+    const logFile = `${plugin.manifest.dir}/tasks-sql-logs.txt`;
+    const logs: string[] = [];
+    const logMessages =
+        (prefix: string) =>
+        (...messages: unknown[]) => {
+            logs.push(`\n[${prefix}]`);
+            for (const message of messages) {
+                logs.push(String(message));
+            }
+            plugin.app.vault.adapter.write(logFile, logs.join(' '));
+        };
+
+    console.debug = logMessages('debug');
+    console.error = logMessages('error');
+    console.info = logMessages('info');
+    console.log = logMessages('log');
+    console.warn = logMessages('warn');
 }

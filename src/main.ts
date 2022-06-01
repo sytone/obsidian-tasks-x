@@ -11,8 +11,8 @@ import { QueryRenderer } from './Query/QueryRenderer';
 import { getSettings, updateSettings } from './Config/Settings';
 import { SettingsTab } from './Config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
-import { log, logCall, monkeyPatchConsole } from './Config/LogConfig';
-import { logging } from './lib/logging';
+import { log, logCall } from './Config/LogConfig';
+import { logging, monkeyPatchConsole } from './lib/logging';
 
 export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;

@@ -1,6 +1,5 @@
 import type TasksPlugin from 'main';
 import type { App, Editor, View } from 'obsidian';
-import { log } from '../Config/LogConfig';
 
 import { createOrEdit } from './CreateOrEdit';
 //import { selectStatus } from './SelectStatus';
@@ -40,9 +39,8 @@ export class Commands {
             id: 'debug-export-tasks',
             name: 'Debug: Export tasks to console log',
             icon: 'pencil',
-            editorCheckCallback: (checking: boolean, editor: Editor, view: View) => {
+            editorCheckCallback: (checking: boolean, _editor: Editor, _view: View) => {
                 if (checking) {
-                    log('silly', `Checking if command is available. ${editor}${view}`);
                     return true;
                 }
                 this.plugin.cache?.getTasks().forEach((task) => {
