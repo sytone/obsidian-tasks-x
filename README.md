@@ -1,10 +1,28 @@
-<h1 align="center">Obsidian Tasks X</h1>
+# Obsidian Tasks SQL Powered
 
-<p align="center">Task management for the <a href="https://obsidian.md/">Obsidian</a> knowledge base. With X Powers</p>
+> Task management for the [Obsidian](https://obsidian.md/) knowledge base. With **SQL** Powers
 
-<p align="center"><a href="https://sytone.github.io/obsidian-tasks-x/">Documentation</a></p>
+[![Version][version-shield]][version-url]
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![Downloads][downloads-shield]][downloads-url]
 
-Note: This is a fork of the Tasks plugin for obsidian and will be kept in sync with it where possible. This for provides extended query capabilities and long term should be merged back into the main plugin. Until then enjoy the power of X.
+## 📑[Documentation](https://sytone.github.io/obsidian-tasks-x/)
+
+This is a fork of the Tasks plugin for obsidian and will be kept in sync with it where possible. This for provides extended query capabilities and long term should be merged back into the main plugin. Until then enjoy the power of SQL.
+
+Here are some examples of what can be done with this plugin:
+
+- `WHERE status->indicator = ' ' AND  moment()->[format]('YYYY-MM-DD') = moment(dueDate)->[format]('YYYY-MM-DD')`
+- `WHERE status->indicator = ' ' AND moment(dueDate)->isBetween(moment()->startOf('day').subtract(1, 'days'), moment()->startOf('day').add(14, 'days'))`
+- `WHERE status->indicator = 'x' AND precedingHeader LIKE '%tasks%'`
+- `WHERE status->indicator = ' ' AND moment(dueDate)->[format]('YYYY-MM-DD') = '2021-04-09' AND path LIKE '%GitHub%'`
+- `WHERE description LIKE '%waiting%' OR description LIKE '%waits%' OR description LIKE '%wartet%'`
+
+And much much more is possible, go explore and share!
 
 Track tasks across your entire vault. Query them and mark them as done wherever you want. Supports due dates, recurring tasks (repetition), done dates, sub-set of checklist items, and filtering.
 
@@ -55,7 +73,7 @@ To install a pre-release, download and enable the [Obsidian42 BRAT](https://gith
 3. Reload Obsidian
 4. If prompted about Safe Mode, you can disable safe mode and enable the plugin.
 
-## Documentation
+## User Documentation
 
 For user documentation, please check [https://sytone.github.io/obsidian-tasks-x/](https://sytone.github.io/obsidian-tasks-x/).
 
@@ -70,3 +88,24 @@ Two example organizations that you could consider donating to are the Wikimedia 
 
 1. [Support the Wikimedia Foundation](https://wikimediafoundation.org/support/)
 2. [Support EFF](https://supporters.eff.org/donate/join-eff-today)
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/sytone/obsidian-tasks-x.svg?style=for-the-badge
+[contributors-url]: https://github.com/sytone/obsidian-tasks-x/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/sytone/obsidian-tasks-x.svg?style=for-the-badge
+[forks-url]: https://github.com/sytone/obsidian-tasks-x/network/members
+[stars-shield]: https://img.shields.io/github/stars/sytone/obsidian-tasks-x.svg?style=for-the-badge
+[stars-url]: https://github.com/sytone/obsidian-tasks-x/stargazers
+[issues-shield]: https://img.shields.io/github/issues/sytone/obsidian-tasks-x.svg?style=for-the-badge
+[issues-url]: https://github.com/sytone/obsidian-tasks-x/issues
+[license-shield]: https://img.shields.io/github/license/sytone/obsidian-tasks-x.svg?style=for-the-badge
+[license-url]: https://github.com/sytone/obsidian-tasks-x/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/othneildrew
+[product-screenshot]: images/screenshot.png
+[version-shield]: https://img.shields.io/github/package-json/v/sytone/obsidian-tasks-x.svg?style=for-the-badge
+[version-url]: https://github.com/sytone/obsidian-tasks-x/releases/latest
+
+[downloads-shield]: https://img.shields.io/github/downloads/sytone/obsidian-tasks-x/total.svg?style=for-the-badge
+[downloads-url]: https://github.com/sytone/obsidian-tasks-x
