@@ -159,3 +159,12 @@ Obsidian writes the changes to disk at its own pace.
     - Obsidian Discord
     - r/ObsidianMD on Reddit
     - etc.
+
+## Cleaning up issues with CRLF -> LF
+
+If you are working cross platform the default EOL should be LF. If you are seeing a lot of files marked as modified but no content you can normalize your repo by running the below commands.
+
+```pwsh
+git rm --cached -r .  # Remove every file from git's index.
+git reset --hard      # Rewrite git's index to pick up all the new line endings.
+```

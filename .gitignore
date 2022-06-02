@@ -22,3 +22,6 @@ data.json
 
 # Backup files.
 *.bak
+
+# If the folder is symlinked make sure this is not checked in.
+.hotreload
