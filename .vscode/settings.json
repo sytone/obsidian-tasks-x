@@ -1,6 +1,20 @@
 {
-    "npm.packageManager": "yarn",
-    "cSpell.words": [
-        "alasql"
-    ]
+  "npm.packageManager": "yarn",
+  "cSpell.words": [
+    "alasql"
+  ],
+  "terminal.integrated.defaultProfile.linux": "pwsh",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "bash",
+      "icon": "terminal-bash"
+    },
+    "zsh": null,
+    "fish": null,
+    "tmux": null,
+    "pwsh": {
+      "path": "pwsh",
+      "icon": "terminal-powershell"
+    }
+  }
 }
