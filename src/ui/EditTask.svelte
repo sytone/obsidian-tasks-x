@@ -1,12 +1,11 @@
 <script lang="ts">
-    import chrono from 'chrono-node';
+    import * as chrono from 'chrono-node';
     import { Status } from '../Status';
     import { onMount } from 'svelte';
     import { Recurrence } from '../Recurrence';
-    import { getSettings, isFeatureEnabled } from '../Config/Settings';
+    import { getSettings } from '../Config/Settings';
     import { Priority, Task } from '../Task';
     import { StatusRegistry } from '../StatusRegistry';
-    import { Feature } from '../Config/Feature';
 
     export let task: Task;
     export let onSubmit: (updatedTasks: Task[]) => void | Promise<void>;
@@ -141,19 +140,7 @@
     });
 
     const _onSubmit = () => {
-        const { globalFilter } = getSettings();
-
         let description = editableTask.description.trim();
-
-        // Check to see if the global filter was added by user.
-        if (!description.includes(globalFilter)) {
-            if (isFeatureEnabled(Feature.APPEND_GLOBAL_FILTER.internalName)) {
-                description = `${description} ${globalFilter}`;
-            } else {
-                // Default is to have filter at front.
-                description = `${globalFilter} ${description}`;
-            }
-        }
 
         let startDate: moment.Moment | null = null;
         const parsedStartDate = chrono.parseDate(editableTask.startDate, new Date(), { forwardDate: true });
