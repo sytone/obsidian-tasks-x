@@ -4,11 +4,11 @@
   "description": "Task management for Obsidian, SQL Powered. This is a fork of the Tasks plugin.",
   "main": "main.js",
   "scripts": {
-    "dev": "node esbuild.config.mjs",
-    "build": "node esbuild.config.mjs production",
-    "build:dev": "node esbuild.config.mjs development",
+    "dev": "node .config/esbuild.config.mjs",
+    "build": "node .config/esbuild.config.mjs production",
+    "build:dev": "node .config/esbuild.config.mjs development",
     "lint": "eslint ./src --fix && eslint ./tests --fix && tsc --noEmit --pretty && svelte-check",
-    "lint:markdown": "markdownlint-cli2-fix \"**/*.md\" \"#node_modules\"",
+    "lint:markdown": "markdownlint-cli2-config \".config/.markdownlint-cli2.jsonc\" \"**/*.md\" \"#node_modules\"",
     "test": "jest --ci",
     "test:dev": "jest --watch",
     "test:obsidian": "pwsh -ExecutionPolicy Unrestricted -NoProfile -File ./scripts/Test-TasksInLocalObsidian.ps1"
@@ -56,5 +56,87 @@
     "chrono-node": "2.2.6",
     "eventemitter2": "^6.4.5",
     "rrule": "^2.6.8"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "printWidth": 120,
+    "tabWidth": 4,
+    "useTabs": false,
+    "singleQuote": true,
+    "bracketSpacing": true
+  },
+  "prettierIgnore": [
+    "main.js",
+    "styles.css",
+    "data.json"
+  ],
+  "jest": {
+    "verbose": true,
+    "preset": "ts-jest",
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "es6": true,
+      "node": true,
+      "browser": true
+    },
+    "extends": [
+      "plugin:prettier/recommended",
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:import/typescript"
+    ],
+    "globals": {
+      "Atomics": "readonly",
+      "SharedArrayBuffer": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "modules": true
+      }
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "import"
+    ],
+    "ignorePatterns": [
+      "main.js"
+    ],
+    "rules": {
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "quotes": [
+        "error",
+        "single",
+        {
+          "avoidEscape": true
+        }
+      ],
+      "@typescript-eslint/no-unused-vars": 0,
+      "no-unused-vars": 0,
+      "semi": [
+        "error",
+        "always"
+      ],
+      "import/order": "error",
+      "sort-imports": [
+        "error",
+        {
+          "ignoreDeclarationSort": true
+        }
+      ]
+    }
   }
 }
