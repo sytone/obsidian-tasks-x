@@ -1,7 +1,7 @@
 {
   "id": "obsidian-tasks-x-plugin",
   "name": "Tasks SQL Powered",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "minAppVersion": "0.13.21",
   "description": "Task management for Obsidian, SQL Powered. This is a preview fork of the Tasks plugin.",
   "author": "Jon Bullen (original by Martin Schenck)",
