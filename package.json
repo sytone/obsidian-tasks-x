@@ -8,10 +8,15 @@
     "build": "node .config/esbuild.config.mjs production",
     "build:dev": "node .config/esbuild.config.mjs development",
     "lint": "eslint ./src --fix && eslint ./tests --fix && tsc --noEmit --pretty && svelte-check",
-    "lint:markdown": "markdownlint-cli2-config \".config/.markdownlint-cli2.jsonc\" \"**/*.md\" \"#node_modules\"",
+    "lint:markdown": "markdownlint-cli2-config \".config/.markdownlint-cli2.jsonc\" \"**/*.md\" \"#node_modules\" \"#CHANGELOG.md\"",
     "test": "jest --ci",
     "test:dev": "jest --watch",
-    "test:obsidian": "pwsh -ExecutionPolicy Unrestricted -NoProfile -File ./scripts/Test-TasksInLocalObsidian.ps1"
+    "test:obsidian": "pwsh -ExecutionPolicy Unrestricted -NoProfile -File ./scripts/Test-TasksInLocalObsidian.ps1",
+    "release": "standard-version",
+    "release:dry": "standard-version --dry-run",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "release:major": "standard-version --release-as major"
   },
   "keywords": [
     "obsidian",
@@ -44,6 +49,7 @@
     "markdownlint-cli2": "^0.4.0",
     "obsidian": "0.13.21",
     "prettier": "^2.2.1",
+    "standard-version": "^9.5.0",
     "svelte": "^3.37.0",
     "svelte-check": "^1.5.2",
     "svelte-preprocess": "^4.10.1",
@@ -56,6 +62,83 @@
     "chrono-node": "2.3.8",
     "eventemitter2": "^6.4.5",
     "rrule": "^2.6.8"
+  },
+  "standard-version": {
+    "types": [
+      {
+        "type": "feat",
+        "section": "Features"
+      },
+      {
+        "type": "change",
+        "section": "Bug Fixes and Changes"
+      },
+      {
+        "type": "fix",
+        "section": "Bug Fixes and Changes"
+      },
+      {
+        "type": "deprecate",
+        "section": "Bug Fixes and Changes"
+      },
+      {
+        "type": "build",
+        "hidden": true
+      },
+      {
+        "type": "chore",
+        "hidden": true
+      },
+      {
+        "type": "ci",
+        "hidden": true
+      },
+      {
+        "type": "docs",
+        "section": "Documentation"
+      },
+      {
+        "type": "style",
+        "hidden": true
+      },
+      {
+        "type": "refactor",
+        "section": "Internal"
+      },
+      {
+        "type": "revert",
+        "hidden": true
+      },
+      {
+        "type": "security",
+        "section": "Internal"
+      },
+      {
+        "type": "perf",
+        "section": "Internal"
+      },
+      {
+        "type": "test",
+        "section": "Internal"
+      }
+    ],
+    "commitUrlFormat": "https://github.com/sytone/obsidian-tasks-x/commits/{{hash}}",
+    "compareUrlFormat": "https://github.com/sytone/obsidian-tasks-x/compare/{{previousTag}}...{{currentTag}}",
+    "issueUrlFormat": "",
+    "bumpFiles": [
+      {
+        "filename": "package.json",
+        "type": "json"
+      },
+      {
+        "filename": "manifest.json",
+        "type": "json"
+      },
+      {
+        "filename": "versions.json",
+        "updater": "/workspaces/obsidian-tasks-x/scripts/obsidian-versions-updater.js"
+      }
+    ]
   },
   "prettier": {
     "trailingComma": "all",

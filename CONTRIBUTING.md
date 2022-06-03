@@ -143,19 +143,17 @@ Obsidian writes the changes to disk at its own pace.
 
 ### How do I make a release?
 
+Versioning is automatically handled by `standard-version` all you need to do is update the minimum obsidian version in the manifest.json file in the root of the repo. This should only be changed if you need something specific in a later version and needs to match the version in the package.json.
+
 1. Check out the `main-tasks-sql` branch
-2. Check for the current version in `package.json` (e.g. `1.4.1`) and decide on a next version
-    - Backwards incompatible change: increase major version
-    - New functionality: increase minor version
-    - Only bug fixes: increase patch version
-3. Check the current version of the obsidian dependency in `package.json` (e.g. `0.13.21`)
-4. Run `./release.sh <new tasks version> <obsidian version>`
-    - Make sure there are no uncommitted changes. Stash them if necessary.
+2. Decide on a next version
+    - Backwards incompatible change: Run `yarn run release:major`
+    - New functionality: Run `yarn run release:minor`
+    - Only bug fixes: Run `yarn run release:patch`
+3. Run the yarn task to do the release.
+4. The task will output the command to push the changes and the updated change log run this.
 5. Wait for [GitHub Actions](https://github.com/sytone/obsidian-tasks-x/actions/workflows/release.yml) to create the new release
-6. Update the release description with the changes of the release
-    - On the release page, GitHub provides a button to auto-generate release notes which works nicely.
-    - Also update the attached zip file by adding the version number to the end of the name after the dash (e.g. `obsidian-tasks-1.4.1.zip`)
-7. Optional: Post to
+6. Optional: Post to
     - Obsidian Discord
     - r/ObsidianMD on Reddit
     - etc.
