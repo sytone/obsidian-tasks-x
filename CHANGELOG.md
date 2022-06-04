@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.14](https://github.com/sytone/obsidian-tasks-x/compare/v2.0.13...v2.0.14) (2022-06-04)
+
 ### [2.0.13](https://github.com/sytone/obsidian-tasks-x/compare/v2.0.12...v2.0.13) (2022-06-03)
 
 ### 2.0.12 (2022-06-02)
