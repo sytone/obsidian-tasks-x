@@ -64,6 +64,7 @@
     "rrule": "^2.6.8"
   },
   "standard-version": {
+    "tag-prefix": "",
     "types": [
       {
         "type": "feat",
