@@ -2,47 +2,13 @@
  * @jest-environment jsdom
  */
 import moment from 'moment';
-import { getSettings, updateSettings } from '../src/Config/Settings';
 import { Query } from '../src/Query/Query';
-import { Status } from '../src/Status';
 import { Priority, Task } from '../src/Task';
+import { Status } from '../src/Status';
 import { createTasksFromMarkdown } from './TestHelpers';
+import { FilteringCase, shouldSupportFiltering } from './TestingTools/FilterTestHelpers';
 
 window.moment = moment;
-
-type FilteringCase = {
-    filters: Array<string>;
-    tasks: Array<string>;
-    expectedResult: Array<string>;
-};
-
-function shouldSupportFiltering(filters: Array<string>, allTaskLines: Array<string>, expectedResult: Array<string>) {
-    // Arrange
-    const query = new Query({ source: filters.join('\n') });
-
-    const tasks = allTaskLines.map(
-        (taskLine) =>
-            Task.fromLine({
-                line: taskLine,
-                sectionStart: 0,
-                sectionIndex: 0,
-                path: '',
-                precedingHeader: '',
-            }) as Task,
-    );
-
-    // Act
-    let filteredTasks = [...tasks];
-    query.filters.forEach((filter) => {
-        filteredTasks = filteredTasks.filter(filter);
-    });
-
-    // Assert
-    const filteredTaskLines = filteredTasks.map(
-        (task) => task.toFileLineString(), //  `- [ ] ${task.toString()}`,
-    );
-    expect(filteredTaskLines).toMatchObject(expectedResult);
-}
 
 describe('Query', () => {
     describe('filtering', () => {
@@ -96,46 +62,6 @@ describe('Query', () => {
             // Assert
             expect(filteredTasks.length).toEqual(1);
             expect(filteredTasks[0]).toEqual(tasks[0]);
-        });
-
-        it('ignores the global filter when filtering', () => {
-            // Arrange
-            const originalSettings = getSettings();
-            updateSettings({ globalFilter: '#task' });
-            const filters: Array<string> = ['description includes task'];
-            const tasks: Array<string> = [
-                '- [ ] #task this does not include the word; only in the global filter',
-                '- [ ] #task this does: task',
-            ];
-            const expectedResult: Array<string> = ['- [ ] #task this does: task'];
-
-            // Act, Assert
-            shouldSupportFiltering(filters, tasks, expectedResult);
-
-            // Cleanup
-            updateSettings(originalSettings);
-        });
-
-        it('works without a global filter', () => {
-            // Arrange
-            const originalSettings = getSettings();
-            updateSettings({ globalFilter: '' });
-            const filters: Array<string> = ['description includes task'];
-            const tasks: Array<string> = [
-                '- [ ] this does not include the word at all',
-                '- [ ] #task this includes the word as a tag',
-                '- [ ] #task this does: task',
-            ];
-            const expectedResult: Array<string> = [
-                '- [ ] #task this includes the word as a tag',
-                '- [ ] #task this does: task',
-            ];
-
-            // Act, Assert
-            shouldSupportFiltering(filters, tasks, expectedResult);
-
-            // Cleanup
-            updateSettings(originalSettings);
         });
 
         test.concurrent.each<[string, FilteringCase]>([
@@ -231,7 +157,7 @@ describe('Query', () => {
                         '- [ ] task 4 🛫 2022-04-25',
                     ],
                     expectedResult: [
-                        '- [ ] task 1', // reference: https://schemar.github.io/obsidian-tasks/queries/filters/#start-date
+                        '- [ ] task 1', // reference: https://obsidian-tasks-group.github.io/obsidian-tasks/queries/filters/#start-date
                         '- [ ] task 2 🛫 2022-04-15',
                     ],
                 },
@@ -262,217 +188,6 @@ describe('Query', () => {
             ],
         ])('should support filtering %s', (_, { tasks: allTaskLines, filters, expectedResult }) => {
             shouldSupportFiltering(filters, allTaskLines, expectedResult);
-        });
-    });
-
-    const defaultTasksWithTags = [
-        '- [ ] #task something to do #later #work',
-        '- [ ] #task something to do #later #work/meeting',
-        '- [ ] #task something to do #later #home',
-        '- [ ] #task something to do #later #home/kitchen',
-        '- [ ] #task get the milk',
-        '- [ ] #task something to do #later #work #TopLevelItem/sub',
-    ];
-
-    describe('filtering with "tags"', () => {
-        const TagFilteringCases: Array<[string, FilteringCase]> = [
-            [
-                'by tag presence',
-                {
-                    filters: ['tags include #home'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #home',
-                        '- [ ] #task something to do #later #home/kitchen',
-                    ],
-                },
-            ],
-            [
-                'by tag absence',
-                {
-                    filters: ['tags do not include #home'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #work',
-                        '- [ ] #task something to do #later #work/meeting',
-                        '- [ ] #task get the milk',
-                        '- [ ] #task something to do #later #work #TopLevelItem/sub',
-                    ],
-                },
-            ],
-            [
-                'by tag presence without hash',
-                {
-                    filters: ['tags include home'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #home',
-                        '- [ ] #task something to do #later #home/kitchen',
-                    ],
-                },
-            ],
-            [
-                'by tag absence without hash',
-                {
-                    filters: ['tags do not include home'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #work',
-                        '- [ ] #task something to do #later #work/meeting',
-                        '- [ ] #task get the milk',
-                        '- [ ] #task something to do #later #work #TopLevelItem/sub',
-                    ],
-                },
-            ],
-
-            [
-                'by tag presence case insensitive',
-                {
-                    filters: ['tags include #HoMe'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #home',
-                        '- [ ] #task something to do #later #home/kitchen',
-                    ],
-                },
-            ],
-            [
-                'by tag absence case insensitive',
-                {
-                    filters: ['tags do not include #HoMe'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #work',
-                        '- [ ] #task something to do #later #work/meeting',
-                        '- [ ] #task get the milk',
-                        '- [ ] #task something to do #later #work #TopLevelItem/sub',
-                    ],
-                },
-            ],
-            [
-                'by tag presence without hash case insensitive',
-                {
-                    filters: ['tags include HoMe'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #home',
-                        '- [ ] #task something to do #later #home/kitchen',
-                    ],
-                },
-            ],
-            [
-                'by tag absence without hash case insensitive',
-                {
-                    filters: ['tags do not include HoMe'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #work',
-                        '- [ ] #task something to do #later #work/meeting',
-                        '- [ ] #task get the milk',
-                        '- [ ] #task something to do #later #work #TopLevelItem/sub',
-                    ],
-                },
-            ],
-            [
-                'by tag presence without hash case insensitive and substring',
-                {
-                    filters: ['tags include TopLevelItem'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: ['- [ ] #task something to do #later #work #TopLevelItem/sub'],
-                },
-            ],
-            [
-                'by tag absence without hash case insensitive and substring',
-                {
-                    filters: ['tags do not include TopLevelItem'],
-                    tasks: defaultTasksWithTags,
-                    expectedResult: [
-                        '- [ ] #task something to do #later #work',
-                        '- [ ] #task something to do #later #work/meeting',
-                        '- [ ] #task something to do #later #home',
-                        '- [ ] #task something to do #later #home/kitchen',
-                        '- [ ] #task get the milk',
-                    ],
-                },
-            ],
-        ];
-
-        test.concurrent.each<[string, FilteringCase]>(TagFilteringCases)(
-            'should filter tag with globalFilter %s',
-            (_, { tasks: allTaskLines, filters, expectedResult }) => {
-                // Arrange
-                const originalSettings = getSettings();
-                updateSettings({ globalFilter: '#task' });
-
-                // Run on the plural version of the filter first.
-                shouldSupportFiltering(filters, allTaskLines, expectedResult);
-
-                // Run a remap of filter to use alternative grammar for single and plural tag/tags.
-                // tags include #home vs tag includes #home. The first is preferred as it is a collection.
-                //  tags -> tag
-                //  include -> includes
-                //  does not include -> do not include
-                filters.map((filter) => {
-                    return filter
-                        .replace('tags', 'tag')
-                        .replace('include', 'includes')
-                        .replace('does not include', 'do not include');
-                });
-
-                shouldSupportFiltering(filters, allTaskLines, expectedResult);
-
-                // Cleanup
-                updateSettings(originalSettings);
-            },
-        );
-
-        test.concurrent.each<[string, FilteringCase]>(TagFilteringCases)(
-            'should filter tags without globalFilter %s',
-            (_, { tasks: allTaskLines, filters, expectedResult }) => {
-                // Arrange
-
-                // Run on the plural version of the filter first.
-                shouldSupportFiltering(filters, allTaskLines, expectedResult);
-
-                // Run a remap of filter to use alternative grammar for single and plural tag/tags.
-                // tags include #home vs tag includes #home. The first is preferred as it is a collection.
-                //  tags -> tag
-                //  include -> includes
-                //  does not include -> do not include
-                filters.map((filter) => {
-                    return filter
-                        .replace('tags', 'tag')
-                        .replace('include', 'includes')
-                        .replace('does not include', 'do not include');
-                });
-
-                shouldSupportFiltering(filters, allTaskLines, expectedResult);
-            },
-        );
-
-        it('should filter tags without globalFilter by tag presence when it is the global tag', () => {
-            // Arrange
-            const originalSettings = getSettings();
-            updateSettings({ globalFilter: '' });
-
-            // Act, Assert
-            shouldSupportFiltering(['tags include task'], defaultTasksWithTags, defaultTasksWithTags);
-
-            // Cleanup
-            updateSettings(originalSettings);
-        });
-
-        it('should filter tag with globalFilter by tag presence when it is the global tag', () => {
-            // Arrange
-            const originalSettings = getSettings();
-            updateSettings({ globalFilter: '#task' });
-            const filters: Array<string> = ['tags include task'];
-
-            // Act, Assert
-            shouldSupportFiltering(filters, defaultTasksWithTags, []);
-
-            // Cleanup
-            updateSettings(originalSettings);
         });
     });
 
@@ -664,59 +379,59 @@ describe('Query', () => {
         });
     });
 
-    const defaultTasksWithStatus = [
-        '- [ ] Something to do',
-        '- [/] Something I am doing',
-        '- [x] Something I have done',
-        '- [-] Something I will no longer do',
-    ];
-    describe('filtering with "status"', () => {
-        const TagFilteringCases: Array<[string, FilteringCase]> = [
-            [
-                'by valid status is',
-                {
-                    filters: ['status is x'],
-                    tasks: defaultTasksWithStatus,
-                    expectedResult: ['- [x] Something I have done'],
-                },
-            ],
-            [
-                'by valid status is not',
-                {
-                    filters: ['status is not x'],
-                    tasks: defaultTasksWithStatus,
-                    expectedResult: [
-                        '- [ ] Something to do',
-                        '- [/] Something I am doing',
-                        '- [-] Something I will no longer do',
-                    ],
-                },
-            ],
-            [
-                'by valid status new',
-                {
-                    filters: ['status is /'],
-                    tasks: defaultTasksWithStatus,
-                    expectedResult: ['- [/] Something I am doing'],
-                },
-            ],
-            [
-                'by invalid status',
-                {
-                    filters: ['status is z'],
-                    tasks: defaultTasksWithStatus,
-                    expectedResult: defaultTasksWithStatus,
-                },
-            ],
-        ];
+    // const defaultTasksWithStatus = [
+    //     '- [ ] Something to do',
+    //     '- [/] Something I am doing',
+    //     '- [x] Something I have done',
+    //     '- [-] Something I will no longer do',
+    // ];
+    // describe('filtering with "status"', () => {
+    //     const TagFilteringCases: Array<[string, FilteringCase]> = [
+    //         [
+    //             'by valid status is',
+    //             {
+    //                 filters: ['status is x'],
+    //                 tasks: defaultTasksWithStatus,
+    //                 expectedResult: ['- [x] Something I have done'],
+    //             },
+    //         ],
+    //         [
+    //             'by valid status is not',
+    //             {
+    //                 filters: ['status is not x'],
+    //                 tasks: defaultTasksWithStatus,
+    //                 expectedResult: [
+    //                     '- [ ] Something to do',
+    //                     '- [/] Something I am doing',
+    //                     '- [-] Something I will no longer do',
+    //                 ],
+    //             },
+    //         ],
+    //         [
+    //             'by valid status new',
+    //             {
+    //                 filters: ['status is /'],
+    //                 tasks: defaultTasksWithStatus,
+    //                 expectedResult: ['- [/] Something I am doing'],
+    //             },
+    //         ],
+    //         [
+    //             'by invalid status',
+    //             {
+    //                 filters: ['status is z'],
+    //                 tasks: defaultTasksWithStatus,
+    //                 expectedResult: defaultTasksWithStatus,
+    //             },
+    //         ],
+    //     ];
 
-        test.concurrent.each<[string, FilteringCase]>(TagFilteringCases)(
-            'should filter status %s',
-            (_, { tasks: allTaskLines, filters, expectedResult }) => {
-                shouldSupportFiltering(filters, allTaskLines, expectedResult);
-            },
-        );
-    });
+    //     test.concurrent.each<[string, FilteringCase]>(TagFilteringCases)(
+    //         'should filter status %s',
+    //         (_, { tasks: allTaskLines, filters, expectedResult }) => {
+    //             shouldSupportFiltering(filters, allTaskLines, expectedResult);
+    //         },
+    //     );
+    // });
 
     // This tests the parsing of 'group by' instructions.
     // Group.test.ts tests the actual grouping code.

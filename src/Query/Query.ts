@@ -1,20 +1,23 @@
-import { getSettings } from '../Config/Settings';
 import { LayoutOptions } from '../LayoutOptions';
+import type { Task } from '../Task';
 import type { IQuery } from '../IQuery';
-import { Priority, Task } from '../Task';
 import { Status } from '../Status';
-import { StatusRegistry } from '../StatusRegistry';
 import { Group } from './Group';
 import type { TaskGroups } from './TaskGroups';
 
 import { Sort } from './Sort';
 
 import type { Field } from './Filter/Field';
+import { DescriptionField } from './Filter/DescriptionField';
 import { DoneDateField } from './Filter/DoneDateField';
 import { DueDateField } from './Filter/DueDateField';
+import { HeadingField } from './Filter/HeadingField';
+import { PathField } from './Filter/PathField';
+import { PriorityField } from './Filter/PriorityField';
 import { ScheduledDateField } from './Filter/ScheduledDateField';
 import { StartDateField } from './Filter/StartDateField';
 import { HappensDateField } from './Filter/HappensDateField';
+import { TagsField } from './Filter/TagsField';
 
 export type SortingProperty =
     | 'urgency'
@@ -47,8 +50,6 @@ export class Query implements IQuery {
     private _sorting: Sorting[] = [];
     private _grouping: Grouping[] = [];
 
-    private readonly priorityRegexp = /^priority (is )?(above|below)? ?(low|none|medium|high)/;
-
     private readonly noStartString = 'no start date';
     private readonly hasStartString = 'has start date';
 
@@ -61,22 +62,12 @@ export class Query implements IQuery {
     private readonly doneString = 'done';
     private readonly notDoneString = 'not done';
 
-    private readonly statusRegexp = /^status (is not|is) (.*)/;
-
-    private readonly pathRegexp = /^path (includes|does not include) (.*)/;
-    private readonly descriptionRegexp = /^description (includes|does not include) (.*)/;
-
-    // Handles both ways of referencing the tags query.
-    private readonly tagRegexp = /^(tag|tags) (includes|does not include|include|do not include) (.*)/;
-
     // If a tag is specified the user can also add a number to specify
     // which one to sort by if there is more than one.
     private readonly sortByRegexp =
         /^sort by (urgency|status|priority|start|scheduled|due|done|path|description|tag)( reverse)?[\s]*(\d+)?/;
 
     private readonly groupByRegexp = /^group by (backlink|filename|folder|heading|path|status)/;
-
-    private readonly headingRegexp = /^heading (includes|does not include) (.*)/;
 
     private readonly hideOptionsRegexp =
         /^hide (task count|backlink|priority|start date|scheduled date|done date|due date|recurrence rule|edit button)/;
@@ -136,8 +127,7 @@ export class Query implements IQuery {
                     case this.shortModeRegexp.test(line):
                         this._layoutOptions.shortMode = true;
                         break;
-                    case this.priorityRegexp.test(line):
-                        this.parsePriorityFilter({ line });
+                    case this.parseFilter(line, new PriorityField()):
                         break;
                     case this.parseFilter(line, new HappensDateField()):
                         break;
@@ -149,20 +139,13 @@ export class Query implements IQuery {
                         break;
                     case this.parseFilter(line, new DoneDateField()):
                         break;
-                    case this.statusRegexp.test(line):
-                        this.parseStatusFilter({ line });
+                    case this.parseFilter(line, new PathField()):
                         break;
-                    case this.pathRegexp.test(line):
-                        this.parsePathFilter({ line });
+                    case this.parseFilter(line, new DescriptionField()):
                         break;
-                    case this.descriptionRegexp.test(line):
-                        this.parseDescriptionFilter({ line });
+                    case this.parseFilter(line, new TagsField()):
                         break;
-                    case this.tagRegexp.test(line):
-                        this.parseTagFilter({ line });
-                        break;
-                    case this.headingRegexp.test(line):
-                        this.parseHeadingFilter({ line });
+                    case this.parseFilter(line, new HeadingField()):
                         break;
                     case this.limitRegexp.test(line):
                         this.parseLimit({ line });
@@ -209,9 +192,9 @@ export class Query implements IQuery {
         return this._error;
     }
 
-    private static stringIncludesCaseInsensitive(haystack: string, needle: string): boolean {
-        return haystack.toLocaleLowerCase().includes(needle.toLocaleLowerCase());
-    }
+    // private static stringIncludesCaseInsensitive(haystack: string, needle: string): boolean {
+    //     return haystack.toLocaleLowerCase().includes(needle.toLocaleLowerCase());
+    // }
 
     public applyQueryToTasks(tasks: Task[]): TaskGroups {
         this.filters.forEach((filter) => {
@@ -261,47 +244,6 @@ export class Query implements IQuery {
         }
     }
 
-    private parsePriorityFilter({ line }: { line: string }): void {
-        const priorityMatch = line.match(this.priorityRegexp);
-        if (priorityMatch !== null) {
-            const filterPriorityString = priorityMatch[3];
-            let filterPriority: Priority | null = null;
-
-            switch (filterPriorityString) {
-                case 'low':
-                    filterPriority = Priority.Low;
-                    break;
-                case 'none':
-                    filterPriority = Priority.None;
-                    break;
-                case 'medium':
-                    filterPriority = Priority.Medium;
-                    break;
-                case 'high':
-                    filterPriority = Priority.High;
-                    break;
-            }
-
-            if (filterPriority === null) {
-                this._error = 'do not understand priority';
-                return;
-            }
-
-            let filter;
-            if (priorityMatch[2] === 'above') {
-                filter = (task: Task) => (task.priority ? task.priority.localeCompare(filterPriority!) < 0 : false);
-            } else if (priorityMatch[2] === 'below') {
-                filter = (task: Task) => (task.priority ? task.priority.localeCompare(filterPriority!) > 0 : false);
-            } else {
-                filter = (task: Task) => (task.priority ? task.priority === filterPriority : false);
-            }
-
-            this._filters.push(filter);
-        } else {
-            this._error = 'do not understand query filter (priority date)';
-        }
-    }
-
     private parseFilter(line: string, field: Field) {
         if (field.canCreateFilterForLine(line)) {
             const { filter, error } = field.createFilterOrErrorMessage(line);
@@ -314,145 +256,6 @@ export class Query implements IQuery {
             return true;
         } else {
             return false;
-        }
-    }
-
-    /**
-     * Parses the status query, will fail if the status is not registered.
-     * Uses the RegEx: '^status (is|is not) (.*)'
-     *
-     * @private
-     * @param {{ line: string }} { line }
-     * @return {*}  {void}
-     * @memberof Query
-     */
-    private parseStatusFilter({ line }: { line: string }): void {
-        const statusMatch = line.match(this.statusRegexp);
-        if (statusMatch !== null) {
-            const filterStatus = statusMatch[2];
-
-            if (StatusRegistry.getInstance().byIndicator(filterStatus) === Status.EMPTY) {
-                this._error = 'status you are searching for is not registered in configuration.';
-                return;
-            }
-
-            let filter;
-            if (statusMatch[1] === 'is') {
-                filter = (task: Task) => task.status.indicator === filterStatus;
-            } else {
-                filter = (task: Task) => task.status.indicator !== filterStatus;
-            }
-
-            this._filters.push(filter);
-        }
-    }
-
-    private parsePathFilter({ line }: { line: string }): void {
-        const pathMatch = line.match(this.pathRegexp);
-        if (pathMatch !== null) {
-            const filterMethod = pathMatch[1];
-            if (filterMethod === 'includes') {
-                this._filters.push((task: Task) => Query.stringIncludesCaseInsensitive(task.path, pathMatch[2]));
-            } else if (pathMatch[1] === 'does not include') {
-                this._filters.push((task: Task) => !Query.stringIncludesCaseInsensitive(task.path, pathMatch[2]));
-            } else {
-                this._error = 'do not understand query filter (path)';
-            }
-        } else {
-            this._error = 'do not understand query filter (path)';
-        }
-    }
-
-    /**
-     * When a tag based filter is used this is the process to apply it.
-     * - Tags can be searched for with and without the hash tag at the start.
-     *
-     * @private
-     * @param {{ line: string }} { line }
-     * @memberof Query
-     */
-    private parseTagFilter({ line }: { line: string }): void {
-        const tagMatch = line.match(this.tagRegexp);
-        if (tagMatch !== null) {
-            const filterMethod = tagMatch[2];
-
-            // Search is done sans the hash. If it is provided then strip it off.
-            const search = tagMatch[3].replace(/^#/, '');
-
-            if (filterMethod === 'include' || filterMethod === 'includes') {
-                this._filters.push(
-                    (task: Task) =>
-                        task.tags.find((tag) => tag.toLowerCase().includes(search.toLowerCase())) !== undefined,
-                );
-            } else if (tagMatch[2] === 'do not include' || tagMatch[2] === 'does not include') {
-                this._filters.push(
-                    (task: Task) =>
-                        task.tags.find((tag) => tag.toLowerCase().includes(search.toLowerCase())) == undefined,
-                );
-            } else {
-                this._error = 'do not understand query filter (tag/tags)';
-            }
-        } else {
-            this._error = 'do not understand query filter (tag/tags)';
-        }
-    }
-
-    private parseDescriptionFilter({ line }: { line: string }): void {
-        const descriptionMatch = line.match(this.descriptionRegexp);
-        if (descriptionMatch !== null) {
-            const filterMethod = descriptionMatch[1];
-            const globalFilter = getSettings().globalFilter;
-
-            if (filterMethod === 'includes') {
-                this._filters.push((task: Task) =>
-                    Query.stringIncludesCaseInsensitive(
-                        // Remove global filter from description match if present.
-                        // This is necessary to match only on the content of the task, not
-                        // the global filter.
-                        task.description.replace(globalFilter, '').trim(),
-                        descriptionMatch[2],
-                    ),
-                );
-            } else if (descriptionMatch[1] === 'does not include') {
-                this._filters.push(
-                    (task: Task) =>
-                        !Query.stringIncludesCaseInsensitive(
-                            // Remove global filter from description match if present.
-                            // This is necessary to match only on the content of the task, not
-                            // the global filter.
-                            task.description.replace(globalFilter, '').trim(),
-                            descriptionMatch[2],
-                        ),
-                );
-            } else {
-                this._error = 'do not understand query filter (description)';
-            }
-        } else {
-            this._error = 'do not understand query filter (description)';
-        }
-    }
-
-    private parseHeadingFilter({ line }: { line: string }): void {
-        const headingMatch = line.match(this.headingRegexp);
-        if (headingMatch !== null) {
-            const filterMethod = headingMatch[1].toLowerCase();
-            if (filterMethod === 'includes') {
-                this._filters.push(
-                    (task: Task) =>
-                        task.precedingHeader !== null &&
-                        Query.stringIncludesCaseInsensitive(task.precedingHeader, headingMatch[2]),
-                );
-            } else if (headingMatch[1] === 'does not include') {
-                this._filters.push(
-                    (task: Task) =>
-                        task.precedingHeader === null ||
-                        !Query.stringIncludesCaseInsensitive(task.precedingHeader, headingMatch[2]),
-                );
-            } else {
-                this._error = 'do not understand query filter (heading)';
-            }
-        } else {
-            this._error = 'do not understand query filter (heading)';
         }
     }
 

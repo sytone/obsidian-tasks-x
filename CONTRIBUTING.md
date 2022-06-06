@@ -6,8 +6,24 @@ Every contribution is much appreciated!
 ## Updating documentation
 
 The documentation resides under the `./docs` directory.
-It consists of markdown files, which [Jekyll](https://jekyllrb.com/) will transform into web pages that you can view at <https://schemar.github.io/obsidian-tasks/> .
+It consists of markdown files, which [Jekyll](https://jekyllrb.com/) will transform into web pages that you can view at <https://obsidian-tasks-group.github.io/obsidian-tasks/> .
 In the simplest case, you can update the existing markdown file and create a pull request (PR) with your changes.
+
+### Version numbers in documentation
+
+We have introduced version markers to the documentation, to show users in which version a specific feature was introduced.
+This means that newly written documentation should be tagged with a placeholder, which will be replaced with the actual
+version upon release.
+
+There are 2 styles of placeholders used through the documentation, Please pick the one that
+fits your text better. (If in doubt, take a look at the existing version tags for other features.)
+
+- `> Introduced in Tasks X.Y.Z`
+  - This placeholder is usually used after a section heading.
+- `> X (Y and Z) was introduced in Tasks X.Y.Z`
+  - This placeholder is used when you need to tag a sub-part of something, for example a list.
+
+### How the documentation is generated
 
 We use [GitHub pages](https://pages.github.com/) for our documentation.
 You can read more about it at their [official documentation](https://docs.github.com/en/pages).
@@ -15,7 +31,9 @@ You can read more about it at their [official documentation](https://docs.github
 To generate the documentation site on your machine,
 see [docs/README.md](docs/README.md).
 
-For documentation changes to show up at <https://schemar.github.io/obsidian-tasks/> , they must be in the `gh-pages` branch.
+### Documentation and branches
+
+For documentation changes to show up at <https://obsidian-tasks-group.github.io/obsidian-tasks/> , they must be in the `gh-pages` branch.
 If you want to see your changes available immediately and not only after the next release, you should make your changes on the `gh-pages` branch.
 When you create a PR, it should merge into the `gh-pages` branch as well.
 If you document an unreleased feature, you should update the documentation on `main-tasks-sql` instead. Ideally together with the related code changes.
@@ -129,15 +147,15 @@ You can toggle a task‘s status by:
 
 The code is located as follows:
 
-- For 1.: ``./src/Commands/ToggleDone.ts`
-- 2. and 4. use a checkbox created by `Task.toLi()`. There, the checkbox gets a click event handler.
+- For 1.: `./src/Commands/ToggleDone.ts`
+- Numbers 2. and 4. use a checkbox created by `Task.toLi()`. There, the checkbox gets a click event handler.
 - For 3.: `./src/LivePreviewExtension.ts`
 
 Toggle behavior:
 
-- 1. toggles the line directly where the cursor is. In the file inside Obsidian‘s vault.
-- The click event listener of 2. and 4. uses File::replaceTaskWithTasks(). That, in turn, updates the file in Obsidian‘s Vault (like 1, but it needs to find the correct line).
-- 3. toggles the line directly where the checkbox is. On the „document“ of CodeMirror (the library that Obsidian uses to show text on screen). That, in turn, updates the file in Obsidian‘s Vault, somehow.
+- Number 1. toggles the line directly where the cursor is. In the file inside Obsidian‘s vault.
+- The click event listener of 2. and 4. uses `File::replaceTaskWithTasks()`. That, in turn, updates the file in Obsidian‘s Vault (like 1, but it needs to find the correct line).
+- Number 3. toggles the line directly where the checkbox is. On the „document“ of CodeMirror (the library that Obsidian uses to show text on screen). That, in turn, updates the file in Obsidian‘s Vault, somehow.
 
 Obsidian writes the changes to disk at its own pace.
 

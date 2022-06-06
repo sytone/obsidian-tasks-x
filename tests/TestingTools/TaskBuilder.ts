@@ -89,6 +89,10 @@ export class TaskBuilder {
         return this;
     }
 
+    /** Set the task's path on disc, including file name extension
+     *
+     * @param path Path to file, including file name extension. Use empty string to indicate 'unknown
+     */
     public path(path: string): TaskBuilder {
         this._path = path;
         return this;
