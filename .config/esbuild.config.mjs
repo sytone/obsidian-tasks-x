@@ -161,7 +161,7 @@ esbuild
         ],
         format: 'cjs',
         logLevel: 'info',
-        minify: prod ? true : false,
+        minify: prod ? true : !prod && !dev ? false : true,
         outfile: 'main.js',
         plugins: [
             esbuildSvelte({

@@ -1,8 +1,11 @@
 import { Notice, PluginSettingTab, Setting } from 'obsidian';
 import type TasksPlugin from '../main';
+import { log } from '../Config/LogConfig';
 import { Feature } from './Feature';
 import { getSettings, isFeatureEnabled, toggleFeature, updateGeneralSetting, updateSettings } from './Settings';
 import settingsJson from './settingsConfiguration.json';
+
+import { CustomStatusModal } from './CustomStatusModal';
 
 export class SettingsTab extends PluginSettingTab {
     customFunctions: { [K: string]: Function } = {
@@ -15,6 +18,16 @@ export class SettingsTab extends PluginSettingTab {
         super(plugin.app, plugin);
 
         this.plugin = plugin;
+    }
+
+    public async saveSettings(update?: boolean): Promise<void> {
+        log('debug', `Saving settings with update: ${update}`);
+
+        await this.plugin.saveSettings();
+
+        if (update) {
+            this.display();
+        }
     }
 
     public display(): void {
@@ -107,9 +120,7 @@ export class SettingsTab extends PluginSettingTab {
                         const updatedFeatures = toggleFeature(feature.internalName, value);
                         updateSettings({ features: updatedFeatures });
 
-                        await settings.plugin.saveSettings();
-                        // Force refresh
-                        settings.display();
+                        await settings.saveSettings(true);
                     });
                 });
         });
@@ -120,7 +131,16 @@ export class SettingsTab extends PluginSettingTab {
         /* -------------------------------------------------------------------------- */
         const { status_types } = getSettings();
         status_types.forEach((status_type) => {
-            new Setting(containerEl)
+            //const taskStatusDiv = containerEl.createEl('div');
+
+            const taskStatusPreview = containerEl.createEl('pre');
+            taskStatusPreview.textContent = `- [${status_type[0]}] ${status_type[1]}, next status is '${status_type[2]}'`;
+
+            const setting = new Setting(containerEl);
+
+            setting.infoEl.replaceWith(taskStatusPreview);
+
+            setting
                 .addExtraButton((extra) => {
                     extra
                         .setIcon('cross')
@@ -132,53 +152,42 @@ export class SettingsTab extends PluginSettingTab {
                                 updateSettings({
                                     status_types: status_types,
                                 });
-                                await settings.plugin.saveSettings();
-                                // Force refresh
-                                settings.display();
+
+                                await settings.saveSettings(true);
                             }
                         });
                 })
-                .addText((text) => {
-                    const t = text
-                        .setPlaceholder('Status symbol')
-                        .setValue(status_type[0])
-                        .onChange(async (new_symbol) => {
-                            // Check to see if they are adding in defaults and block. UI provides this information already.
-                            if ([' ', 'x', '-', '/'].includes(new_symbol)) {
-                                new Notice(`The symbol ${new_symbol} is already in use.`);
-                                updateSettings({
-                                    status_types: status_types,
-                                });
-                                await settings.plugin.saveSettings();
-                                // Force refresh
-                                settings.display();
-                                return;
-                            }
 
-                            await this.updateStatusSetting(status_types, status_type, 0, new_symbol);
-                        });
+                .addExtraButton((extra) => {
+                    extra
+                        .setIcon('pencil')
+                        .setTooltip('Edit')
+                        .onClick(async () => {
+                            const modal = new CustomStatusModal(settings.plugin, status_type);
 
-                    return t;
-                })
-                .addText((text) => {
-                    const t = text
-                        .setPlaceholder('Status name')
-                        .setValue(status_type[1])
-                        .onChange(async (new_name) => {
-                            await this.updateStatusSetting(status_types, status_type, 1, new_name);
-                        });
-                    return t;
-                })
-                .addText((text) => {
-                    const t = text
-                        .setPlaceholder('Next status symbol')
-                        .setValue(status_type[2])
-                        .onChange(async (new_symbol) => {
-                            await this.updateStatusSetting(status_types, status_type, 2, new_symbol);
-                        });
+                            modal.onClose = async () => {
+                                if (modal.saved) {
+                                    const index = status_types.indexOf(status_type);
+                                    if (index > -1) {
+                                        status_types.splice(index, 1, [
+                                            modal.statusSymbol,
+                                            modal.statusName,
+                                            modal.statusNextSymbol,
+                                        ]);
+                                        updateSettings({
+                                            status_types: status_types,
+                                        });
 
-                    return t;
+                                        await settings.saveSettings(true);
+                                    }
+                                }
+                            };
+
+                            modal.open();
+                        });
                 });
+
+            setting.infoEl.remove();
         });
 
         containerEl.createEl('div');
@@ -192,13 +201,13 @@ export class SettingsTab extends PluginSettingTab {
                     updateSettings({
                         status_types: status_types,
                     });
-                    await settings.plugin.saveSettings();
-                    // Force refresh
-                    settings.display();
+
+                    await settings.saveSettings(true);
                 });
         });
         setting.infoEl.remove();
 
+        /* -------------------- Minimal Theme Supported Status Types -------------------- */
         const addStatusesSupportedByMinimalTheme = new Setting(containerEl).addButton((button) => {
             button
                 .setButtonText('Add all Status types supported by Minimal Theme')
@@ -246,30 +255,67 @@ export class SettingsTab extends PluginSettingTab {
                     updateSettings({
                         status_types: status_types,
                     });
-                    await settings.plugin.saveSettings();
-                    // Force refresh
-                    settings.display();
+
+                    await settings.saveSettings(true);
                 });
         });
         addStatusesSupportedByMinimalTheme.infoEl.remove();
-    }
 
-    private async updateStatusSetting(
-        status_types: [string, string, string][],
-        status_type: [string, string, string],
-        valueIndex: number,
-        newValue: string,
-    ) {
-        const index = status_types.findIndex((element) => {
-            element[0] === status_type[0] && element[1] === status_type[1] && element[2] === status_type[2];
+        /* -------------------- ITS Theme Supported Status Types -------------------- */
+        const addStatusesSupportedByITSTheme = new Setting(containerEl).addButton((button) => {
+            button
+                .setButtonText('Add all Status types supported by ITS Theme')
+                .setCta()
+                .onClick(async () => {
+                    const supportedStatuses: Array<[string, string, string]> = [
+                        //['X', 'Checked', 'x'],
+                        ['>', 'Forward', 'x'],
+                        ['D', 'Deferred/Scheduled', 'x'],
+                        //['-', 'Cancelled/Non-Task', 'x'],
+                        ['?', 'Question', 'x'],
+                        ['!', 'Important', 'x'],
+                        ['+', 'Add', 'x'],
+                        //['/', 'Half Done', 'x'],
+                        ['R', 'Research', 'x'],
+                        ['i', 'Idea', 'x'],
+                        ['B', 'Brainstorm', 'x'],
+                        ['P', 'Pro', 'x'],
+                        ['C', 'Con', 'x'],
+                        ['I', 'Info', 'x'],
+                        ['Q', 'Quote', 'x'],
+                        ['N', 'Note', 'x'],
+                        ['b', 'Bookmark', 'x'],
+                        ['p', 'Paraphrase', 'x'],
+                        ['E', 'Example', 'x'],
+                        ['L', 'Location', 'x'],
+                        ['A', 'Answer', 'x'],
+                        ['r', 'Reward', 'x'],
+                        ['c', 'Choice', 'x'],
+                    ];
+
+                    supportedStatuses.forEach((importedStatus) => {
+                        console.log(importedStatus);
+                        const hasStatus = status_types.find((element) => {
+                            return (
+                                element[0] == importedStatus[0] &&
+                                element[1] == importedStatus[1] &&
+                                element[2] == importedStatus[2]
+                            );
+                        });
+                        if (!hasStatus) {
+                            status_types.push(importedStatus);
+                        } else {
+                            new Notice(`The status ${importedStatus[1]} (${importedStatus[0]}) is already added.`);
+                        }
+                    });
+
+                    updateSettings({
+                        status_types: status_types,
+                    });
+
+                    await settings.saveSettings(true);
+                });
         });
-
-        if (index > -1) {
-            status_types[index][valueIndex] = newValue;
-            updateSettings({
-                status_types: status_types,
-            });
-            await this.plugin.saveSettings();
-        }
+        addStatusesSupportedByITSTheme.infoEl.remove();
     }
 }

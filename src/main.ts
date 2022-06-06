@@ -12,7 +12,7 @@ import { getSettings, updateSettings } from './Config/Settings';
 import { SettingsTab } from './Config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
 import { log, logCall } from './Config/LogConfig';
-import { logging, monkeyPatchConsole } from './lib/logging';
+import { logging } from './lib/logging';
 
 export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;
@@ -22,10 +22,11 @@ export default class TasksPlugin extends Plugin {
 
     @logCall
     async onload(): Promise<void> {
-        monkeyPatchConsole(this);
+        //monkeyPatchConsole(this);
         logging
             .configure({
                 minLevels: {
+                    '': 'debug',
                     taskssql: 'debug',
                     'taskssql.querysql.QuerySql': 'debug',
                 },
@@ -36,7 +37,6 @@ export default class TasksPlugin extends Plugin {
         // Load the settings and UI.
         await this.loadSettings();
         this.addSettingTab(new SettingsTab({ plugin: this }));
-
         /**
          * Fire the initial indexing only if layoutReady = true
          * avoids trying to create an index while obsidian is indexing files

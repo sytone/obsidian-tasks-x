@@ -1,3 +1,4 @@
+import { log } from '../Config/LogConfig';
 import { Feature, FeatureFlag } from './Feature';
 
 export interface Settings {
@@ -46,6 +47,8 @@ export const getSettings = (): Settings => {
 };
 
 export const updateSettings = (newSettings: Partial<Settings>): Settings => {
+    log('debug', `updateSettings ${JSON.stringify(newSettings)}`);
+
     settings = { ...settings, ...newSettings };
 
     return getSettings();
@@ -58,6 +61,26 @@ export const updateGeneralSetting = (name: string, value: string | boolean): Set
     updateSettings({ globalFilter: <string>settings.generalSettings['globalFilter'] });
     updateSettings({ removeGlobalFilter: <boolean>settings.generalSettings['removeGlobalFilter'] });
     updateSettings({ setDoneDate: <boolean>settings.generalSettings['setDoneDate'] });
+
+    return getSettings();
+};
+
+export const updateStatusSetting = (
+    status_type: [string, string, string],
+    valueIndex: number,
+    newValue: string,
+): Settings => {
+    log('debug', `updateStatusSetting ${JSON.stringify(status_type)}, ${valueIndex}, ${newValue}`);
+
+    const index = settings.status_types.findIndex((element) => {
+        return element[0] === status_type[0] && element[1] === status_type[1] && element[2] === status_type[2];
+    });
+
+    log('debug', `updateStatusSetting ${index}`);
+
+    if (index > -1) {
+        settings.status_types[index][valueIndex] = newValue;
+    }
 
     return getSettings();
 };
