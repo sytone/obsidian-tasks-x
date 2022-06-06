@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/sytone/obsidian-tasks-x/compare/2.0.14...2.1.0) (2022-06-06)
+
+
+### Documentation
+
+* move screenshots to site for linking ([3de5e97](https://github.com/sytone/obsidian-tasks-x/commits/3de5e9743f94409a58964f211133a303d60d1fcc))
+
+
+### Bug Fixes and Changes
+
+* move additional status type editing to modal ([e6f7037](https://github.com/sytone/obsidian-tasks-x/commits/e6f7037e2f15f4872b9caa1e2314dc0ee002cebf)), closes [#4](https://github.com/sytone/obsidian-tasks-x/issues/4)
+
 ### [2.0.14](https://github.com/sytone/obsidian-tasks-x/compare/v2.0.13...v2.0.14) (2022-06-04)
 
 ### [2.0.13](https://github.com/sytone/obsidian-tasks-x/compare/v2.0.12...v2.0.13) (2022-06-03)
