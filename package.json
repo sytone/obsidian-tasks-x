@@ -61,6 +61,7 @@
     "alasql": "^1.7.3",
     "chrono-node": "2.3.8",
     "eventemitter2": "^6.4.5",
+    "handlebars": "^4.7.7",
     "rrule": "^2.6.8"
   },
   "standard-version": {
