@@ -145,29 +145,3 @@ describe('urgency - start date component', () => {
         testUrgency(lowPriority.startDate(null), 0.0);
     });
 });
-
-// describe('urgency - calculations', () => {
-//     it('Map a range of 21 days to the value 0.2 - 1.0', () => {
-//         //const milliSecondsPerDay = 1000 * 60 * 60 * 24;
-//         //const ago = moment().subtract(3, 'days');
-
-//         //const daysOverdue = Math.round(window.moment().diff(ago) / milliSecondsPerDay);
-
-//         //expect(daysOverdue).toBe(21);
-//         for (let index = -20; index <= 30; index++) {
-//             let dueMultiplier: number;
-//             if (index >= 7) {
-//                 dueMultiplier = 1.0; // < 1 wk ago
-//             } else if (index >= -14.0) {
-//                 // Due between 7 days (+7) ago and in 14 days (-14)
-//                 dueMultiplier = ((index + 14.0) * 0.8) / 21.0 + 0.2;
-//             } else {
-//                 dueMultiplier = 0.2; // > 2 wks
-//             }
-
-//             console.log(`${index} - ${dueMultiplier} - ${dueMultiplier * 12.0}`);
-//         }
-
-//         expect(1).toBe(0.2);
-//     });
-// });
