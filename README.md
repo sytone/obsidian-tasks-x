@@ -55,8 +55,10 @@ The `Tasks: Create or edit` command helps you when editing a task.
 
 Follow the steps below to install Tasks.
 
-1. Search for "Tasks X" in Obsidian's community plugins browser
-2. Enable the plugin in your Obsidian settings (find "Tasks X" under "Community plugins").
+> Note: The request to have it added is still pending. Use BRAT for the moment.
+
+1. Search for "Tasks SQL Powered" in Obsidian's community plugins browser
+2. Enable the plugin in your Obsidian settings (find "Tasks SQL Powered" under "Community plugins").
 3. Check the settings. It makes sense to set the global filter early on (if you want one).
 4. Replace the "Toggle checklist status" hotkey with "Tasks: Toggle Done".
     - I recommend you remove the original toggle hotkey and set the "Tasks" toggle to `Ctrl + Enter` (or `Cmd + Enter` on a mac).
@@ -65,6 +67,13 @@ Follow the steps below to install Tasks.
 
 To install a pre-release, download and enable the [Obsidian42 BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin, add the beta repository `sytone/obsidian-tasks-x`, and then have BRAT check for updates.
 
+Then..
+
+1. Enable the plugin in your Obsidian settings (find "Tasks SQL Powered" under "Community plugins").
+2. Check the settings. It makes sense to set the global filter early on (if you want one).
+3. Replace the "Toggle checklist status" hotkey with "Tasks: Toggle Done".
+    - I recommend you remove the original toggle hotkey and set the "Tasks" toggle to `Ctrl + Enter` (or `Cmd + Enter` on a mac).
+
 ### Manual installation
 
 1. Download the latest [release](https://github.com/sytone/obsidian-tasks-x/releases/latest)
@@ -72,6 +81,13 @@ To install a pre-release, download and enable the [Obsidian42 BRAT](https://gith
    Note: On some machines the `.obsidian` folder may be hidden. On MacOS you should be able to press `Command+Shift+Dot` to show the folder in Finder.
 3. Reload Obsidian
 4. If prompted about Safe Mode, you can disable safe mode and enable the plugin.
+
+Then..
+
+1. Enable the plugin in your Obsidian settings (find "Tasks SQL Powered" under "Community plugins").
+2. Check the settings. It makes sense to set the global filter early on (if you want one).
+3. Replace the "Toggle checklist status" hotkey with "Tasks: Toggle Done".
+    - I recommend you remove the original toggle hotkey and set the "Tasks" toggle to `Ctrl + Enter` (or `Cmd + Enter` on a mac).
 
 ## User Documentation
 
