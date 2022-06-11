@@ -1,5 +1,5 @@
 import type { Moment } from 'moment';
-import { Component, MarkdownRenderer } from 'obsidian';
+import { Component, MarkdownRenderer, TFile } from 'obsidian';
 import moment from 'moment';
 
 import { StatusRegistry } from './StatusRegistry';
@@ -29,6 +29,7 @@ export type TaskRecord = {
     status: Status;
     description: string;
     path: string;
+    file: TFile | null;
     indentation: string;
     sectionStart: number;
     sectionIndex: number;
@@ -87,6 +88,8 @@ export class Task {
     public readonly status: Status;
     public readonly description: string;
     public readonly path: string;
+    public readonly file: TFile | null;
+
     public readonly indentation: string;
     /** Line number where the section starts that contains this task. */
     public readonly sectionStart: number;
@@ -113,6 +116,7 @@ export class Task {
         status,
         description,
         path,
+        file,
         indentation,
         sectionStart,
         sectionIndex,
@@ -129,6 +133,7 @@ export class Task {
         status: Status;
         description: string;
         path: string;
+        file: TFile | null;
         indentation: string;
         sectionStart: number;
         sectionIndex: number;
@@ -145,6 +150,7 @@ export class Task {
         this.status = status;
         this.description = description;
         this.path = path;
+        this.file = file;
         this.indentation = indentation;
         this.sectionStart = sectionStart;
         this.sectionIndex = sectionIndex;
@@ -185,6 +191,7 @@ export class Task {
             status: record.status,
             description: record.description,
             path: record.path,
+            file: record.file,
             indentation: record.indentation,
             sectionStart: record.sectionStart,
             sectionIndex: record.sectionIndex,
@@ -215,12 +222,14 @@ export class Task {
     public static fromLine({
         line,
         path,
+        file,
         sectionStart,
         sectionIndex,
         precedingHeader,
     }: {
         line: string;
         path: string;
+        file: TFile | null;
         sectionStart: number;
         sectionIndex: number;
         precedingHeader: string | null;
@@ -355,6 +364,7 @@ export class Task {
             status,
             description,
             path,
+            file,
             indentation,
             sectionStart,
             sectionIndex,
@@ -578,6 +588,7 @@ export class Task {
             status: this.status,
             description: this.description,
             path: this.path,
+            file: this.file,
             indentation: this.indentation,
             sectionStart: this.sectionStart,
             sectionIndex: this.sectionIndex,

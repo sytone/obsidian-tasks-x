@@ -12,6 +12,7 @@ export function fromLine({
     return Task.fromLine({
         line,
         path,
+        file: null,
         precedingHeader,
         sectionIndex: 0,
         sectionStart: 0,
@@ -25,6 +26,7 @@ export function createTasksFromMarkdown(tasksAsMarkdown: string, path: string, p
         const task = Task.fromLine({
             line: line,
             path: path,
+            file: null,
             precedingHeader: precedingHeader,
             sectionIndex: 0,
             sectionStart: 0,

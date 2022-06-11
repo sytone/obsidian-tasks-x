@@ -1,5 +1,6 @@
 // Builder
 import type { Moment } from 'moment';
+import type { TFile } from 'obsidian';
 import { StatusRegistry } from '../../src/StatusRegistry';
 import { Priority, Task } from '../../src/Task';
 import type { Recurrence } from '../../src/Recurrence';
@@ -22,6 +23,7 @@ export class TaskBuilder {
     private _status: Status = Status.TODO;
     private _description: string = 'my description';
     private _path: string = '';
+    private _file: TFile | null = null;
     private _indentation: string = '';
 
     private _sectionStart: number = 0;
@@ -64,6 +66,7 @@ export class TaskBuilder {
             status: this._status,
             description: this._description,
             path: this._path,
+            file: this._file,
             indentation: this._indentation,
             sectionStart: this._sectionStart,
             sectionIndex: this._sectionIndex,
@@ -95,6 +98,11 @@ export class TaskBuilder {
      */
     public path(path: string): TaskBuilder {
         this._path = path;
+        return this;
+    }
+
+    public file(file: TFile | null): TaskBuilder {
+        this._file = file;
         return this;
     }
 

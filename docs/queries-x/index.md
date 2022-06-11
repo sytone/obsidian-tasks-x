@@ -27,6 +27,7 @@ The following columns are available to be used in the WHERE clauses.
 | status->nextStatusIndicator | The next indicator to be used when clicked on.  ('x', ' ', '/', etc)                |      |
 | description                 | The description of the task.                                                        |      |
 | path                        | The path to the note the task is in.                                                |      |
+| file                        | The TFile object in Obsidian.                                                       |      |
 | precedingHeader             | The heading that the task is under                                                  |      |
 | priority                    | The priority of the task. This has to be treated like a string ('1', '2', '3', '4') |      |
 
@@ -59,6 +60,18 @@ WHERE ((dueDate->getUTCFullYear() = 2021 AND status->indicator = 'x') OR (dueDat
 - tags: string[] | [];
 
 Look at the [SQL Compatibility](https://github.com/AlaSQL/alasql/wiki/SQL%20keywords) table to see what SQL commands are supported.
+
+### Queries using file
+
+basename is the name of the page
+
+`WHERE status->indicator = '!' AND file->basename = '2021-10-13'`
+
+You can also now query based on the creation date of the note the task is in.
+
+`WHERE status->indicator = ' ' AND moment(file->stat->ctime)->month() = 3`
+
+you can use `mtime` to access the modified time.
 
 ### Object Properties & Functions
 

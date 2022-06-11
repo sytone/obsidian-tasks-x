@@ -64,6 +64,7 @@ export function shouldSupportFiltering(
                 sectionStart: 0,
                 sectionIndex: 0,
                 path: '',
+                file: null,
                 precedingHeader: '',
             }) as Task,
     );

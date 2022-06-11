@@ -38,6 +38,7 @@ describe('StatusRegistry', () => {
         const task = Task.fromLine({
             line,
             path,
+            file: null,
             sectionStart,
             sectionIndex,
             precedingHeader,
@@ -71,6 +72,7 @@ describe('StatusRegistry', () => {
         const task = Task.fromLine({
             line,
             path,
+            file: null,
             sectionStart,
             sectionIndex,
             precedingHeader,
@@ -128,6 +130,7 @@ describe('StatusRegistry', () => {
         const task = Task.fromLine({
             line,
             path,
+            file: null,
             sectionStart,
             sectionIndex,
             precedingHeader,

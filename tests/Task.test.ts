@@ -32,6 +32,7 @@ describe('parsing', () => {
         const task = Task.fromLine({
             line,
             path,
+            file: null,
             sectionStart,
             sectionIndex,
             precedingHeader,
@@ -61,6 +62,7 @@ describe('parsing', () => {
         const task = Task.fromLine({
             line,
             path,
+            file: null,
             sectionStart,
             sectionIndex,
             precedingHeader,
@@ -85,6 +87,7 @@ describe('parsing', () => {
         const task = Task.fromLine({
             line,
             path,
+            file: null,
             sectionStart,
             sectionIndex,
             precedingHeader,
@@ -112,6 +115,7 @@ describe('parsing', () => {
         const task = Task.fromLine({
             line,
             path,
+            file: null,
             sectionStart,
             sectionIndex,
             precedingHeader,
@@ -140,6 +144,7 @@ function constructTaskFromLine(line: string) {
     const task = Task.fromLine({
         line,
         path: 'file.md',
+        file: null,
         sectionStart: 0,
         sectionIndex: 0,
         precedingHeader: '',
@@ -267,6 +272,7 @@ describe('to string', () => {
         const task: Task = Task.fromLine({
             line,
             path: '',
+            file: null,
             sectionStart: 0,
             sectionIndex: 0,
             precedingHeader: '',
@@ -285,6 +291,7 @@ describe('to string', () => {
         const task: Task = Task.fromLine({
             line,
             path: '',
+            file: null,
             sectionStart: 0,
             sectionIndex: 0,
             precedingHeader: '',
@@ -360,6 +367,7 @@ describe('toggle done', () => {
         const task: Task = Task.fromLine({
             line,
             path: '',
+            file: null,
             sectionStart: 0,
             sectionIndex: 0,
             precedingHeader: '',
@@ -609,6 +617,7 @@ describe('toggle done', () => {
             const task = Task.fromLine({
                 line,
                 path: '',
+                file: null,
                 precedingHeader: '',
                 sectionStart: 0,
                 sectionIndex: 0,

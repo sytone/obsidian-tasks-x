@@ -52,6 +52,7 @@ const toggleLine = ({ line, path }: { line: string; path: string }): string => {
     const task = Task.fromLine({
         line,
         path,
+        file: null,
         sectionStart: 0, // We don't need this to toggle it here in the editor.
         sectionIndex: 0, // We don't need this to toggle it here in the editor.
         precedingHeader: null, // We don't need this to toggle it here in the editor.

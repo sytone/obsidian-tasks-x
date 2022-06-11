@@ -42,6 +42,7 @@ const taskFromLine = ({ line, path }: { line: string; path: string }): Task => {
     const task = Task.fromLine({
         line,
         path,
+        file: null,
         sectionStart: 0, // We don't need this to toggle it here in the editor.
         sectionIndex: 0, // We don't need this to toggle it here in the editor.
         precedingHeader: null, // We don't need this to toggle it here in the editor.
@@ -62,6 +63,7 @@ const taskFromLine = ({ line, path }: { line: string; path: string }): Task => {
             status: Status.TODO,
             description: '',
             path,
+            file: null,
             indentation: '',
             priority: Priority.None,
             startDate: null,
@@ -94,6 +96,7 @@ const taskFromLine = ({ line, path }: { line: string; path: string }): Task => {
         status,
         description,
         path,
+        file: null,
         indentation,
         blockLink,
         priority: Priority.None,

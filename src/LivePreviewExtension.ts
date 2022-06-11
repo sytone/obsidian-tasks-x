@@ -37,6 +37,7 @@ class LivePreviewExtension implements PluginValue {
             // The task is created, toggled, and written back to the CM6 document,
             // replacing the old task in-place.
             path: '',
+            file: null,
             sectionStart: 0,
             sectionIndex: 0,
             precedingHeader: null,

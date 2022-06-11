@@ -273,6 +273,7 @@ export class Cache {
                 const task = Task.fromLine({
                     line,
                     path: file.path,
+                    file,
                     sectionStart: currentSection.position.start.line,
                     sectionIndex,
                     precedingHeader: this.getPrecedingHeader({
