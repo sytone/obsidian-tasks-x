@@ -2,6 +2,64 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/sytone/obsidian-tasks-x/compare/2.1.0...2.3.0) (2022-06-11)
+
+
+### Features
+
+* add file as property of the task for quering ([eff7181](https://github.com/sytone/obsidian-tasks-x/commits/eff718153a118137651e001207ff1cb3b63de75c))
+* separation of rendering logic from task model ([c289af9](https://github.com/sytone/obsidian-tasks-x/commits/c289af94b329633dba8cd8cde03b68704a39a2ed))
+
+
+### Internal
+
+* Add tests for urgency score ([#710](https://github.com/sytone/obsidian-tasks-x/issues/710)) ([0741ac1](https://github.com/sytone/obsidian-tasks-x/commits/0741ac11cbfbb13cbf28a6e5ecdc1f5d10bbbd04))
+* Create priority filter class ([#706](https://github.com/sytone/obsidian-tasks-x/issues/706)) ([8048e26](https://github.com/sytone/obsidian-tasks-x/commits/8048e262685bdfae12abb6127d9531828fb2af67))
+* Create tag/tags filter class ([#714](https://github.com/sytone/obsidian-tasks-x/issues/714)) ([251093f](https://github.com/sytone/obsidian-tasks-x/commits/251093f225a469cf9b976e3c6aa535d1729a0d64))
+* Create text filter classes ([#705](https://github.com/sytone/obsidian-tasks-x/issues/705)) ([30a095b](https://github.com/sytone/obsidian-tasks-x/commits/30a095bf30331da12706f89187d4450f95e7db35))
+
+
+### Documentation
+
+* Fix 'How does Tasks handle status changes?' formatting ([#720](https://github.com/sytone/obsidian-tasks-x/issues/720)) ([17c9545](https://github.com/sytone/obsidian-tasks-x/commits/17c95451c01c43158e08fdc869d991af93113542))
+* fix old references to Tasks X ([7e3cc89](https://github.com/sytone/obsidian-tasks-x/commits/7e3cc898d8b04a75ac948dd8b8a5c05d937d6fde))
+* Indicate when 1.6.0 features were released ([#731](https://github.com/sytone/obsidian-tasks-x/issues/731)) ([3da6d12](https://github.com/sytone/obsidian-tasks-x/commits/3da6d1256510a8137afd38d7660ecd69d7239c0a))
+
+
+### Bug Fixes and Changes
+
+* fix rounding issue on days overdue ([39ae9fc](https://github.com/sytone/obsidian-tasks-x/commits/39ae9fc427cd9b5b0b40d32b43a45e92bd2065d0))
+* Fix typo in error message for priority instruction. ([#707](https://github.com/sytone/obsidian-tasks-x/issues/707)) ([5608c02](https://github.com/sytone/obsidian-tasks-x/commits/5608c020e3af5f881e463785b67ceab8f616f67d))
+
+## [2.2.0](https://github.com/sytone/obsidian-tasks-x/compare/2.1.0...2.2.0) (2022-06-11)
+
+
+### Features
+
+* add file as property of the task for quering ([eff7181](https://github.com/sytone/obsidian-tasks-x/commits/eff718153a118137651e001207ff1cb3b63de75c))
+* separation of rendering logic from task model ([c289af9](https://github.com/sytone/obsidian-tasks-x/commits/c289af94b329633dba8cd8cde03b68704a39a2ed))
+
+
+### Internal
+
+* Add tests for urgency score ([#710](https://github.com/sytone/obsidian-tasks-x/issues/710)) ([0741ac1](https://github.com/sytone/obsidian-tasks-x/commits/0741ac11cbfbb13cbf28a6e5ecdc1f5d10bbbd04))
+* Create priority filter class ([#706](https://github.com/sytone/obsidian-tasks-x/issues/706)) ([8048e26](https://github.com/sytone/obsidian-tasks-x/commits/8048e262685bdfae12abb6127d9531828fb2af67))
+* Create tag/tags filter class ([#714](https://github.com/sytone/obsidian-tasks-x/issues/714)) ([251093f](https://github.com/sytone/obsidian-tasks-x/commits/251093f225a469cf9b976e3c6aa535d1729a0d64))
+* Create text filter classes ([#705](https://github.com/sytone/obsidian-tasks-x/issues/705)) ([30a095b](https://github.com/sytone/obsidian-tasks-x/commits/30a095bf30331da12706f89187d4450f95e7db35))
+
+
+### Documentation
+
+* Fix 'How does Tasks handle status changes?' formatting ([#720](https://github.com/sytone/obsidian-tasks-x/issues/720)) ([17c9545](https://github.com/sytone/obsidian-tasks-x/commits/17c95451c01c43158e08fdc869d991af93113542))
+* fix old references to Tasks X ([7e3cc89](https://github.com/sytone/obsidian-tasks-x/commits/7e3cc898d8b04a75ac948dd8b8a5c05d937d6fde))
+* Indicate when 1.6.0 features were released ([#731](https://github.com/sytone/obsidian-tasks-x/issues/731)) ([3da6d12](https://github.com/sytone/obsidian-tasks-x/commits/3da6d1256510a8137afd38d7660ecd69d7239c0a))
+
+
+### Bug Fixes and Changes
+
+* fix rounding issue on days overdue ([39ae9fc](https://github.com/sytone/obsidian-tasks-x/commits/39ae9fc427cd9b5b0b40d32b43a45e92bd2065d0))
+* Fix typo in error message for priority instruction. ([#707](https://github.com/sytone/obsidian-tasks-x/issues/707)) ([5608c02](https://github.com/sytone/obsidian-tasks-x/commits/5608c020e3af5f881e463785b67ceab8f616f67d))
+
 ## [2.1.0](https://github.com/sytone/obsidian-tasks-x/compare/2.0.14...2.1.0) (2022-06-06)
 
 
