@@ -173,6 +173,21 @@ Versioning is automatically handled by `standard-version` all you need to do is 
 5. Wait for [GitHub Actions](https://github.com/sytone/obsidian-tasks-x/actions/workflows/release.yml) to create the new release
 6. Optional: Post to
     - Obsidian Discord
+
+        ````markdown
+        🔍 {Title of release}
+
+        x.y.z has been released, this is in sync with the current released version of tasks. Update via BRAT using `sytone/obsidian-tasks-x` as the repo.
+
+        {Release summary}
+
+        {Cut and past changelog.md section for version}
+
+
+        🔗  Github release link:
+        https://github.com/sytone/obsidian-tasks-x/releases/tag/x.y.z
+        ````
+
     - r/ObsidianMD on Reddit
     - etc.
 
