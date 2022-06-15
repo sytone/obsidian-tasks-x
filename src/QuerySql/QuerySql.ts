@@ -19,6 +19,11 @@ export class QuerySql implements IQuery {
     public source: string;
     public name: string;
 
+    // @ts-ignore
+    private _sourcePath: string;
+    // @ts-ignore
+    private _frontmatter: any | null | undefined;
+
     private _layoutOptions: LayoutOptions = new LayoutOptions();
     private _grouping: Grouping[] = [];
     private _error: string | undefined = undefined;
@@ -35,8 +40,19 @@ export class QuerySql implements IQuery {
     private _shortModeRegexp = /^short/;
     private _rawQuery = /^raw (empty|tasks)/;
 
-    constructor({ source }: { source: string }) {
+    constructor({
+        source,
+        sourcePath,
+        frontmatter,
+    }: {
+        source: string;
+        sourcePath: string;
+        frontmatter: any | null | undefined;
+    }) {
         this.name = 'QuerySql';
+
+        this._sourcePath = sourcePath;
+        this._frontmatter = frontmatter;
 
         source
             .split('\n')
@@ -138,22 +154,45 @@ export class QuerySql implements IQuery {
             return task.toRecord();
         });
 
+        this.logger.info('Tables', alasql);
+
+        // SHOW TABLES FROM alasql
+        if (!alasql.tables['pagedata']) {
+            alasql('CREATE TABLE pagedata (name STRING, keyvalue STRING)');
+        }
+        console.log(alasql.tables);
+        // const queryPageData = { sourcePath: this._sourcePath, frontmatter: this._frontmatter };
+        alasql(`INSERT INTO pagedata VALUES ('sourcePath','${this._sourcePath}')`);
+        alasql(`INSERT INTO pagedata VALUES ('frontmatter','${this._frontmatter}')`);
+        console.log(alasql.tables);
+
         // Run the query in AlaSQL.
         alasql.fn.moment = moment; // Set moment() function available to AlaSQL
 
+        alasql.fn.currentPage = function () {
+            return alasql('SELECT keyvalue FROM pagedata where name = "sourcePath"');
+        };
+
+        alasql.fn.currentPageFrontmatter = function () {
+            return this._frontmatter;
+        };
+
+        alasql.fn.pageProperty = function (field) {
+            return field;
+        };
+
         if (this._rawMode && !this._rawWithTasksMode) {
             const rawResult = alasql(this.source);
-            console.log('RAW Data result from AlaSQL query');
-            console.log(rawResult);
+            this.logger.info('RAW Data result from AlaSQL query', rawResult);
             return new TaskGroups([], []);
         }
 
         let queryResult: TaskRecord[] = alasql(this.source, [records]);
         this.logger.debug(`queryResult: ${queryResult.length}`);
+        console.log(alasql.tables);
 
         if (this._rawMode && this._rawWithTasksMode) {
-            console.log('RAW Data result from AlaSQL query');
-            console.log(queryResult);
+            this.logger.info('RAW Data result from AlaSQL query', queryResult);
         }
 
         if (this._groupingPossible) {

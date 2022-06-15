@@ -75,22 +75,22 @@ export class LogManager extends EventEmitter2 {
             const msg = `[${logEntry.module}] ${logEntry.message}`;
             switch (logEntry.level) {
                 case 'trace':
-                    console.trace(msg);
+                    console.trace(msg, logEntry.objects);
                     break;
                 case 'debug':
-                    console.debug(msg);
+                    console.debug(msg, logEntry.objects);
                     break;
                 case 'info':
-                    console.info(msg);
+                    console.info(msg, logEntry.objects);
                     break;
                 case 'warn':
-                    console.warn(msg);
+                    console.warn(msg, logEntry.objects);
                     break;
                 case 'error':
-                    console.error(msg);
+                    console.error(msg, logEntry.objects);
                     break;
                 default:
-                    console.log(`{${logEntry.level}} ${msg}`);
+                    console.log(`{${logEntry.level}} ${msg}`, logEntry.objects);
             }
         });
 
@@ -104,6 +104,7 @@ export interface LogEntry {
     module: string;
     location?: string;
     message: string;
+    objects: any;
 }
 
 export interface LogOptions {
@@ -145,11 +146,11 @@ export class Logger {
      * @param logLevel
      * @param message
      */
-    public log(logLevel: string, message: string): void {
+    public log(logLevel: string, message: string, objects: any): void {
         const level = this.levelToInt(logLevel);
         if (level < this.minLevel) return;
 
-        const logEntry: LogEntry = { level: logLevel, module: this.module, message };
+        const logEntry: LogEntry = { level: logLevel, module: this.module, message, objects };
 
         // Obtain the line/file through a thoroughly hacky method
         // This creates a new stack trace and pulls the caller from it.  If the caller
@@ -167,20 +168,20 @@ export class Logger {
         this.logManager.emit('log', logEntry);
     }
 
-    public trace(message: string): void {
-        this.log('trace', message);
+    public trace(message: string, objects?: any): void {
+        this.log('trace', message, objects);
     }
-    public debug(message: string): void {
-        this.log('debug', message);
+    public debug(message: string, objects?: any): void {
+        this.log('debug', message, objects);
     }
-    public info(message: string): void {
-        this.log('info', message);
+    public info(message: string, objects?: any): void {
+        this.log('info', message, objects);
     }
-    public warn(message: string): void {
-        this.log('warn', message);
+    public warn(message: string, objects?: any): void {
+        this.log('warn', message, objects);
     }
-    public error(message: string): void {
-        this.log('error', message);
+    public error(message: string, objects?: any): void {
+        this.log('error', message, objects);
     }
 }
 

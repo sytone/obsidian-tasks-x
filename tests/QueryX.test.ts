@@ -152,7 +152,7 @@ describe('QuerySql', () => {
                 }),
             ];
             const input = 'SELECT * FROM Tasks WHERE Path LIKE "ab/c d"';
-            const query = new QuerySql({ source: input });
+            const query = new QuerySql({ source: input, sourcePath: '', frontmatter: '' });
 
             // Act
             const groupedTasks = query.applyQueryToTasks(tasks);
@@ -202,7 +202,7 @@ describe('QuerySql', () => {
                 }),
             ];
             const input = 'SELECT * FROM Tasks WHERE status->indicator = "x"';
-            const query = new QuerySql({ source: input });
+            const query = new QuerySql({ source: input, sourcePath: '', frontmatter: '' });
 
             // Act
             const groupedTasks = query.applyQueryToTasks(tasks);

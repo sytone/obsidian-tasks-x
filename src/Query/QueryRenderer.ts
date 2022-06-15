@@ -27,7 +27,7 @@ export class QueryRenderer {
     }
 
     private async _addQueryRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        log('debug', `Adding Query Render for ${source} to context ${context.docId}`);
+        log('debug', `Adding Original Query Render for ${source} to context ${context.docId}`);
         context.addChild(
             new QueryRenderChild({
                 app: this.app,
@@ -39,13 +39,13 @@ export class QueryRenderer {
     }
 
     private async _addQuerySqlRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        log('debug', `Adding Query Render for ${source} to context ${context.docId}`);
+        log('debug', `Adding SQL Query Render for ${source} to context ${context.docId}`);
         context.addChild(
             new QueryRenderChild({
                 app: this.app,
                 events: this.events,
                 container: element,
-                queryEngine: new QuerySql({ source }),
+                queryEngine: new QuerySql({ source, sourcePath: context.sourcePath, frontmatter: context.frontmatter }),
             }),
         );
     }
