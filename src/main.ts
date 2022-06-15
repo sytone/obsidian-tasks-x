@@ -1,4 +1,4 @@
-import { Plugin } from 'obsidian';
+import { App, Plugin } from 'obsidian';
 import { Status } from './Status';
 
 import { Cache } from './Cache';
@@ -20,6 +20,8 @@ export default class TasksPlugin extends Plugin {
     public statusRegistry: StatusRegistry | undefined;
     public cache: Cache | undefined;
 
+    public static obsidianApp: App;
+
     @logCall
     async onload(): Promise<void> {
         //monkeyPatchConsole(this);
@@ -33,6 +35,7 @@ export default class TasksPlugin extends Plugin {
             })
             .registerConsoleLogger();
         log('info', `loading plugin "${this.manifest.name}" v${this.manifest.version}`);
+        TasksPlugin.obsidianApp = this.app;
 
         // Load the settings and UI.
         await this.loadSettings();

@@ -11,6 +11,7 @@ import { Group } from '../Query/Group';
 import { TaskGroup } from '../Query/TaskGroup';
 import { GroupHeading } from '../Query/GroupHeading';
 import { logging } from '../lib/logging';
+import TasksPlugin from 'main';
 
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };
@@ -90,7 +91,7 @@ export class QuerySql implements IQuery {
 
         const queryPrefix = 'SELECT * FROM ?';
 
-        this.source = source.replace(this._commentReplacementRegexp, '');
+        this.source = source.replace(this._commentReplacementRegexp, '').trim();
 
         // Exit out if raw with no set table to query.
         if (this._rawMode && !this._rawWithTasksMode) {
@@ -149,47 +150,75 @@ export class QuerySql implements IQuery {
 
     @logCall
     public applyQueryToTasks(tasks: Task[]): TaskGroups {
-        this.logger.debug(`Executing query: [${this.source}]`);
+        const queryId = Date.now() + Math.random().toString(36).slice(2, 9);
+
+        this.logger.debug(`Executing query:${queryId}[${this.source}]`);
+
         const records: TaskRecord[] = tasks.map((task) => {
             return task.toRecord();
         });
 
-        this.logger.info('Tables', alasql);
+        // this.logger.info('Tables', alasql);
 
-        // SHOW TABLES FROM alasql
-        if (!alasql.tables['pagedata']) {
+        // // SHOW TABLES FROM alasql
+        if (alasql('SHOW TABLES FROM alasql LIKE "pagedata"').length == 0) {
             alasql('CREATE TABLE pagedata (name STRING, keyvalue STRING)');
         }
-        console.log(alasql.tables);
-        // const queryPageData = { sourcePath: this._sourcePath, frontmatter: this._frontmatter };
-        alasql(`INSERT INTO pagedata VALUES ('sourcePath','${this._sourcePath}')`);
-        alasql(`INSERT INTO pagedata VALUES ('frontmatter','${this._frontmatter}')`);
-        console.log(alasql.tables);
+
+        if (alasql(`SELECT keyvalue FROM pagedata WHERE name = "sourcePath${queryId}"`).length == 0) {
+            alasql(`INSERT INTO pagedata VALUES ('sourcePath${queryId}','${this._sourcePath}')`);
+        }
+
+        // console.log(alasql.tables);
+        // // const queryPageData = { sourcePath: this._sourcePath, frontmatter: this._frontmatter };
+        // alasql(`INSERT INTO pagedata VALUES ('sourcePath','${this._sourcePath}')`);
+        // alasql(`INSERT INTO pagedata VALUES ('frontmatter','${this._frontmatter}')`);
+        // console.log(alasql.tables);
+
+        //alasql(`INSERT INTO pagedata VALUES (200, 'Update 1') ON CONFLICT DO NOTHING`);
+
+        //console.log(alasql('SHOW TABLES FROM alasql LIKE "pagedata"').length == 1);
+        console.log(this._frontmatter);
 
         // Run the query in AlaSQL.
         alasql.fn.moment = moment; // Set moment() function available to AlaSQL
-
-        alasql.fn.currentPage = function () {
-            return alasql('SELECT keyvalue FROM pagedata where name = "sourcePath"');
-        };
-
-        alasql.fn.currentPageFrontmatter = function () {
-            return this._frontmatter;
-        };
 
         alasql.fn.pageProperty = function (field) {
             return field;
         };
 
+        alasql.fn.queryBlockFile = function () {
+            const result = alasql(`SELECT keyvalue FROM pagedata WHERE name = "sourcePath${queryId}"`);
+            if (result.length == 1) {
+                const fileCache = TasksPlugin.obsidianApp.metadataCache.getCache(result[0].keyvalue);
+
+                return {
+                    frontmatter: fileCache?.frontmatter,
+                    tags: fileCache?.tags,
+                    path: result[0].keyvalue,
+                    basename: result[0].keyvalue.split('/').slice(-1)[0].split('.')[0],
+                };
+            }
+
+            return {
+                frontmatter: null,
+                tags: [],
+                path: result[0].keyvalue,
+                basename: result[0].keyvalue.split('/').slice(-1)[0].split('.')[0],
+            };
+        };
+
+        alasql.options.nocount = true; // Disable row count for queries.
+        //console.log(alasql(`DECLARE @queryId STRING = '${queryId}';`));
+
         if (this._rawMode && !this._rawWithTasksMode) {
-            const rawResult = alasql(this.source);
+            const rawResult = alasql(`DECLARE @queryId STRING = '${queryId}';` + this.source)[1];
             this.logger.info('RAW Data result from AlaSQL query', rawResult);
             return new TaskGroups([], []);
         }
 
-        let queryResult: TaskRecord[] = alasql(this.source, [records]);
+        let queryResult: TaskRecord[] = alasql(`DECLARE @queryId STRING = '${queryId}';` + this.source, [records])[1];
         this.logger.debug(`queryResult: ${queryResult.length}`);
-        console.log(alasql.tables);
 
         if (this._rawMode && this._rawWithTasksMode) {
             this.logger.info('RAW Data result from AlaSQL query', queryResult);

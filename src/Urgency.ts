@@ -36,7 +36,7 @@ export class Urgency {
             } else {
                 dueMultiplier = 0.2; // > 2 wks
             }
-            console.log(`${task.dueDate} ${daysOverdue} ${dueMultiplier} ${dueMultiplier * Urgency.dueCoefficient}`);
+            // console.log(`${task.dueDate} ${daysOverdue} ${dueMultiplier} ${dueMultiplier * Urgency.dueCoefficient}`);
 
             urgency += dueMultiplier * Urgency.dueCoefficient;
         }
