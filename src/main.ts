@@ -13,6 +13,7 @@ import { SettingsTab } from './Config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
 import { log, logCall } from './Config/LogConfig';
 import { logging } from './lib/logging';
+import TasksServices from './Services';
 
 export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;
@@ -30,12 +31,13 @@ export default class TasksPlugin extends Plugin {
                 minLevels: {
                     '': 'debug',
                     taskssql: 'debug',
+                    'taskssql.perf': 'debug',
                     'taskssql.querysql.QuerySql': 'debug',
                 },
             })
             .registerConsoleLogger();
         log('info', `loading plugin "${this.manifest.name}" v${this.manifest.version}`);
-        TasksPlugin.obsidianApp = this.app;
+        TasksServices.obsidianApp = this.app;
 
         // Load the settings and UI.
         await this.loadSettings();

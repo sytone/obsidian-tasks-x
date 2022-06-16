@@ -11,7 +11,7 @@ import { Group } from '../Query/Group';
 import { TaskGroup } from '../Query/TaskGroup';
 import { GroupHeading } from '../Query/GroupHeading';
 import { logging } from '../lib/logging';
-import TasksPlugin from 'main';
+import TasksServices from '../Services';
 
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };
@@ -158,9 +158,12 @@ export class QuerySql implements IQuery {
             return task.toRecord();
         });
 
-        // this.logger.info('Tables', alasql);
-
-        // // SHOW TABLES FROM alasql
+        /*
+         * As we are using alaSQL we can take advantage of a in memory cache. The pagedata
+         * table contains the source path for the executing code block when rendered. This
+         * allows the code block to reference the page it is being rendered on and access
+         * the page meta data for more complex queries.
+         */
         if (alasql('SHOW TABLES FROM alasql LIKE "pagedata"').length == 0) {
             alasql('CREATE TABLE pagedata (name STRING, keyvalue STRING)');
         }
@@ -169,19 +172,10 @@ export class QuerySql implements IQuery {
             alasql(`INSERT INTO pagedata VALUES ('sourcePath${queryId}','${this._sourcePath}')`);
         }
 
-        // console.log(alasql.tables);
-        // // const queryPageData = { sourcePath: this._sourcePath, frontmatter: this._frontmatter };
-        // alasql(`INSERT INTO pagedata VALUES ('sourcePath','${this._sourcePath}')`);
-        // alasql(`INSERT INTO pagedata VALUES ('frontmatter','${this._frontmatter}')`);
-        // console.log(alasql.tables);
-
-        //alasql(`INSERT INTO pagedata VALUES (200, 'Update 1') ON CONFLICT DO NOTHING`);
-
-        //console.log(alasql('SHOW TABLES FROM alasql LIKE "pagedata"').length == 1);
         console.log(this._frontmatter);
 
-        // Run the query in AlaSQL.
-        alasql.fn.moment = moment; // Set moment() function available to AlaSQL
+        // Set moment() function available to AlaSQL
+        alasql.fn.moment = moment;
 
         alasql.fn.pageProperty = function (field) {
             return field;
@@ -190,7 +184,7 @@ export class QuerySql implements IQuery {
         alasql.fn.queryBlockFile = function () {
             const result = alasql(`SELECT keyvalue FROM pagedata WHERE name = "sourcePath${queryId}"`);
             if (result.length == 1) {
-                const fileCache = TasksPlugin.obsidianApp.metadataCache.getCache(result[0].keyvalue);
+                const fileCache = TasksServices.obsidianApp.metadataCache.getCache(result[0].keyvalue);
 
                 return {
                     frontmatter: fileCache?.frontmatter,
@@ -212,12 +206,12 @@ export class QuerySql implements IQuery {
         //console.log(alasql(`DECLARE @queryId STRING = '${queryId}';`));
 
         if (this._rawMode && !this._rawWithTasksMode) {
-            const rawResult = alasql(`DECLARE @queryId STRING = '${queryId}';` + this.source)[1];
+            const rawResult = alasql(this.source);
             this.logger.info('RAW Data result from AlaSQL query', rawResult);
             return new TaskGroups([], []);
         }
 
-        let queryResult: TaskRecord[] = alasql(`DECLARE @queryId STRING = '${queryId}';` + this.source, [records])[1];
+        let queryResult: TaskRecord[] = alasql(this.source, [records]);
         this.logger.debug(`queryResult: ${queryResult.length}`);
 
         if (this._rawMode && this._rawWithTasksMode) {

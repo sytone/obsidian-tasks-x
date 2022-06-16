@@ -72,7 +72,10 @@ export class LogManager extends EventEmitter2 {
         if (this.consoleLoggerRegistered) return this;
 
         this.onLogEntry((logEntry) => {
-            const msg = `[${logEntry.module}] ${logEntry.message}`;
+            const msg = `[${logEntry.level}][${logEntry.module}] ${logEntry.message}`;
+            if (logEntry.objects === undefined) {
+                logEntry.objects = '';
+            }
             switch (logEntry.level) {
                 case 'trace':
                     console.trace(msg, logEntry.objects);

@@ -1,5 +1,5 @@
 import { App, Editor, MarkdownView, View } from 'obsidian';
-import { StatusRegistry } from 'StatusRegistry';
+import { StatusRegistry } from '../StatusRegistry';
 import { TaskModal } from '../TaskModal';
 import { Status } from '../Status';
 import { Priority, Task, TaskRegularExpressions } from '../Task';

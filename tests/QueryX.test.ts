@@ -5,7 +5,6 @@ import moment from 'moment';
 import alasql from 'alasql';
 
 import { QuerySql } from '../src/QuerySql/QuerySql';
-//import { getSettings, updateSettings } from '../src/config/Settings';
 import { Status } from '../src/Status';
 import { Priority, Task } from '../src/Task';
 
