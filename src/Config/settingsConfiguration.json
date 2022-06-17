@@ -26,8 +26,9 @@
         "name": "Global task filter",
         "description": "The global filter will be applied to all checklist items.",
         "type": "text",
-        "placeholder": "#task",
+        "placeholder": "Enter a tag like #task here to limit queries to only tasks with this tag.",
         "settingName": "globalFilter",
+        "featureFlag": "",
         "notice": {
           "class": "setting-item-description",
           "text": "The global filter will be applied to all checklist items to filter out 'non-task' checklist items.\n A checklist item must include the specified string in its description in order to be considered a task.\n For example, if you set the global filter to '#task', the Tasks plugin will only handle checklist items tagged with '#task'.\n Other checklist items will remain normal checklist items and not appear in queries or get a done date set.\n Leave empty if you want all checklist items from your vault to be tasks managed by this plugin.",
@@ -40,6 +41,7 @@
         "type": "checkbox",
         "placeholder": false,
         "settingName": "removeGlobalFilter",
+        "featureFlag": "",
         "notice": null
       },
       {
@@ -48,6 +50,16 @@
         "type": "checkbox",
         "placeholder": true,
         "settingName": "setDoneDate",
+        "featureFlag": "",
+        "notice": null
+      },
+      {
+        "name": "Append global filter",
+        "description": "When this is enabled the global filter if specified will be appended to the task by default. Existing tasks will be updated on any edits.",
+        "type": "checkbox",
+        "placeholder": false,
+        "settingName": "appendGlobalFilter",
+        "featureFlag": "APPEND_GLOBAL_FILTER",
         "notice": null
       }
     ]
@@ -69,6 +81,7 @@
         "type": "function",
         "placeholder": "",
         "settingName": "insertTaskStatusSettings",
+        "featureFlag": "",
         "notice": null
       }
     ]
@@ -90,6 +103,7 @@
         "type": "function",
         "placeholder": "",
         "settingName": "insertFeatureFlags",
+        "featureFlag": "",
         "notice": null
       }
     ]

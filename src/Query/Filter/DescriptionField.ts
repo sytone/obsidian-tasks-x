@@ -1,4 +1,4 @@
-import { getSettings } from '../../Config/Settings';
+import { getSettings } from '../../config/Settings';
 import type { Task } from '../../Task';
 import { TextField } from './TextField';
 

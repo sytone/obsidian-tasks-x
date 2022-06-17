@@ -7,9 +7,9 @@ import type { Status } from './Status';
 import { replaceTaskWithTasks } from './File';
 import { LayoutOptions } from './LayoutOptions';
 import { Recurrence, RecurrenceRecord } from './Recurrence';
-import { getSettings, isFeatureEnabled } from './Config/Settings';
+import { getGeneralSetting, getSettings, isFeatureEnabled } from './config/Settings';
 import { Urgency } from './Urgency';
-import { Feature } from './Config/Feature';
+import { Feature } from './config/Feature';
 
 /**
  * When sorting, make sure low always comes after none. This way any tasks with low will be below any exiting
@@ -503,6 +503,11 @@ export class Task {
      * Returns a string representation of the task. This is the entire body after the
      * markdown task prefix. ( - [ ] )
      *
+     * This is called to render the task in markdown and as part of
+     * the query results. This complicates some of the logic and needs
+     * to be split out long term so render is not part of the base Task
+     * and markdown structure.
+     *
      * @param {LayoutOptions} [layoutOptions]
      * @return {*}  {string}
      * @memberof Task
@@ -511,9 +516,12 @@ export class Task {
         layoutOptions = layoutOptions ?? new LayoutOptions();
 
         let taskString = this.description.trim();
-        const { globalFilter } = getSettings();
 
-        if (isFeatureEnabled(Feature.APPEND_GLOBAL_FILTER.internalName)) {
+        const globalFilter = getGeneralSetting('globalFilter');
+
+        // New feature. Only enabled if user turns on the APPEND_GLOBAL_FILTER feature. Will
+        // append the filter rather than forcing it to the front.
+        if (isFeatureEnabled(Feature.APPEND_GLOBAL_FILTER.internalName) && getGeneralSetting('appendGlobalFilter')) {
             taskString = `${taskString} ${globalFilter}`.trim();
         } else {
             // Default is to have filter at front.

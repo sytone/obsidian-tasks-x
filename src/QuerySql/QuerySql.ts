@@ -4,7 +4,7 @@ import moment from 'moment';
 import { LayoutOptions } from '../LayoutOptions';
 
 import { Task, TaskRecord } from '../Task';
-import { logCall } from '../Config/LogConfig';
+import { logCall } from '../config/LogConfig';
 import type { IQuery } from '../IQuery';
 import { TaskGroups } from '../Query/TaskGroups';
 import { Group } from '../Query/Group';

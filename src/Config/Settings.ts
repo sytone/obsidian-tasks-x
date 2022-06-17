@@ -1,13 +1,23 @@
-import { log } from '../Config/LogConfig';
+import { log } from './LogConfig';
 import { Feature, FeatureFlag } from './Feature';
 
 export interface Settings {
+    // Original settings, they will be auto migrated to the new settings map.
     globalFilter: string;
     removeGlobalFilter: boolean;
     setDoneDate: boolean;
+
+    // The custom status states.
     status_types: Array<[string, string, string]>;
+
+    // Collection of feature flag IDs and their state.
     features: FeatureFlag;
+
+    // Settings are moved to a more general map to allow the settings UI to be
+    // dynamically generated.
     generalSettings: SettingsMap;
+
+    // Tracks the stage of the headings in the setttings UI.
     headingOpened: HeadingState;
 }
 
@@ -29,6 +39,9 @@ const defaultSettings: Settings = {
         globalFilter: '',
         removeGlobalFilter: false,
         setDoneDate: true,
+
+        // Allows the filter to be pushed to the end of the tag. Available if APPEND_GLOBAL_FILTER feature enabled.
+        appendGlobalFilter: false,
     },
     headingOpened: {}, //;  { 'Documentation and Support': true },
 };
@@ -42,6 +55,10 @@ export const getSettings = (): Settings => {
             settings.features[flag] = Feature.settingsFlags[flag];
         }
     }
+
+    settings.generalSettings['globalFilter'] = settings.globalFilter;
+    settings.generalSettings['removeGlobalFilter'] = settings.removeGlobalFilter;
+    settings.generalSettings['setDoneDate'] = settings.setDoneDate;
 
     return { ...settings };
 };
@@ -57,7 +74,7 @@ export const updateSettings = (newSettings: Partial<Settings>): Settings => {
 export const updateGeneralSetting = (name: string, value: string | boolean): Settings => {
     settings.generalSettings[name] = value;
 
-    // Mapping the old settings over on change to the new dynamic structure.
+    // sync the old settings for the moment so a larger change is not needed.
     updateSettings({ globalFilter: <string>settings.generalSettings['globalFilter'] });
     updateSettings({ removeGlobalFilter: <boolean>settings.generalSettings['removeGlobalFilter'] });
     updateSettings({ setDoneDate: <boolean>settings.generalSettings['setDoneDate'] });
@@ -83,6 +100,10 @@ export const updateStatusSetting = (
     }
 
     return getSettings();
+};
+
+export const getGeneralSetting = (name: string): string | boolean => {
+    return settings.generalSettings[name];
 };
 
 export const isFeatureEnabled = (internalName: string): boolean => {

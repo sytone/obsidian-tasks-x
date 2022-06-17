@@ -7,11 +7,11 @@ import { TasksEvents } from './TasksEvents';
 import { initializeFile } from './File';
 import { InlineRenderer } from './InlineRenderer';
 import { newLivePreviewExtension } from './LivePreviewExtension';
-import { QueryRenderer } from './Query/QueryRenderer';
-import { getSettings, updateSettings } from './Config/Settings';
-import { SettingsTab } from './Config/SettingsTab';
+import { QueryRenderer } from './QueryRenderer';
+import { getSettings, updateSettings } from './config/Settings';
+import { SettingsTab } from './config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
-import { log, logCall } from './Config/LogConfig';
+import { log, logCall } from './config/LogConfig';
 import { logging } from './lib/logging';
 import TasksServices from './Services';
 

@@ -1,6 +1,6 @@
 import { Notice, PluginSettingTab, Setting } from 'obsidian';
 import type TasksPlugin from '../main';
-import { log } from '../Config/LogConfig';
+import { log } from './LogConfig';
 import { Feature } from './Feature';
 import { getSettings, isFeatureEnabled, toggleFeature, updateGeneralSetting, updateSettings } from './Settings';
 import settingsJson from './settingsConfiguration.json';
@@ -8,10 +8,14 @@ import settingsJson from './settingsConfiguration.json';
 import { CustomStatusModal } from './CustomStatusModal';
 
 export class SettingsTab extends PluginSettingTab {
+    // If the UI needs a more complex setting you can create a
+    // custom function and specifiy it from the json file. It will
+    // then be rendered instead of a normal checkbox or text box.
     customFunctions: { [K: string]: Function } = {
         insertTaskStatusSettings: this.insertTaskStatusSettings,
         insertFeatureFlags: this.insertFeatureFlags,
     };
+
     private readonly plugin: TasksPlugin;
 
     constructor({ plugin }: { plugin: TasksPlugin }) {
@@ -65,7 +69,15 @@ export class SettingsTab extends PluginSettingTab {
                 }
             }
 
+            // This will process all the settings from settingsConfiguration.json and render
+            // them out reducing the duplication of the code in this file. This will become
+            // more important as features are being added over time.
             heading.settings.forEach((setting) => {
+                if (setting.featureFlag !== '' && !isFeatureEnabled(setting.featureFlag)) {
+                    // The settings configuration has a featureFlag set and the user has not
+                    // enabled it. Skip adding the settings option.
+                    return;
+                }
                 if (setting.type === 'checkbox') {
                     new Setting(detailsContainer)
                         .setName(setting.name)
@@ -110,6 +122,14 @@ export class SettingsTab extends PluginSettingTab {
         });
     }
 
+    /**
+     * This renders the Features section of the settings tab. As it is more
+     * complex it has a function spcefied from the json file.
+     *
+     * @param {HTMLElement} containerEl
+     * @param {SettingsTab} settings
+     * @memberof SettingsTab
+     */
     insertFeatureFlags(containerEl: HTMLElement, settings: SettingsTab) {
         Feature.values.forEach((feature) => {
             new Setting(containerEl)

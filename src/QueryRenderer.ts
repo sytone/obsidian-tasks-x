@@ -1,15 +1,15 @@
 import { App, EventRef, MarkdownPostProcessorContext, MarkdownRenderChild, Plugin, TFile } from 'obsidian';
 
-import { State } from '../Cache';
-import { replaceTaskWithTasks } from '../File';
-import { TaskModal } from '../TaskModal';
-import type { TasksEvents } from '../TasksEvents';
-import type { Task } from '../Task';
-import { log } from '../Config/LogConfig';
-import type { IQuery } from '../IQuery';
-import { QuerySql } from '../QuerySql/QuerySql';
-import { Query } from './Query';
-import type { GroupHeading } from './GroupHeading';
+import { State } from './Cache';
+import { replaceTaskWithTasks } from './File';
+import { TaskModal } from './TaskModal';
+import type { TasksEvents } from './TasksEvents';
+import type { Task } from './Task';
+import { log } from './config/LogConfig';
+import type { IQuery } from './IQuery';
+import { QuerySql } from './QuerySql/QuerySql';
+import { Query } from './Query/Query';
+import type { GroupHeading } from './Query/GroupHeading';
 
 export class QueryRenderer {
     public addQueryRenderChild = this._addQueryRenderChild.bind(this);
