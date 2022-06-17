@@ -1,4 +1,4 @@
-import { log } from './LogConfig';
+import { log } from './../lib/logging';
 import { Feature, FeatureFlag } from './Feature';
 
 export interface Settings {

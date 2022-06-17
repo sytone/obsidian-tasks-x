@@ -1,6 +1,6 @@
 import { Notice, PluginSettingTab, Setting } from 'obsidian';
 import type TasksPlugin from '../main';
-import { log } from './LogConfig';
+import { log } from './../lib/logging';
 import { Feature } from './Feature';
 import { getSettings, isFeatureEnabled, toggleFeature, updateGeneralSetting, updateSettings } from './Settings';
 import settingsJson from './settingsConfiguration.json';

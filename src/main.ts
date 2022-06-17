@@ -11,7 +11,7 @@ import { QueryRenderer } from './QueryRenderer';
 import { getSettings, updateSettings } from './config/Settings';
 import { SettingsTab } from './config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
-import { log, logCall } from './config/LogConfig';
+import { log, logCall } from './config/../lib/logging';
 import { logging } from './lib/logging';
 import TasksServices from './Services';
 

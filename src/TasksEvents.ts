@@ -1,5 +1,5 @@
 import type { EventRef, Events as ObsidianEvents } from 'obsidian';
-import { log } from './config/LogConfig';
+import { log } from './config/../lib/logging';
 
 import type { State } from './Cache';
 import type { Task } from './Task';

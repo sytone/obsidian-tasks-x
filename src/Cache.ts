@@ -4,7 +4,7 @@ import { Mutex } from 'async-mutex';
 import { Task } from './Task';
 import type { TasksEvents } from './TasksEvents';
 
-import { log, logCall } from './config/LogConfig';
+import { log, logCall } from './config/../lib/logging';
 
 export enum State {
     Cold = 'Cold',
