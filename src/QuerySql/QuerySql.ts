@@ -11,7 +11,7 @@ import { Group } from '../Query/Group';
 import { TaskGroup } from '../Query/TaskGroup';
 import { GroupHeading } from '../Query/GroupHeading';
 import { logging } from '../lib/logging';
-import TasksServices from '../Services';
+import TasksServices from '../TasksServices';
 
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };

@@ -189,7 +189,7 @@ export class Logger {
 }
 
 /**
- * This decleration will log the time taken to run the function it is attached to.
+ * This deceleration will log the time taken to run the function it is attached to.
  *
  * @export
  * @return {*}

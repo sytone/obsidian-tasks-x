@@ -1,7 +1,8 @@
 {
   "npm.packageManager": "yarn",
   "cSpell.words": [
-    "alasql"
+    "alasql",
+    "taskssql"
   ],
   "terminal.integrated.defaultProfile.linux": "pwsh",
   "terminal.integrated.profiles.linux": {

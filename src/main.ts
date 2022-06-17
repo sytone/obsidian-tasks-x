@@ -13,7 +13,7 @@ import { SettingsTab } from './config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
 import { log, logCall } from './config/../lib/logging';
 import { logging } from './lib/logging';
-import TasksServices from './Services';
+import TasksServices from './TasksServices';
 
 export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;
