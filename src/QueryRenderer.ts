@@ -5,7 +5,7 @@ import { replaceTaskWithTasks } from './File';
 import { TaskModal } from './TaskModal';
 import type { TasksEvents } from './TasksEvents';
 import type { Task } from './Task';
-import { log } from './config/../lib/logging';
+import { log } from './Config/../lib/logging';
 import type { IQuery } from './IQuery';
 import { QuerySql } from './QuerySql/QuerySql';
 import { Query } from './Query/Query';
