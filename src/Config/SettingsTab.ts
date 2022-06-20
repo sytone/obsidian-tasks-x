@@ -1,4 +1,5 @@
 import { Notice, PluginSettingTab, Setting } from 'obsidian';
+import { StatusConfiguration } from 'Status';
 import type TasksPlugin from '../main';
 import { log } from './../lib/logging';
 import { Feature } from './Feature';
@@ -9,7 +10,7 @@ import { CustomStatusModal } from './CustomStatusModal';
 
 export class SettingsTab extends PluginSettingTab {
     // If the UI needs a more complex setting you can create a
-    // custom function and specifiy it from the json file. It will
+    // custom function and specify it from the json file. It will
     // then be rendered instead of a normal checkbox or text box.
     customFunctions: { [K: string]: Function } = {
         insertTaskStatusSettings: this.insertTaskStatusSettings,
@@ -145,16 +146,25 @@ export class SettingsTab extends PluginSettingTab {
                 });
         });
     }
+
+    /**
+     * Settings for Custom Task Status
+     *
+     * @param {HTMLElement} containerEl
+     * @param {SettingsTab} settings
+     * @memberof SettingsTab
+     */
     insertTaskStatusSettings(containerEl: HTMLElement, settings: SettingsTab) {
-        /* -------------------------------------------------------------------------- */
-        /*                       Settings for Custom Task Status                      */
-        /* -------------------------------------------------------------------------- */
-        const { status_types } = getSettings();
-        status_types.forEach((status_type) => {
+        const { statusTypes } = getSettings();
+        statusTypes.forEach((status_type) => {
             //const taskStatusDiv = containerEl.createEl('div');
 
             const taskStatusPreview = containerEl.createEl('pre');
-            taskStatusPreview.textContent = `- [${status_type[0]}] ${status_type[1]}, next status is '${status_type[2]}'`;
+            let commandNotice = '';
+            if (status_type.availableAsCommand) {
+                commandNotice = 'Available as a command.';
+            }
+            taskStatusPreview.textContent = `- [${status_type.indicator}] ${status_type.name}, next status is '${status_type.nextStatusIndicator}'. ${commandNotice}`;
 
             const setting = new Setting(containerEl);
 
@@ -166,11 +176,11 @@ export class SettingsTab extends PluginSettingTab {
                         .setIcon('cross')
                         .setTooltip('Delete')
                         .onClick(async () => {
-                            const index = status_types.indexOf(status_type);
+                            const index = statusTypes.indexOf(status_type);
                             if (index > -1) {
-                                status_types.splice(index, 1);
+                                statusTypes.splice(index, 1);
                                 updateSettings({
-                                    status_types: status_types,
+                                    statusTypes: statusTypes,
                                 });
 
                                 await settings.saveSettings(true);
@@ -187,15 +197,20 @@ export class SettingsTab extends PluginSettingTab {
 
                             modal.onClose = async () => {
                                 if (modal.saved) {
-                                    const index = status_types.indexOf(status_type);
+                                    const index = statusTypes.indexOf(status_type);
                                     if (index > -1) {
-                                        status_types.splice(index, 1, [
-                                            modal.statusSymbol,
-                                            modal.statusName,
-                                            modal.statusNextSymbol,
-                                        ]);
+                                        statusTypes.splice(
+                                            index,
+                                            1,
+                                            new StatusConfiguration(
+                                                modal.statusSymbol,
+                                                modal.statusName,
+                                                modal.statusNextSymbol,
+                                                modal.statusAvailableAsCommand,
+                                            ),
+                                        );
                                         updateSettings({
-                                            status_types: status_types,
+                                            statusTypes: statusTypes,
                                         });
 
                                         await settings.saveSettings(true);
@@ -217,9 +232,9 @@ export class SettingsTab extends PluginSettingTab {
                 .setButtonText('Add New Task Status')
                 .setCta()
                 .onClick(async () => {
-                    status_types.push(['', '', '']);
+                    statusTypes.push(new StatusConfiguration('', '', '', false));
                     updateSettings({
-                        status_types: status_types,
+                        statusTypes: statusTypes,
                     });
 
                     await settings.saveSettings(true);
@@ -258,22 +273,24 @@ export class SettingsTab extends PluginSettingTab {
 
                     minimalSupportedStatuses.forEach((importedStatus) => {
                         console.log(importedStatus);
-                        const hasStatus = status_types.find((element) => {
+                        const hasStatus = statusTypes.find((element) => {
                             return (
-                                element[0] == importedStatus[0] &&
-                                element[1] == importedStatus[1] &&
-                                element[2] == importedStatus[2]
+                                element.indicator == importedStatus[0] &&
+                                element.name == importedStatus[1] &&
+                                element.nextStatusIndicator == importedStatus[2]
                             );
                         });
                         if (!hasStatus) {
-                            status_types.push(importedStatus);
+                            statusTypes.push(
+                                new StatusConfiguration(importedStatus[0], importedStatus[1], importedStatus[2], false),
+                            );
                         } else {
                             new Notice(`The status ${importedStatus[1]} (${importedStatus[0]}) is already added.`);
                         }
                     });
 
                     updateSettings({
-                        status_types: status_types,
+                        statusTypes: statusTypes,
                     });
 
                     await settings.saveSettings(true);
@@ -315,22 +332,24 @@ export class SettingsTab extends PluginSettingTab {
 
                     supportedStatuses.forEach((importedStatus) => {
                         console.log(importedStatus);
-                        const hasStatus = status_types.find((element) => {
+                        const hasStatus = statusTypes.find((element) => {
                             return (
-                                element[0] == importedStatus[0] &&
-                                element[1] == importedStatus[1] &&
-                                element[2] == importedStatus[2]
+                                element.indicator == importedStatus[0] &&
+                                element.name == importedStatus[1] &&
+                                element.nextStatusIndicator == importedStatus[2]
                             );
                         });
                         if (!hasStatus) {
-                            status_types.push(importedStatus);
+                            statusTypes.push(
+                                new StatusConfiguration(importedStatus[0], importedStatus[1], importedStatus[2], false),
+                            );
                         } else {
                             new Notice(`The status ${importedStatus[1]} (${importedStatus[0]}) is already added.`);
                         }
                     });
 
                     updateSettings({
-                        status_types: status_types,
+                        statusTypes: statusTypes,
                     });
 
                     await settings.saveSettings(true);

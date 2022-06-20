@@ -1,4 +1,4 @@
-import { Status } from './Status';
+import { Status, StatusConfiguration } from './Status';
 
 /**
  * Tracks all the registered statuses a task can have.
@@ -50,13 +50,17 @@ export class StatusRegistry {
     /**
      * Adds a new Status to the registry if not already registered.
      *
-     * @param {Status} status
+     * @param {StatusConfiguration | Status} status
      * @memberof StatusRegistry
      */
-    public add(status: Status): void {
+    public add(status: StatusConfiguration | Status): void {
         if (!this.hasIndicator(status.indicator)) {
-            // status.statusRegistry = this;
-            this._registeredStatuses.push(status);
+            if (status instanceof StatusConfiguration) {
+                this._registeredStatuses.push(new Status(status));
+            }
+            if (status instanceof Status) {
+                this._registeredStatuses.push(status);
+            }
         }
     }
 

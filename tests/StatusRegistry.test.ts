@@ -3,7 +3,7 @@
  */
 import moment from 'moment';
 import { StatusRegistry } from '../src/StatusRegistry';
-import { Status } from '../src/Status';
+import { Status, StatusConfiguration } from '../src/Status';
 import { Task } from '../src/Task';
 
 jest.mock('obsidian');
@@ -15,9 +15,12 @@ describe('StatusRegistry', () => {
 
         // Act
         const statusRegistry = StatusRegistry.getInstance();
+        const doneStatus = statusRegistry.byIndicator('x');
 
         // Assert
         expect(statusRegistry).not.toBeNull();
+
+        expect(doneStatus).toEqual(Status.DONE);
 
         expect(statusRegistry.byIndicator('x')).toEqual(Status.DONE);
         expect(statusRegistry.byIndicator('')).toEqual(Status.EMPTY);
@@ -92,10 +95,10 @@ describe('StatusRegistry', () => {
         // Arrange
         const statusRegistry = StatusRegistry.getInstance();
         statusRegistry.clearStatuses();
-        const statusA = new Status('a', 'A', 'b');
-        const statusB = new Status('b', 'B', 'c');
-        const statusC = new Status('c', 'C', 'd');
-        const statusD = new Status('d', 'D', 'a');
+        const statusA = new Status(new StatusConfiguration('a', 'A', 'b', false));
+        const statusB = new Status(new StatusConfiguration('b', 'B', 'c', false));
+        const statusC = new Status(new StatusConfiguration('c', 'C', 'd', false));
+        const statusD = new Status(new StatusConfiguration('d', 'D', 'a', false));
 
         // Act
         statusRegistry.add(statusA);
@@ -114,10 +117,10 @@ describe('StatusRegistry', () => {
         // Arrange
         const statusRegistry = StatusRegistry.getInstance();
         statusRegistry.clearStatuses();
-        const statusA = new Status('a', 'A', 'b');
-        const statusB = new Status('b', 'B', 'c');
-        const statusC = new Status('c', 'C', 'd');
-        const statusD = new Status('d', 'D', 'a');
+        const statusA = new Status(new StatusConfiguration('a', 'A', 'b', false));
+        const statusB = new Status(new StatusConfiguration('b', 'B', 'c', false));
+        const statusC = new Status(new StatusConfiguration('c', 'C', 'd', false));
+        const statusD = new Status(new StatusConfiguration('d', 'D', 'a', false));
         statusRegistry.add(statusA);
         statusRegistry.add(statusB);
         statusRegistry.add(statusC);

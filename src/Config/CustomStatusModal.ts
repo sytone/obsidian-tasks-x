@@ -1,17 +1,20 @@
 import { Modal, Setting, TextComponent } from 'obsidian';
+import type { StatusConfiguration } from '../Status';
 import type TasksPlugin from '../main';
 
 export class CustomStatusModal extends Modal {
     statusSymbol: string;
     statusName: string;
     statusNextSymbol: string;
+    statusAvailableAsCommand: boolean;
     saved: boolean = false;
     error: boolean = false;
-    constructor(public plugin: TasksPlugin, statusType: [string, string, string]) {
+    constructor(public plugin: TasksPlugin, statusType: StatusConfiguration) {
         super(plugin.app);
-        this.statusSymbol = statusType[0];
-        this.statusName = statusType[1];
-        this.statusNextSymbol = statusType[2];
+        this.statusSymbol = statusType.indicator;
+        this.statusName = statusType.name;
+        this.statusNextSymbol = statusType.nextStatusIndicator;
+        this.statusAvailableAsCommand = statusType.availableAsCommand;
     }
 
     async display() {
@@ -63,6 +66,17 @@ export class CustomStatusModal extends Modal {
             .addText((text) => {
                 text.setValue(this.statusNextSymbol).onChange((v) => {
                     this.statusNextSymbol = v;
+                });
+            });
+
+        new Setting(settingDiv)
+            .setName('Available as command')
+            .setDesc(
+                'If enabled this status will be available as a command so you can assign a hotkey and toggle the status using it.',
+            )
+            .addToggle((toggle) => {
+                toggle.setValue(this.statusAvailableAsCommand).onChange(async (value) => {
+                    this.statusAvailableAsCommand = value;
                 });
             });
 

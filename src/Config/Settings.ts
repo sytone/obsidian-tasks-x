@@ -1,25 +1,6 @@
+import type { StatusConfiguration } from '../Status';
 import { log } from './../lib/logging';
 import { Feature, FeatureFlag } from './Feature';
-
-export interface Settings {
-    // Original settings, they will be auto migrated to the new settings map.
-    globalFilter: string;
-    removeGlobalFilter: boolean;
-    setDoneDate: boolean;
-
-    // The custom status states.
-    status_types: Array<[string, string, string]>;
-
-    // Collection of feature flag IDs and their state.
-    features: FeatureFlag;
-
-    // Settings are moved to a more general map to allow the settings UI to be
-    // dynamically generated.
-    generalSettings: SettingsMap;
-
-    // Tracks the stage of the headings in the setttings UI.
-    headingOpened: HeadingState;
-}
 
 interface SettingsMap {
     [key: string]: string | boolean;
@@ -29,11 +10,33 @@ type HeadingState = {
     [id: string]: boolean;
 };
 
+export interface Settings {
+    // Original settings, they will be auto migrated to the new settings map.
+    globalFilter: string;
+    removeGlobalFilter: boolean;
+    setDoneDate: boolean;
+
+    // The custom status states.
+    status_types: Array<[string, string, string]>;
+    statusTypes: StatusConfiguration[];
+
+    // Collection of feature flag IDs and their state.
+    features: FeatureFlag;
+
+    // Settings are moved to a more general map to allow the settings UI to be
+    // dynamically generated.
+    generalSettings: SettingsMap;
+
+    // Tracks the stage of the headings in the settings UI.
+    headingOpened: HeadingState;
+}
+
 const defaultSettings: Settings = {
     globalFilter: '',
     removeGlobalFilter: false,
     setDoneDate: true,
     status_types: [['', '', '']],
+    statusTypes: [],
     features: Feature.settingsFlags,
     generalSettings: {
         globalFilter: '',

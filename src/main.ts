@@ -1,5 +1,4 @@
 import { App, Plugin } from 'obsidian';
-import { Status } from './Status';
 
 import { Cache } from './Cache';
 import { Commands } from './Commands';
@@ -72,14 +71,17 @@ export default class TasksPlugin extends Plugin {
 
     @logCall
     async loadTaskStatuses() {
-        const { status_types } = getSettings();
+        const { statusTypes } = getSettings();
 
         // Reset the registry as this may also come from a settings add/delete.
         this.statusRegistry?.clearStatuses();
-        log('info', `Adding ${status_types.length} custom status types`);
-        status_types.forEach((status_type) => {
-            this.statusRegistry?.add(new Status(status_type[0], status_type[1], status_type[2]));
+        log('info', `Adding ${statusTypes.length} custom status types`);
+        statusTypes.forEach((statusType) => {
+            this.statusRegistry?.add(statusType);
         });
+        // status_types.forEach((status_type) => {
+        //     this.statusRegistry?.add(new Status(new StatusConfiguration( status_type[0], status_type[1], status_type[2]));
+        // });
     }
 
     @logCall

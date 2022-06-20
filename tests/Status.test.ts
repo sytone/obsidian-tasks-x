@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import moment from 'moment';
-import { Status } from '../src/Status';
+import { Status, StatusConfiguration } from '../src/Status';
 
 jest.mock('obsidian');
 window.moment = moment;
@@ -15,7 +15,7 @@ describe('Status', () => {
         const next = 'x';
 
         // Act
-        const status = new Status(indicator, name, next);
+        const status = new Status(new StatusConfiguration(indicator, name, next, false));
 
         // Assert
         expect(status).not.toBeNull();
@@ -32,7 +32,7 @@ describe('Status', () => {
         const next = ' ';
 
         // Act
-        const status = new Status(indicator, name, next);
+        const status = new Status(new StatusConfiguration(indicator, name, next, false));
 
         // Assert
         expect(status).not.toBeNull();

@@ -621,8 +621,11 @@ export class Task {
      * together with the next occurrence in the order `[next, toggled]`. If the
      * task is not recurring, it will return `[toggled]`.
      */
-    public toggle(): Task[] {
-        const newStatus = StatusRegistry.getInstance().getNextStatus(this.status);
+    public toggle(status?: Status): Task[] {
+        let newStatus = StatusRegistry.getInstance().getNextStatus(this.status);
+        if (status !== undefined) {
+            newStatus = status;
+        }
 
         let newDoneDate = null;
 
