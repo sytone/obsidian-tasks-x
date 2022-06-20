@@ -7,10 +7,10 @@ import { initializeFile } from './File';
 import { InlineRenderer } from './InlineRenderer';
 import { newLivePreviewExtension } from './LivePreviewExtension';
 import { QueryRenderer } from './QueryRenderer';
-import { getSettings, updateSettings } from './config/Settings';
-import { SettingsTab } from './config/SettingsTab';
+import { getSettings, updateSettings } from './Config/Settings';
+import { SettingsTab } from './Config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
-import { log, logCall } from './config/../lib/logging';
+import { log, logCall } from './Config/../lib/logging';
 import { logging } from './lib/logging';
 import TasksServices from './TasksServices';
 

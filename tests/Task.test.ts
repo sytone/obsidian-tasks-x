@@ -4,8 +4,8 @@
 import moment from 'moment';
 import { Status } from '../src/Status';
 import { Task } from '../src/Task';
-import { getSettings, toggleFeature, updateGeneralSetting, updateSettings } from '../src/config/Settings';
-import { Feature } from '../src/config/Feature';
+import { getSettings, toggleFeature, updateGeneralSetting, updateSettings } from '../src/Config/Settings';
+import { Feature } from '../src/Config/Feature';
 
 jest.mock('obsidian');
 window.moment = moment;

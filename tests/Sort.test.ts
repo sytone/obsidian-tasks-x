@@ -6,7 +6,7 @@ import moment from 'moment';
 window.moment = moment;
 
 import { Sort } from '../src/Query/Sort';
-import { getSettings, updateSettings } from '../src/config/Settings';
+import { getSettings, updateSettings } from '../src/Config/Settings';
 import { fromLine } from './TestHelpers';
 
 describe('Sort', () => {

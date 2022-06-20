@@ -1,5 +1,5 @@
 import type { Task } from '../Task';
-import { log } from '../config/../lib/logging';
+import { log } from '../Config/../lib/logging';
 import type { Grouping, GroupingProperty } from './Query';
 import { TaskGroups } from './TaskGroups';
 

@@ -3,7 +3,7 @@
     import { Status } from '../Status';
     import { onMount } from 'svelte';
     import { Recurrence } from '../Recurrence';
-    import { getSettings } from '../config/Settings';
+    import { getSettings } from '../Config/Settings';
     import { Priority, Task } from '../Task';
     import { StatusRegistry } from '../StatusRegistry';
 
