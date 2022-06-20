@@ -1,7 +1,7 @@
 import type TasksPlugin from 'main';
 import type { App, Editor, View } from 'obsidian';
 
-import { getSettings } from '../config/Settings';
+import { getSettings } from '../Config/Settings';
 import { createOrEdit } from './CreateOrEdit';
 import { toggleDone } from './ToggleDone';
 import { toggleStatus } from './ToggleStatus';
