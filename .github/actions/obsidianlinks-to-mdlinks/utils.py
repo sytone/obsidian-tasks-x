@@ -18,6 +18,8 @@ def getAllDocumentPaths(source_directory):
 
 
 def getFileFullText(path):
+    print("getFileFullText:path:", path)
+
     with open(path) as f:
         fulltext = f.read()
 
