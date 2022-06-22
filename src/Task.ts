@@ -219,6 +219,7 @@ export class Task {
      * @return {*}  {(Task | null)}
      * @memberof Task
      */
+
     public static fromLine({
         line,
         path,
@@ -406,6 +407,7 @@ export class Task {
      * @return {*}  {Promise<HTMLLIElement>}
      * @memberof Task
      */
+
     public async toLi({
         parentUlElement,
         listIndex,
@@ -428,6 +430,7 @@ export class Task {
 
         // Generate top level list item.
         const li: HTMLLIElement = parentUlElement.createEl('li');
+
         li.setAttr('data-line', listIndex);
         li.setAttr('data-task', this.status.indicator.trim()); // Trim to ensure empty attribute for space. Same way as obsidian.
         li.addClasses(['task-list-item', 'plugin-tasks-list-item']);
@@ -438,7 +441,12 @@ export class Task {
         const textSpan = li.createSpan();
         textSpan.addClass('tasks-list-text');
 
-        await MarkdownRenderer.renderMarkdown(taskAsString, textSpan, this.path, null as unknown as Component);
+        // If there is no links then just set span to text, saves a ms or so per item.
+        if (taskAsString.indexOf('[[') != -1 && taskAsString.indexOf(']]') != -1) {
+            await MarkdownRenderer.renderMarkdown(taskAsString, textSpan, this.path, null as unknown as Component);
+        } else {
+            textSpan.textContent = taskAsString;
+        }
 
         // If the task is a block quote, the block quote wraps the p-tag that contains the content.
         // In that case, we need to unwrap the p-tag *inside* the surrounding block quote.
@@ -512,6 +520,7 @@ export class Task {
      * @return {*}  {string}
      * @memberof Task
      */
+
     public toString(layoutOptions?: LayoutOptions): string {
         layoutOptions = layoutOptions ?? new LayoutOptions();
 
@@ -587,6 +596,7 @@ export class Task {
      * @return {*}  {string}
      * @memberof Task
      */
+
     public toFileLineString(): string {
         return `${this.indentation}- [${this.status.indicator}] ${this.toString().trim()}`;
     }
@@ -621,6 +631,7 @@ export class Task {
      * together with the next occurrence in the order `[next, toggled]`. If the
      * task is not recurring, it will return `[toggled]`.
      */
+
     public toggle(status?: Status): Task[] {
         let newStatus = StatusRegistry.getInstance().getNextStatus(this.status);
         if (status !== undefined) {
@@ -680,6 +691,7 @@ export class Task {
      *                                        If it is undefined, the outcome will be the same as with a unique file name: the file name only.
      *                                        If set to `true`, the full path will be returned.
      */
+
     public getLinkText({ isFilenameUnique }: { isFilenameUnique: boolean | undefined }): string | null {
         let linkText: string | null;
         if (isFilenameUnique) {
