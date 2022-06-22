@@ -4,7 +4,7 @@ import { Mutex } from 'async-mutex';
 import { Task } from './Task';
 import type { TasksEvents } from './TasksEvents';
 
-import { log, logCall } from './Config/../lib/logging';
+import { log } from './Config/../lib/logging';
 
 export enum State {
     Cold = 'Cold',
@@ -84,7 +84,6 @@ export class Cache {
         return this.state;
     }
 
-    @logCall
     private notifySubscribers() {
         if (this.state === State.Warm) {
             this.events.triggerCacheUpdate({
@@ -187,7 +186,6 @@ export class Cache {
         this.eventsEventReferences.push(requestReference);
     }
 
-    @logCall
     private async loadVault() {
         this.state = State.Initializing;
         await Promise.all(
@@ -352,12 +350,19 @@ export class Cache {
 
         const linePrecedingHeader = fileLines[lineNumberPrecedingHeader];
 
-        const headerRegex = /^#+ +(.*)/u;
-        const headerMatch = linePrecedingHeader.match(headerRegex);
-        if (headerMatch === null) {
-            return null;
-        } else {
-            return headerMatch[1];
+        // Use the index and slice as it is faster than the regex calls by a few ms.
+        if (linePrecedingHeader.indexOf('#') === 0) {
+            return linePrecedingHeader.slice(linePrecedingHeader.split(' ')[0].length);
         }
+        return null;
+
+        // const headerRegex = /^#+ +(.*)/u;
+        // const headerMatch = linePrecedingHeader.match(headerRegex);
+
+        // if (headerMatch === null) {
+        //     return null;
+        // } else {
+        //     return headerMatch[1];
+        // }
     }
 }
