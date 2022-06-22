@@ -1,4 +1,5 @@
 import { EventEmitter2 } from 'eventemitter2';
+import moment from 'moment';
 /*
  * EventEmitter2 is an implementation of the EventEmitter module found in Node.js.
  * In addition to having a better benchmark performance than EventEmitter and being
@@ -59,7 +60,6 @@ export class LogManager extends EventEmitter2 {
                 match = key;
             }
         }
-
         return new Logger(this, module, minLevel);
     }
 
@@ -68,14 +68,31 @@ export class LogManager extends EventEmitter2 {
         return this;
     }
 
+    // private period: number = 0;
+    arrAvg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length;
+
     public registerConsoleLogger(): LogManager {
         if (this.consoleLoggerRegistered) return this;
 
         this.onLogEntry((logEntry) => {
-            const msg = `[${logEntry.level}][${logEntry.module}] ${logEntry.message}`;
+            let msg = `[${moment().format('YYYYMMDDHHmmss')}][${logEntry.level}][${logEntry.module}]`;
+
+            if (logEntry.traceId) {
+                msg += `[${logEntry.traceId}]`;
+            }
+
+            msg += ` ${logEntry.message}`;
             if (logEntry.objects === undefined) {
                 logEntry.objects = '';
             }
+
+            // if (this.period++ % 30 === 0) {
+            //     Object.entries(timingMap).forEach(([key, value]) =>
+            //         console.log(
+            //             `${key}: ${value.length}:${Math.min(...value)}:${Math.max(...value)}:${this.arrAvg(value)}`,
+            //         ),
+            //     );
+            // }
             switch (logEntry.level) {
                 case 'trace':
                     console.trace(msg, logEntry.objects);
@@ -103,6 +120,7 @@ export class LogManager extends EventEmitter2 {
 }
 
 export interface LogEntry {
+    traceId?: string;
     level: string;
     module: string;
     location?: string;
@@ -149,24 +167,24 @@ export class Logger {
      * @param logLevel
      * @param message
      */
-    public log(logLevel: string, message: string, objects: any): void {
+    public log(logLevel: string, message: string, objects?: any): void {
         const level = this.levelToInt(logLevel);
         if (level < this.minLevel) return;
 
-        const logEntry: LogEntry = { level: logLevel, module: this.module, message, objects };
+        const logEntry: LogEntry = { level: logLevel, module: this.module, message, objects, traceId: undefined };
 
         // Obtain the line/file through a thoroughly hacky method
         // This creates a new stack trace and pulls the caller from it.  If the caller
         // if .trace()
-        const error = new Error('');
-        if (error.stack) {
-            const cla = error.stack.split('\n');
-            let idx = 1;
-            while (idx < cla.length && cla[idx].includes('at Logger.Object.')) idx++;
-            if (idx < cla.length) {
-                logEntry.location = cla[idx].slice(cla[idx].indexOf('at ') + 3, cla[idx].length);
-            }
-        }
+        // const error = new Error('');
+        // if (error.stack) {
+        //     const cla = error.stack.split('\n');
+        //     let idx = 1;
+        //     while (idx < cla.length && cla[idx].includes('at Logger.Object.')) idx++;
+        //     if (idx < cla.length) {
+        //         logEntry.location = cla[idx].slice(cla[idx].indexOf('at ') + 3, cla[idx].length);
+        //     }
+        // }
 
         this.logManager.emit('log', logEntry);
     }
@@ -186,7 +204,43 @@ export class Logger {
     public error(message: string, objects?: any): void {
         this.log('error', message, objects);
     }
+
+    /**
+     * Central logging method.
+     * @param logLevel
+     * @param message
+     */
+    public logWithId(logLevel: string, traceId: string, message: string, objects?: any): void {
+        const level = this.levelToInt(logLevel);
+        if (level < this.minLevel) return;
+
+        const logEntry: LogEntry = { level: logLevel, module: this.module, message, objects, traceId };
+
+        this.logManager.emit('log', logEntry);
+    }
+
+    public traceWithId(traceId: string, message: string, objects?: any): void {
+        this.logWithId('trace', traceId, message, objects);
+    }
+    public debugWithId(traceId: string, message: string, objects?: any): void {
+        this.logWithId('debug', traceId, message, objects);
+    }
+    public infoWithId(traceId: string, message: string, objects?: any): void {
+        this.logWithId('info', traceId, message, objects);
+    }
+    public warnWithId(traceId: string, message: string, objects?: any): void {
+        this.logWithId('warn', traceId, message, objects);
+    }
+    public errorWithId(traceId: string, message: string, objects?: any): void {
+        this.logWithId('error', traceId, message, objects);
+    }
 }
+
+type TimingMap = {
+    // count, avg, min, max
+    [id: string]: number[];
+};
+const timingMap: TimingMap = {};
 
 /**
  * This deceleration will log the time taken to run the function it is attached to.
@@ -196,16 +250,32 @@ export class Logger {
  */
 export const logCall = (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
-    const logger = logging.getLogger('taskssql.perf');
+    //const logger = logging.getLogger('taskssql.perf');
     descriptor.value = function (...args: any[]) {
         const startTime = new Date(Date.now());
         const result = originalMethod.apply(this, args);
         const endTime = new Date(Date.now());
-        logger.debug(
-            `${target?.constructor?.name}:${propertyKey}:called with ${args.length} arguments. Took: ${
-                endTime.getTime() - startTime.getTime()
-            }ms`,
-        );
+        const name = `${target?.constructor?.name}${propertyKey}`;
+        const time = endTime.getTime() - startTime.getTime();
+        if (timingMap[name] === undefined) {
+            timingMap[name] = [];
+        }
+        timingMap[name].push(time);
+
+        //console.log(timingMap);
+        // if (endTime.getTime() - startTime.getTime() > 50) {
+        //     console.debug(
+        //         `[debug][taskssql.perf] ${String(timingMap[name].avg).padEnd(4)}${String(
+        //             endTime.getTime() - startTime.getTime(),
+        //         ).padEnd(4)} ${target?.constructor?.name.padEnd(10)}${propertyKey.padEnd(20)}`,
+        //     );
+
+        //     // logger.debug(
+        //     //     `${target?.constructor?.name}:${propertyKey}:called with ${args.length} arguments. Took: ${
+        //     //         endTime.getTime() - startTime.getTime()
+        //     //     }ms`,
+        //     // );
+        // }
         return result;
     };
 
