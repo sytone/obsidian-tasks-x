@@ -59,7 +59,7 @@ add the following `sort` expressions to your queries:
 
 Info
 {: .label .label-blue }
-Sorting by description should take into account `[[Links]]` and `[Links with an|Alias]` (note pipe).
+Sorting by description should take into account `**Links**` and `[Links with an|Alias]` (note pipe).
 It should also take into account `*italics*` and `==highlights==`.
 It sorts by the text that's visible in preview mode.
 </div>
