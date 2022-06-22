@@ -9,4 +9,5 @@ for path in allpaths:
     fullpath = path.split("/")
     filename = fullpath[-1]
 
-    replaceurl(path, allpaths, docsdirectory)
+    if path.endswith(".md"):
+      replaceurl(path, allpaths, docsdirectory)
