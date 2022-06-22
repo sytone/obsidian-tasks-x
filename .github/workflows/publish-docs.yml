@@ -21,7 +21,7 @@ jobs:
       #     npm run build
 
       - name: Transform Links 🚀
-        uses: sytone/obsidianlinks-to-mdlinks-action
+        uses: ./.github/actions/obsidianlinks-to-mdlinks
         with:
           srcrootdirectory: docs
           rootindexfilename: index.md
