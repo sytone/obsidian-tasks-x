@@ -20,6 +20,12 @@ jobs:
       #     npm ci
       #     npm run build
 
+      - name: Transform Links 🚀
+        uses: sytone/obsidianlinks-to-mdlinks-action
+        with:
+          srcrootdirectory: docs
+          rootindexfilename: index.md
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
