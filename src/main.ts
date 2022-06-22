@@ -1,4 +1,4 @@
-import { App, Plugin } from 'obsidian';
+import { Plugin } from 'obsidian';
 
 import { Cache } from './Cache';
 import { Commands } from './Commands';
@@ -10,8 +10,7 @@ import { QueryRenderer } from './QueryRenderer';
 import { getSettings, updateSettings } from './Config/Settings';
 import { SettingsTab } from './Config/SettingsTab';
 import { StatusRegistry } from './StatusRegistry';
-import { log, logCall } from './Config/../lib/logging';
-import { logging } from './lib/logging';
+import { log, logging } from './lib/logging';
 import TasksServices from './TasksServices';
 
 export default class TasksPlugin extends Plugin {
@@ -20,23 +19,20 @@ export default class TasksPlugin extends Plugin {
     public statusRegistry: StatusRegistry | undefined;
     public cache: Cache | undefined;
 
-    public static obsidianApp: App;
-
-    @logCall
     async onload(): Promise<void> {
         //monkeyPatchConsole(this);
+        TasksServices.obsidianApp = this.app;
         logging
             .configure({
                 minLevels: {
                     '': 'debug',
                     taskssql: 'debug',
                     'taskssql.perf': 'debug',
-                    'taskssql.querysql.QuerySql': 'debug',
+                    'taskssql.QuerySql.QuerySql': 'debug',
                 },
             })
             .registerConsoleLogger();
         log('info', `loading plugin "${this.manifest.name}" v${this.manifest.version}`);
-        TasksServices.obsidianApp = this.app;
 
         // Load the settings and UI.
         await this.loadSettings();
@@ -69,7 +65,6 @@ export default class TasksPlugin extends Plugin {
         });
     }
 
-    @logCall
     async loadTaskStatuses() {
         const { statusTypes } = getSettings();
 
@@ -84,19 +79,16 @@ export default class TasksPlugin extends Plugin {
         // });
     }
 
-    @logCall
     onunload() {
         log('info', `unloading plugin "${this.manifest.name}" v${this.manifest.version}`);
         this.cache?.unload();
     }
 
-    @logCall
     async loadSettings() {
         const newSettings = await this.loadData();
         updateSettings(newSettings);
     }
 
-    @logCall
     async saveSettings() {
         await this.saveData(getSettings());
         await this.loadTaskStatuses();
