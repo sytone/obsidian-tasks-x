@@ -1,27 +1,5 @@
-# Intellij
-*.iml
-.idea
-
-# npm
-node_modules
-yarn-error.log
-
-# build
-main.js
-*.js.map
-.log
-
-# obsidian
-data.json
-
-# osx
-.DS_Store
-
-# asdf
-.tool-versions
-
-# Backup files.
-*.bak
-
-# If the folder is symlinked make sure this is not checked in.
-.hotreload
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor

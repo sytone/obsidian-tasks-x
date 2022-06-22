@@ -1,127 +1,110 @@
-# Obsidian Tasks SQL Powered
+# Documentation for Obsidian Tasks
 
-> Task management for the [Obsidian](https://obsidian.md/) knowledge base. With **SQL** Powers
+## Overview
 
-[![Version][version-shield]][version-url]
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![Downloads][downloads-shield]][downloads-url]
+- For background, including which branch to work on, see ["Updating documentation" in CONTRIBUTING](../CONTRIBUTING.md#updating-documentation)
+- The documentation is written in Markdown
+- It is converted to HTML via Ruby and Jekyll
+  - Important: Ruby 2 is required, for example, Ruby 2.7
+- The published documentation is at <https://obsidian-tasks-group.github.io/obsidian-tasks/>
 
-## 📑[Documentation](https://sytone.github.io/obsidian-tasks-x/)
+## Test documentation locally with Jekyll
 
-This is a fork of the Tasks plugin for obsidian and will be kept in sync with it where possible. This for provides extended query capabilities and long term should be merged back into the main plugin. Until then enjoy the power of SQL.
+When making significant edits to the documentation, it is helpful to see what
+the published docs will look like. This allows spotting of problems like formatting oddities.
 
-Here are some examples of what can be done with this plugin:
+### Setup
 
-- `WHERE status->indicator = ' ' AND  moment()->[format]('YYYY-MM-DD') = moment(dueDate)->[format]('YYYY-MM-DD')`
-- `WHERE status->indicator = ' ' AND moment(dueDate)->isBetween(moment()->startOf('day').subtract(1, 'days'), moment()->startOf('day').add(14, 'days'))`
-- `WHERE status->indicator = 'x' AND precedingHeader LIKE '%tasks%'`
-- `WHERE status->indicator = ' ' AND moment(dueDate)->[format]('YYYY-MM-DD') = '2021-04-09' AND path LIKE '%GitHub%'`
-- `WHERE description LIKE '%waiting%' OR description LIKE '%waits%' OR description LIKE '%wartet%'`
+See below for how to set up either of two options for creating the published pages during development:
 
-And much much more is possible, go explore and share!
+1. [Running inside a Docker container (recommended)](#option-1-running-inside-a-docker-container)
+2. [Running without Docker](#option-2-running-without-docker)
 
-Track tasks across your entire vault. Query them and mark them as done wherever you want. Supports due dates, recurring tasks (repetition), done dates, sub-set of checklist items, and filtering.
+### Development cycle
 
-_You can toggle the task status in any view or query and it will update the source file._
+In both cases, once the Jekyll server is running and you are viewing it in your browser,
+there is a fast feedback cycle of:
 
----
+1. Edit a markdown pageSS
+1. Wait a few seconds until you see console output like this:
 
-For changes in each release, please check the releases page: <https://github.com/sytone/obsidian-tasks-x/releases>
+    ```text
+    web_1  |       Regenerating: 1 file(s) changed at 2022-05-07 08:03:54
+    web_1  |                     README.md
+    web_1  |       Remote Theme: Using theme pmarsceill/just-the-docs
+    web_1  |        Jekyll Feed: Generating feed for posts
+    web_1  |                     ...done in 4.02288725 seconds.
+    ```
 
----
+1. Reload the page in your browser to see the changes
 
-## Screenshots
+## Option 1: Running inside a Docker container
 
-- _All screenshots assume the [global filter](#filtering-checklist-items) `#task` which is not set by default (see also [installation](#installation))._
-- _The theme is [Obsidian Atom](https://github.com/kognise/obsidian-atom)._
+If you can run docker, this is the easiest way.
 
-![ACME Tasks](https://github.com/sytone/obsidian-tasks-x/raw/main-tasks-sql/docs/screenshots/acme.png)
-The `ACME` note has some tasks.
+### Prerequisites for using Docker
 
-![Important Project Tasks](https://github.com/sytone/obsidian-tasks-x/raw/main-tasks-sql/docs/screenshots/important_project.png)
-The `Important Project` note also has some tasks.
+1. Install Docker
+2. Ensure Docker is running
 
-![Tasks Queries](https://github.com/sytone/obsidian-tasks-x/raw/main-tasks-sql/docs/screenshots/tasks_queries.png)
-The `Tasks` note gathers all tasks from the vault and displays them using queries.
+### Seeing the docs via Docker
 
-![Create or Edit Modal](https://github.com/sytone/obsidian-tasks-x/raw/main-tasks-sql/docs/screenshots/modal.png)
-The `Tasks: Create or edit` command helps you when editing a task.
+Now every time you want to see the docs locally, run:
 
-## Installation
+```bash
+cd ./docs
+./docker_start
+```
 
-Follow the steps below to install Tasks.
+You will eventually see output ending something like this:
 
-> Note: The request to have it added is still pending. Use BRAT for the moment.
+```text
+web_1  | Configuration file: /code/docs/_config.yml
+web_1  |             Source: /code/docs
+web_1  |        Destination: /code/docs/_site
+web_1  |  Incremental build: disabled. Enable with --incremental
+web_1  |       Generating...
+web_1  |       Remote Theme: Using theme pmarsceill/just-the-docs
+web_1  |        Jekyll Feed: Generating feed for posts
+web_1  |                     done in 4.838 seconds.
+web_1  | /usr/local/bundle/gems/pathutil-0.16.2/lib/pathutil.rb:502: warning: Using the last argument as keyword parameters is deprecated
+web_1  |  Auto-regeneration: enabled for '/code/docs'
+web_1  |     Server address: http://0.0.0.0:4000/obsidian-tasks/
+web_1  |   Server running... press ctrl-c to stop.
+```
 
-1. Search for "Tasks SQL Powered" in Obsidian's community plugins browser
-2. Enable the plugin in your Obsidian settings (find "Tasks SQL Powered" under "Community plugins").
-3. Check the settings. It makes sense to set the global filter early on (if you want one).
-4. Replace the "Toggle checklist status" hotkey with "Tasks: Toggle Done".
-    - I recommend you remove the original toggle hotkey and set the "Tasks" toggle to `Ctrl + Enter` (or `Cmd + Enter` on a mac).
+This runs a web server inside Docker that you can view on your own machine.
+Look for the line containing `Server address:` and open that URL in your local browser.
+It will be something like <http://0.0.0.0:4000/obsidian-tasks/>.
 
-### From BRAT
+You can stop the service by hitting `Ctrl+c`.
 
-To install a pre-release, download and enable the [Obsidian42 BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin, add the beta repository `sytone/obsidian-tasks-x`, and then have BRAT check for updates.
+## Option 2: Running without Docker
 
-Then..
+### Prerequisites for using installed Jekyll
 
-1. Enable the plugin in your Obsidian settings (find "Tasks SQL Powered" under "Community plugins").
-2. Check the settings. It makes sense to set the global filter early on (if you want one).
-3. Replace the "Toggle checklist status" hotkey with "Tasks: Toggle Done".
-    - I recommend you remove the original toggle hotkey and set the "Tasks" toggle to `Ctrl + Enter` (or `Cmd + Enter` on a mac).
+1. Install ruby 2.x.
+    - It is important that you use a version 2 of ruby, not version 3, for example 2.7.0.
+1. Run:
 
-### Manual installation
+    ```bash
+    cd obsidian-tasks/
+    gem install bundler
+    cd docs/
+    bundle install
+    ```
 
-1. Download the latest [release](https://github.com/sytone/obsidian-tasks-x/releases/latest)
-2. Extract the obsidian-tasks-x-plugin folder from the zip to your vault's plugins folder: `{vault}/.obsidian/plugins/`
-   Note: On some machines the `.obsidian` folder may be hidden. On MacOS you should be able to press `Command+Shift+Dot` to show the folder in Finder.
-3. Reload Obsidian
-4. If prompted about Safe Mode, you can disable safe mode and enable the plugin.
+You can find more information about these tools, and download links, at
+[Testing your GitHub Pages site locally with Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll).
 
-Then..
+### Seeing the docs via installed Jekyll
 
-1. Enable the plugin in your Obsidian settings (find "Tasks SQL Powered" under "Community plugins").
-2. Check the settings. It makes sense to set the global filter early on (if you want one).
-3. Replace the "Toggle checklist status" hotkey with "Tasks: Toggle Done".
-    - I recommend you remove the original toggle hotkey and set the "Tasks" toggle to `Ctrl + Enter` (or `Cmd + Enter` on a mac).
+Now every time you want to see the docs locally, run:
 
-## User Documentation
+```bash
+cd obsidian-tasks/docs
+bundle exec jekyll serve
+```
 
-For user documentation, please check [https://sytone.github.io/obsidian-tasks-x/](https://sytone.github.io/obsidian-tasks-x/).
-
-## Development
-
-Clone the repository, run `yarn` to install the dependencies, and run `yarn dev` to compile the plugin and watch file changes.
-
-## Donations
-
-The plugin is completely free to use. If you love it very much and want to pay it forward, please consider donating to an organization of your choice.
-Two example organizations that you could consider donating to are the Wikimedia Foundation and the Electronic Frontiers Foundation:
-
-1. [Support the Wikimedia Foundation](https://wikimediafoundation.org/support/)
-2. [Support EFF](https://supporters.eff.org/donate/join-eff-today)
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/sytone/obsidian-tasks-x.svg?style=for-the-badge
-[contributors-url]: https://github.com/sytone/obsidian-tasks-x/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/sytone/obsidian-tasks-x.svg?style=for-the-badge
-[forks-url]: https://github.com/sytone/obsidian-tasks-x/network/members
-[stars-shield]: https://img.shields.io/github/stars/sytone/obsidian-tasks-x.svg?style=for-the-badge
-[stars-url]: https://github.com/sytone/obsidian-tasks-x/stargazers
-[issues-shield]: https://img.shields.io/github/issues/sytone/obsidian-tasks-x.svg?style=for-the-badge
-[issues-url]: https://github.com/sytone/obsidian-tasks-x/issues
-[license-shield]: https://img.shields.io/github/license/sytone/obsidian-tasks-x.svg?style=for-the-badge
-[license-url]: https://github.com/sytone/obsidian-tasks-x/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
-[version-shield]: https://img.shields.io/github/package-json/v/sytone/obsidian-tasks-x.svg?style=for-the-badge
-[version-url]: https://github.com/sytone/obsidian-tasks-x/releases/latest
-
-[downloads-shield]: https://img.shields.io/github/downloads/sytone/obsidian-tasks-x/total.svg?style=for-the-badge
-[downloads-url]: https://github.com/sytone/obsidian-tasks-x
+In the output, look for the line containing `Server address:` and open that URL in your local browser.
+It will be something like <http://0.0.0.0:4000/obsidian-tasks/>.
