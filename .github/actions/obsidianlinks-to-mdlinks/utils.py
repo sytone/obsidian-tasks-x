@@ -18,8 +18,7 @@ def getAllDocumentPaths(source_directory):
 
 
 def getFileFullText(path):
-    print("getFileFullText:path:", path)
-
+    print(f"::debug:: getFileFullText path is {path}")
     with open(path) as f:
         fulltext = f.read()
 
