@@ -18,7 +18,7 @@ def getAllDocumentPaths(source_directory):
 
 
 def getFileFullText(path):
-    print(f"::debug:: getFileFullText path is {path}")
+    print(f"getFileFullText path is {path}")
     with open(path) as f:
         fulltext = f.read()
 
@@ -35,21 +35,21 @@ def replaceLinks(text, allpaths, docsdirectory):
         linkpagename = re.sub(r'\|.*$', '', linkpagesrc)
         linkpage = re.sub(r'^.*\|', '',  linkpagesrc) + ".md"
         
-        print(f"::debug:: replaceLinks fullwikilink is {fullwikilink}")
-        print(f"::debug:: replaceLinks linkpagesrc is {linkpagesrc}")
-        print(f"::debug:: replaceLinks linkpagename is {linkpagename}")
-        print(f"::debug:: replaceLinks linkpage is {linkpage}")
+        print(f"replaceLinks fullwikilink is {fullwikilink}")
+        print(f"replaceLinks linkpagesrc is {linkpagesrc}")
+        print(f"replaceLinks linkpagename is {linkpagename}")
+        print(f"replaceLinks linkpage is {linkpage}")
 
 
         pageurl = ''
         for path in allpaths:
             filename = path.split("/")[-1]
             # print('linkpagename:', linkpagename)
-            print(f"::debug:: replaceLinks linkpage is {filename}")
+            print(f"replaceLinks linkpage is {filename}")
 
             if linkpagename + ".md" == filename:
                 pageurl = path
-                print(f"::debug:: replaceLinks pageurl is {pageurl}")
+                print(f"replaceLinks pageurl is {pageurl}")
 
 
         if len(pageurl) > 0:
@@ -73,10 +73,16 @@ def replaceMermaidBlocks(text):
 
 
 def replaceurl(path, allpaths, docsdirectory):
+    print(f"::group::{path}")
+
+    
+
     fulltext = getFileFullText(path)
     replacedtext = replaceLinks(fulltext, allpaths, docsdirectory)
     replacedtext = replaceMermaidBlocks(replacedtext)
-    print(replacedtext)
+
     os.remove(path)
     with open(path.replace(':', ' -'), "w") as f:
         f.write(replacedtext)
+    print("::endgroup::")
+
