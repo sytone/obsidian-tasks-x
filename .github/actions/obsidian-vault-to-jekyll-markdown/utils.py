@@ -84,8 +84,18 @@ def replace_mermaid_blocks(text):
 
 
 def replace_callouts(text):
+
+    regex = r"(^> \[!NOTE\].*?\n{2})"
+    subst = """<div class="code-example" markdown="1">
+    📝 Note
+    {: .label .label-green }
+    \\g
+    </div>
+    """
+    result = re.sub(regex, subst, text, 0, re.MULTILINE | re.DOTALL)
+
     # 📝
-    return text.replace("[!NOTE]", "📝")
+    return result  # text.replace("[!NOTE]", "📝")
 
 
 def replace_url(path, all_paths, docs_directory, url_base):
