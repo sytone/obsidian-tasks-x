@@ -31,11 +31,19 @@ jobs:
           yarn run build
 
       # Package the required files into a zip
-      - name: Package
+      - name: Package Plugin 📦
         run: |
           mkdir ${{ github.event.repository.name }}
           cp main.js manifest.json styles.css README.md ${{ github.event.repository.name }}
           zip -r ${{ github.event.repository.name }}.zip ${{ github.event.repository.name }}
+
+      # Package the vault files into a zip
+      - name: Package Vault 📦
+        run: |
+          mkdir ${{ github.event.repository.name }}/vault
+          cp -R docs/. ${{ github.event.repository.name }}/vault
+          rm -R ${{ github.event.repository.name }}/vault/_site/
+          zip -r ${{ github.event.repository.name }}.vault.zip ${{ github.event.repository.name }}/vault
 
       # Get the release notes from the changelog.
       - name: Get notes
@@ -70,6 +78,18 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./${{ github.event.repository.name }}.zip
           asset_name: ${{ github.event.repository.name }}-${{ steps.version.outputs.tag }}.zip
+          asset_content_type: application/zip
+
+      # Upload the packaged vault file
+      - name: Upload zip file
+        id: upload-zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ github.event.repository.name }}.vault.zip
+          asset_name: ${{ github.event.repository.name }}-${{ steps.version.outputs.tag }}.vault.zip
           asset_content_type: application/zip
 
       # Upload the main.js
