@@ -19,7 +19,7 @@ This plugin has a more advanced query and display system. It also supports the o
 To list all open tasks in a markdown file, simply add a [[5-queries-sql|Queries - SQL]] as a tasks code block like so:
 
 ````markdown
-```taskx
+```task-sql
 SELECT * FROM ? WHERE status->indicator != "x"
 ```
 ````
@@ -28,7 +28,7 @@ Now you have a list of all open tasks! This is enough to get started with tasks.
 
 This new language requires a bit more explanation, this is covered in the [[5-queries-sql|Queries - SQL]] Section.
 
-## Tasks Orginal
+## Tasks Original
 
 To list all open tasks in a markdown file, simply add a [[4-queries-basic| Queries - Basic]] as a tasks code block like so:
 
@@ -129,3 +129,5 @@ For example: `✅ 2021-04-09` means the task was done on the 9th of April, 2021.
 
 > [!WARNING]
 > Tasks only supports checklist items in markdown files with the file extension `.md`.
+
+For more information please see the rest of this vault / site.

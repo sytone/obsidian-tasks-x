@@ -90,7 +90,11 @@ def replace_callouts(text):
     for match in re.finditer(regex, results, re.MULTILINE | re.DOTALL):
         print(match.group(1))
         clean_match = (
-            match.group(1).replace("> [!NOTE]", "").replace("> ", "").replace(">", "")
+            match.group(1)
+            .replace("> [!NOTE]", "")
+            .replace("> [!INFO]", "")
+            .replace("> ", "")
+            .replace(">", "")
         )
         jekyll_format = (
             '<div class="code-example" markdown="1">\n📝 Note\n{: .label .label-blue }\n'
@@ -103,7 +107,11 @@ def replace_callouts(text):
     for match in re.finditer(regex, results, re.MULTILINE | re.DOTALL):
         print(match.group(1))
         clean_match = (
-            match.group(1).replace("> [!NOTE]", "").replace("> ", "").replace(">", "")
+            match.group(1)
+            .replace("> [!WARNING]", "")
+            .replace("> [!WARN]", "")
+            .replace("> ", "")
+            .replace(">", "")
         )
         jekyll_format = (
             '<div class="code-example" markdown="1">\n⚠ Warning\n{: .label .label-yellow }\n'
