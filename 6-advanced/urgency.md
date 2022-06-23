@@ -8,11 +8,11 @@ has_toc: false
 
 # Urgency
 
-By default, Tasks [sorts](4-queries-basic/sorting.md) query results by decreasing urgency.
+By default, Tasks [sorts](/4-queries-basic/sorting) query results by decreasing urgency.
 Tasks tries to calculate urgency based on what you should likely work on next.
 
 The urgency score isn't perfect, of course, as many more factors may influence the order on which you want to work on tasks.
-Urgency can only consider the parameters it knows: [dates](3-getting-started/dates.md) and [priorities](3-getting-started/priority.md).
+Urgency can only consider the parameters it knows: [dates](/3-getting-started/dates) and [priorities](/3-getting-started/priority).
 It is likely that the task you want to work on next is one of the tasks at the top of the list.
 
 The idea of Tasks' urgency is based on [Taskwarrior's](https://taskwarrior.org/) concept of [urgency](https://taskwarrior.org/docs/urgency.html).

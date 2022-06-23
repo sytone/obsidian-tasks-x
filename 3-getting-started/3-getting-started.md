@@ -16,21 +16,21 @@ This plugin has a more advanced query and display system. It also supports the o
 
 ## Tasks SQL Powered
 
-To list all open tasks in a markdown file, simply add a [5-queries-sql](5-queries-sql.md) as a tasks code block like so:
+To list all open tasks in a markdown file, simply add a [Queries - SQL](/5-queries-sql/5-queries-sql) as a tasks code block like so:
 
 ````markdown
-```taskx
+```task-sql
 SELECT * FROM ? WHERE status->indicator != "x"
 ```
 ````
 
 Now you have a list of all open tasks! This is enough to get started with tasks.
 
-This new language requires a bit more explination, this is covered in the [5-queries-sql](5-queries-sql.md) Section.
+This new language requires a bit more explanation, this is covered in the [Queries - SQL](/5-queries-sql/5-queries-sql) Section.
 
-## Tasks Orginal
+## Tasks Original
 
-To list all open tasks in a markdown file, simply add a [4-queries-basic](4-queries-basic.md) as a tasks code block like so:
+To list all open tasks in a markdown file, simply add a [ Queries - Basic](/4-queries-basic/4-queries-basic) as a tasks code block like so:
 
 ````markdown
 ```tasks
@@ -40,7 +40,7 @@ not done
 
 Now you have a list of all open tasks! This is enough to get started with tasks.
 You can _optionally_ start using one or more of the other features that Tasks offers.
-Like, for example, [priorities](3-getting-started/priority.md) or [dates](3-getting-started/dates.md#start-date)
+Like, for example, [priorities](/3-getting-started/priority) or [[3-getting-started/dates#start-date|dates]]
 
 A more convenient way to create a task is by using the `Tasks: Create or edit` command from the command palette.
 You can also bind a hotkey to the command.
@@ -62,14 +62,18 @@ A "done" task will have the date it was done appended to the end of its line.
 For example: `✅ 2021-04-09` means the task was done on the 9th of April, 2021.
 
 <div class="code-example" markdown="1">
-Warning
-{: .label .label-yellow}
+⚠ Warning
+{: .label .label-yellow }
+
 Whenever Tasks behaves in an unexpected way, please try restarting Obsidian.
 
----
 
-Warning
-{: .label .label-yellow}
+</div>
+
+<div class="code-example" markdown="1">
+⚠ Warning
+{: .label .label-yellow }
+
 Tasks only supports single-line checklist items.
 
 The task list rendered through this plugin **and** the checklist items
@@ -94,10 +98,13 @@ The following _does not work:_
         and then its description continues on the next line
 ```
 
----
 
-Warning
-{: .label .label-yellow}
+</div>
+
+<div class="code-example" markdown="1">
+⚠ Warning
+{: .label .label-yellow }
+
 Tasks can only render inline footnotes. Regular footnotes are not supported.
 
 ```markdown
@@ -105,16 +112,36 @@ Tasks can only render inline footnotes. Regular footnotes are not supported.
 -   [ ] This footnote _will not work_[^notworking]
 ```
 
----
 
-Warning
-{: .label .label-yellow}
+</div>
+
+<div class="code-example" markdown="1">
+⚠ Warning
+{: .label .label-yellow }
+
+Tasks can only render inline footnotes. Regular footnotes are not supported.
+
+```markdown
+-   [ ] This is a task^[with a working inline footnote]
+-   [ ] This footnote _will not work_[^notworking]
+```
+
+
+</div>
+
+<div class="code-example" markdown="1">
+⚠ Warning
+{: .label .label-yellow }
+
 Tasks' support for block quotes inside tasks is limited. It renders correctly, but since Tasks only supports a single line, the meta-data of the task will be inside the block quote.
 
----
 
-Warning
-{: .label .label-yellow}
+</div>
+
+<div class="code-example" markdown="1">
+⚠ Warning
+{: .label .label-yellow }
+
 Tasks won't render spaces around list items if you have a list with empty lines.
 
 ```markdown
@@ -123,10 +150,13 @@ Tasks won't render spaces around list items if you have a list with empty lines.
 -   [ ] Another task. The empty line above will _not_ result in the tasks being more spaced out.
 ```
 
----
 
-Warning
+</div>
+
+<div class="code-example" markdown="1">
+⚠ Warning
 {: .label .label-yellow }
+
 You can only put block links (`^link-name`) after metadata such as dates. Anything else will break the parsing of dates, priorities and recurrence rules.
 
 ```markdown
@@ -136,10 +166,16 @@ You can only put block links (`^link-name`) after metadata such as dates. Anythi
 -   [ ] Task with tag before priority _works_ #tag 🔼
 ```
 
----
-
-Warning
-{: .label .label-yellow}
-Tasks only supports checklist items in markdown files with the file extension `.md`.
 
 </div>
+
+<div class="code-example" markdown="1">
+⚠ Warning
+{: .label .label-yellow }
+
+Tasks only supports checklist items in markdown files with the file extension `.md`.
+
+
+</div>
+
+For more information please see the rest of this vault / site.

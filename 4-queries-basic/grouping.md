@@ -62,7 +62,7 @@ Each subsequent `group by` will generate a new heading-level within the existing
 * Second `group by` is displayed as `h5` headings
 * Third and subsequent `group by` are displayed as `h6` headings
 
-See the [screenshots below](#screenshots) for how this looks in practice.
+See the [[#screenshots|screenshots below]] for how this looks in practice.
 
 <div class="code-example" markdown="1">
 Info
@@ -90,14 +90,16 @@ The order of operations ensures that grouping does not modify which tasks are di
 
 Here is an example Tasks result, without any `group by` commands:
 
-![Tasks Ungrouped](https://github.com/sytone/obsidian-tasks-x/raw/main-tasks-sql/docs/screenshots/tasks_ungrouped.png)
+![[screenshots/tasks_ungrouped.png]]
+
 Tasks not grouped.
 
 ### After
 
 And here is what this might look like, when grouped by folder, filename and heading:
 
-![Tasks Grouped](https://github.com/sytone/obsidian-tasks-x/raw/main-tasks-sql/docs/screenshots/tasks_grouped.png)
+![[screenshots/tasks_grouped.png]]
+
 Tasks grouped.
 
 ---

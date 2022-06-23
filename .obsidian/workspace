@@ -90,10 +90,10 @@
   "active": "3499b419562ba964",
   "lastOpenFiles": [
     "1-introduction/1-introduction.md",
-    "README.md",
-    "2-installation/2-installation.md",
     "3-getting-started/3-getting-started.md",
     "5-queries-sql/5-queries-sql.md",
+    "README.md",
+    "2-installation/2-installation.md",
     "6-advanced/6-advanced.md",
     "4-queries-basic/4-queries-basic.md",
     "5-queries-sql/sorting.md",
