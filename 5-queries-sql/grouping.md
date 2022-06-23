@@ -2,7 +2,7 @@
 layout: default
 title: Grouping
 nav_order: 3
-parent: Queries
+parent: Queries - SQL
 ---
 
 # Grouping

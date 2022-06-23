@@ -7,11 +7,22 @@
 - It is converted to HTML via Ruby and Jekyll
   - Important: Ruby 2 is required, for example, Ruby 2.7
 - The published documentation is at <https://obsidian-tasks-group.github.io/obsidian-tasks/>
+- The documentation is also a test and example vault for features of this plugin.
+  - Keep all folder and note names in lowercase and us a `-` instead of a space
+  - If a page has a order put a prefix on it, for root files put them in a folder so they are the same order as the navigation.
 
 ## Test documentation locally with Jekyll
 
 When making significant edits to the documentation, it is helpful to see what
 the published docs will look like. This allows spotting of problems like formatting oddities.
+
+> [!NOTE]
+> As wiki links are used there is a step in the github build action that replaces them with Markdown links. This means you will not see them by default. You can run this manually if needed with the following commands. Do not check in any of the modified files.
+>
+> ```shell
+> export INPUT_SRCROOTDIRECTORY=/mnt/g/repos/gh/obsidian-tasks-x/docs
+> python3 .github/actions/obsidianlinks-to-mdlinks/linkconvert.py
+> ```
 
 ### Setup
 

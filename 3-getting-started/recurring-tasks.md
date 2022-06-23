@@ -90,7 +90,7 @@ Now the newly created task is scheduled 1 week after the task was completed rath
 
 ## Priority of Dates
 
-A task can have [various dates]({{ site.baseurl }}{% link getting-started/dates.md %}).
+A task can have [various dates](3-getting-started/dates.md).
 When a task has multiple dates, one of them is selected as reference date based on the following priorities:
 
 1. Due date

@@ -2,7 +2,7 @@
 layout: default
 title: Limiting
 nav_order: 5
-parent: Queries
+parent: Queries - SQL
 has_toc: false
 ---
 

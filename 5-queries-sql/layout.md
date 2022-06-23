@@ -2,7 +2,7 @@
 layout: default
 title: Layout
 nav_order: 4
-parent: Queries
+parent: Queries - SQL
 ---
 
 # Layout options
