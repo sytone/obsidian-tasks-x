@@ -34,15 +34,23 @@ def replaceLinks(text, allpaths, docsdirectory):
         linkpagesrc = item[1]
         linkpagename = re.sub(r'\|.*$', '', linkpagesrc)
         linkpage = re.sub(r'^.*\|', '',  linkpagesrc) + ".md"
+        
+        print(f"::debug:: replaceLinks fullwikilink is {fullwikilink}")
+        print(f"::debug:: replaceLinks linkpagesrc is {linkpagesrc}")
+        print(f"::debug:: replaceLinks linkpagename is {linkpagename}")
+        print(f"::debug:: replaceLinks linkpage is {linkpage}")
+
 
         pageurl = ''
         for path in allpaths:
             filename = path.split("/")[-1]
             # print('linkpagename:', linkpagename)
-            # print("filename:", filename)
+            print(f"::debug:: replaceLinks linkpage is {filename}")
 
             if linkpagename + ".md" == filename:
                 pageurl = path
+                print(f"::debug:: replaceLinks pageurl is {pageurl}")
+
 
         if len(pageurl) > 0:
 
