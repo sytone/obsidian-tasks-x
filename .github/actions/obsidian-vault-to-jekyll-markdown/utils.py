@@ -84,18 +84,35 @@ def replace_mermaid_blocks(text):
 
 
 def replace_callouts(text):
+    results = text
 
-    regex = r"(^> \[!NOTE\].*?\n{2})"
-    subst = """<div class="code-example" markdown="1">
-    📝 Note
-    {: .label .label-green }
-    \\g
-    </div>
-    """
-    result = re.sub(regex, subst, text, 0, re.MULTILINE | re.DOTALL)
+    regex = r"(^> \[!(NOTE|INFO)\].*?\n{2})"
+    for match in re.finditer(regex, results, re.MULTILINE | re.DOTALL):
+        print(match.group(1))
+        clean_match = (
+            match.group(1).replace("> [!NOTE]", "").replace("> ", "").replace(">", "")
+        )
+        jekyll_format = (
+            '<div class="code-example" markdown="1">\n📝 Note\n{: .label .label-blue }\n'
+            + clean_match
+            + "\n</div>\n\n"
+        )
+        results = results.replace(match.group(1), jekyll_format)
 
-    # 📝
-    return result  # text.replace("[!NOTE]", "📝")
+    regex = r"(^> \[!(WARNING|WARN)\].*?\n{2})"
+    for match in re.finditer(regex, results, re.MULTILINE | re.DOTALL):
+        print(match.group(1))
+        clean_match = (
+            match.group(1).replace("> [!NOTE]", "").replace("> ", "").replace(">", "")
+        )
+        jekyll_format = (
+            '<div class="code-example" markdown="1">\n⚠ Warning\n{: .label .label-yellow }\n'
+            + clean_match
+            + "\n</div>\n\n"
+        )
+        results = results.replace(match.group(1), jekyll_format)
+
+    return results
 
 
 def replace_url(path, all_paths, docs_directory, url_base):

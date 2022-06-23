@@ -61,85 +61,71 @@ There are two ways to mark a task done:
 A "done" task will have the date it was done appended to the end of its line.
 For example: `✅ 2021-04-09` means the task was done on the 9th of April, 2021.
 
-<div class="code-example" markdown="1">
-Warning
-{: .label .label-yellow}
-Whenever Tasks behaves in an unexpected way, please try restarting Obsidian.
+> [!WARNING]
+> Whenever Tasks behaves in an unexpected way, please try restarting Obsidian.
 
----
+> [!WARNING]
+> Tasks only supports single-line checklist items.
+>
+> The task list rendered through this plugin **and** the checklist items
+> from which the task list is built render only the first line of the item.
+> Text after the first line in a multi-line checklist item is
+> ignored (but is unaffected in the stored `.md` file).
+>
+> This works:
+>
+> ```markdown
+> -   [ ] This is a task
+>     -   This is a sub-item
+>     -   Another sub-item
+>     -   [ ] And a sub task
+>         -   Even more details
+> ```
+>
+> The following _does not work:_
+>
+> ```markdown
+> -   [ ] This task starts on this line
+>         and then its description continues on the next line
+> ```
 
-Warning
-{: .label .label-yellow}
-Tasks only supports single-line checklist items.
+> [!WARNING]
+> Tasks can only render inline footnotes. Regular footnotes are not supported.
+>
+> ```markdown
+> -   [ ] This is a task^[with a working inline footnote]
+> -   [ ] This footnote _will not work_[^notworking]
+> ```
 
-The task list rendered through this plugin **and** the checklist items
-from which the task list is built render only the first line of the item.
-Text after the first line in a multi-line checklist item is
-ignored (but is unaffected in the stored `.md` file).
+> [!WARNING]
+> Tasks can only render inline footnotes. Regular footnotes are not supported.
+>
+> ```markdown
+> -   [ ] This is a task^[with a working inline footnote]
+> -   [ ] This footnote _will not work_[^notworking]
+> ```
 
-This works:
+> [!WARNING]
+> Tasks' support for block quotes inside tasks is limited. It renders correctly, but since Tasks only supports a single line, the meta-data of the task will be inside the block quote.
 
-```markdown
--   [ ] This is a task
-    -   This is a sub-item
-    -   Another sub-item
-    -   [ ] And a sub task
-        -   Even more details
-```
+> [!WARNING]
+> Tasks won't render spaces around list items if you have a list with empty lines.
+>
+> ```markdown
+> -   [ ] First task before the empty line
+>
+> -   [ ] Another task. The empty line above will _not_ result in the tasks being more spaced out.
+> ```
 
-The following _does not work:_
+> [!WARNING]
+> You can only put block links (`^link-name`) after metadata such as dates. Anything else will break the parsing of dates, priorities and recurrence rules.
+>
+> ```markdown
+> -   [ ] Task with priority placed before tag _priority will not be recognized_ 🔼 #tag
+> -   [ ] Task with date placed before tag _date will not be recognized_ 📅 2021-04-09 #tag
+> -   [ ] Task with block link _works_ 📅 2021-04-09 ^e5bebf
+> -   [ ] Task with tag before priority _works_ #tag 🔼
+> ```
 
-```markdown
--   [ ] This task starts on this line
-        and then its description continues on the next line
-```
-
----
-
-Warning
-{: .label .label-yellow}
-Tasks can only render inline footnotes. Regular footnotes are not supported.
-
-```markdown
--   [ ] This is a task^[with a working inline footnote]
--   [ ] This footnote _will not work_[^notworking]
-```
-
----
-
-Warning
-{: .label .label-yellow}
-Tasks' support for block quotes inside tasks is limited. It renders correctly, but since Tasks only supports a single line, the meta-data of the task will be inside the block quote.
-
----
-
-Warning
-{: .label .label-yellow}
-Tasks won't render spaces around list items if you have a list with empty lines.
-
-```markdown
--   [ ] First task before the empty line
-
--   [ ] Another task. The empty line above will _not_ result in the tasks being more spaced out.
-```
-
----
-
-Warning
-{: .label .label-yellow }
-You can only put block links (`^link-name`) after metadata such as dates. Anything else will break the parsing of dates, priorities and recurrence rules.
-
-```markdown
--   [ ] Task with priority placed before tag _priority will not be recognized_ 🔼 #tag
--   [ ] Task with date placed before tag _date will not be recognized_ 📅 2021-04-09 #tag
--   [ ] Task with block link _works_ 📅 2021-04-09 ^e5bebf
--   [ ] Task with tag before priority _works_ #tag 🔼
-```
-
----
-
-Warning
-{: .label .label-yellow}
-Tasks only supports checklist items in markdown files with the file extension `.md`.
-
-</div>
+> [!WARNING]
+> Tasks only supports checklist items in markdown files with the file extension `.md`.
