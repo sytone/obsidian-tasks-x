@@ -69,7 +69,7 @@ Start dates use a departing airplane emoji instead of a calendar emoji.
 - [ ] take out the trash 🛫 2021-04-09
 ```
 
-When [filtering]({{ site.baseurl }}{% link queries/filters.md %}#start-date) queries by start date,
+When [filtering](4-queries-basic/filters.md#start-date) queries by start date,
 the result will include tasks without a start date.
 This way, you can use the start date as a filter to filter out any tasks that you cannot yet work on.
 

@@ -2,7 +2,7 @@
 layout: default
 title: Examples
 nav_order: 7
-parent: Queries
+parent: Queries - SQL
 has_toc: false
 ---
 

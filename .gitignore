@@ -25,3 +25,4 @@ data.json
 
 # If the folder is symlinked make sure this is not checked in.
 .hotreload
+.github/actions/obsidianlinks-to-mdlinks/__pycache__/utils.cpython-310.pyc

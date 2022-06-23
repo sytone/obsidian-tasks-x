@@ -1,13 +1,14 @@
 import os
 
-from utils import getAllDocumentPaths, replaceurl
+from utils import get_all_document_paths, replace_url
 
-docsdirectory = os.environ["INPUT_SRCROOTDIRECTORY"]
-allpaths = getAllDocumentPaths(docsdirectory)
+docs_directory = os.environ["INPUT_SRCROOTDIRECTORY"]
+print(f"SRCROOTDIRECTORY: {docs_directory}")
+all_paths = get_all_document_paths(docs_directory)
 
-for path in allpaths:
-    fullpath = path.split("/")
-    filename = fullpath[-1]
+for path in all_paths:
+    full_path = path.split("/")
+    filename = full_path[-1]
 
     if path.endswith(".md"):
-      replaceurl(path, allpaths, docsdirectory)
+        replace_url(path, all_paths, docs_directory)

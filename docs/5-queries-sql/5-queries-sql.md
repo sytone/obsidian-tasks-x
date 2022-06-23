@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Queries X
-nav_order: 4
+title: Queries - SQL
+nav_order: 5
 has_children: true
 ---
 
-# Queries X
+# Queries - SQL
 
 {: .no_toc }
 

@@ -2,87 +2,97 @@ import os
 import re
 
 
-def getAllDocumentPaths(source_directory):
-    allpaths = list()
+def get_all_document_paths(source_directory):
+    all_paths = list()
 
     for (dirpath, dirnames, filenames) in os.walk(source_directory):
         dirnames.sort()
         filenames.sort()
+
         for filename in filenames:
             path = os.path.join(dirpath, filename)
-            # path.replace(source_directory, "")
-            allpaths.append(path)
-    allpaths.sort(reverse=True)
+            all_paths.append(path)
 
-    return allpaths
+    all_paths.sort(reverse=True)
+
+    return all_paths
 
 
-def getFileFullText(path):
-    print(f"getFileFullText path is {path}")
+def get_file_full_text(path):
+    print(f"get_file_full_text path is {path}")
     with open(path) as f:
-        fulltext = f.read()
+        full_text = f.read()
 
-    return re.sub(r"%%.*%%", "", fulltext)
-
-
-def replaceLinks(text, allpaths, docsdirectory):
-    foundmatches = re.findall(
-        r'(?P<fullwikilink>\[\[(?P<linkpage>.*?)\]\]?)', text)
-    outputtext = text
-    for item in foundmatches:
-        fullwikilink = item[0]
-        linkpagesrc = item[1]
-        linkpagename = re.sub(r'\|.*$', '', linkpagesrc)
-        linkpage = re.sub(r'^.*\|', '',  linkpagesrc) + ".md"
-        
-        print(f"replaceLinks fullwikilink is {fullwikilink}")
-        print(f"replaceLinks linkpagesrc is {linkpagesrc}")
-        print(f"replaceLinks linkpagename is {linkpagename}")
-        print(f"replaceLinks linkpage is {linkpage}")
+    return re.sub(r"%%.*%%", "", full_text)
 
 
-        pageurl = ''
-        for path in allpaths:
-            filename = path.split("/")[-1]
-            # print('linkpagename:', linkpagename)
-            print(f"replaceLinks linkpage is {filename}")
+def replace_links(text, all_paths, docs_directory):
+    found_matches = re.findall(r"(?P<full_wiki_link>\[\[(?P<link_page>.*?)\]\]?)", text)
+    output_text = text
 
-            if linkpagename + ".md" == filename:
-                pageurl = path
-                print(f"replaceLinks pageurl is {pageurl}")
+    for item in found_matches:
+        full_wiki_link = item[0]
+        link_page_src = item[1]
+        link_page_name = re.sub(r"\|.*$", "", link_page_src)
+        link_page_description = re.sub(r"^.*\|", "", link_page_src)
 
+        print(f"       Original Link: {full_wiki_link}")
+        print(f"           Page link: {link_page_name}")
+        print(f"Optional description: {link_page_description}")
 
-        if len(pageurl) > 0:
+        page_url = ""
+        for path in all_paths:
+            # filename = path.split("/")[-1]
+            filename = path.replace(f"{docs_directory}/", "")
 
-            # print(pageurl)
-            replacetext = "[" + linkpage.replace(".md", "") + \
-                "]("+pageurl.replace(docsdirectory,
-                                     "/knowledge/").replace(':', ' -').replace(".md", "") + ")"
+            # print('link_page_name:', link_page_name)
+            # print(f"replace_links filename is {filename}")
+
+            if link_page_name + ".md" == filename:
+                page_url = path
+                print(f"    Replacement Path: {page_url}")
+
+        if len(page_url) > 0:
+
+            # print(page_url)
+            replacement_text = (
+                "["
+                + link_page_description.split("/")[-1]
+                + "]("
+                + page_url.replace(f"{docs_directory}/", "")
+                .replace(":", " -")
+                .replace(".md", "")
+                + ")"
+            )
         else:
-            replacetext = "**"+linkpagename+"**"
-        outputtext = outputtext.replace(
-            fullwikilink, replacetext)
-    return outputtext
+            replacement_text = full_wiki_link
+        print(f"🔁 Replacement: {replacement_text}\n")
+
+        output_text = output_text.replace(full_wiki_link, replacement_text)
+    return output_text
 
 
-def replaceMermaidBlocks(text):
+def replace_mermaid_blocks(text):
     regex = r"(```mermaid(?P<mermaid>[\s\S]*?)```)"
     subst = "<script src='https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js'></script><div class=mermaid>\\g<mermaid></div>"
     result = re.sub(regex, subst, text, 0, re.MULTILINE)
     return result
 
 
-def replaceurl(path, allpaths, docsdirectory):
+def replace_callouts(text):
+    # 📝
+    return text.replace("[!NOTE]", "📝")
+
+
+def replace_url(path, all_paths, docs_directory):
     print(f"::group::{path}")
 
-    
+    full_text = get_file_full_text(path)
+    replaced_text = replace_links(full_text, all_paths, docs_directory)
+    replaced_text = replace_mermaid_blocks(replaced_text)
+    replaced_text = replace_callouts(replaced_text)
 
-    fulltext = getFileFullText(path)
-    replacedtext = replaceLinks(fulltext, allpaths, docsdirectory)
-    replacedtext = replaceMermaidBlocks(replacedtext)
-
-    os.remove(path)
-    with open(path.replace(':', ' -'), "w") as f:
-        f.write(replacedtext)
+    # os.remove(path)
+    # with open(path.replace(":", " -"), "w") as f:
+    #     f.write(replaced_text)
     print("::endgroup::")
-

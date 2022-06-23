@@ -16,7 +16,7 @@ This plugin has a more advanced query and display system. It also supports the o
 
 ## Tasks SQL Powered
 
-To list all open tasks in a markdown file, simply add a [query]({{ site.baseurl }}{% link queries-x/index.md %}) as a tasks code block like so:
+To list all open tasks in a markdown file, simply add a [5-queries-sql](5-queries-sql.md) as a tasks code block like so:
 
 ````markdown
 ```taskx
@@ -26,11 +26,11 @@ SELECT * FROM ? WHERE status->indicator != "x"
 
 Now you have a list of all open tasks! This is enough to get started with tasks.
 
-This new language requires a bit more explination, this is covered in the [Queries X]({{ site.baseurl }}{% link queries-x/index.md %}) Section.
+This new language requires a bit more explination, this is covered in the [5-queries-sql](5-queries-sql.md) Section.
 
 ## Tasks Orginal
 
-To list all open tasks in a markdown file, simply add a [query]({{ site.baseurl }}{% link queries/index.md %}) as a tasks code block like so:
+To list all open tasks in a markdown file, simply add a [4-queries-basic](4-queries-basic.md) as a tasks code block like so:
 
 ````markdown
 ```tasks
@@ -40,7 +40,7 @@ not done
 
 Now you have a list of all open tasks! This is enough to get started with tasks.
 You can _optionally_ start using one or more of the other features that Tasks offers.
-Like, for example, [priorities]({{ site.baseurl }}{% link getting-started/priority.md %}) or [dates]({{ site.baseurl }}{% link getting-started/dates.md %}#start-date)
+Like, for example, [priorities](3-getting-started/priority.md) or [dates](3-getting-started/dates.md#start-date)
 
 A more convenient way to create a task is by using the `Tasks: Create or edit` command from the command palette.
 You can also bind a hotkey to the command.
