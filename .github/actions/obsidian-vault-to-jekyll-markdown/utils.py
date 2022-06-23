@@ -11,7 +11,8 @@ def get_all_document_paths(source_directory):
 
         for filename in filenames:
             path = os.path.join(dirpath, filename)
-            all_paths.append(path)
+            if "_site" not in dirpath:
+                all_paths.append(path)
 
     all_paths.sort(reverse=True)
 
@@ -26,7 +27,7 @@ def get_file_full_text(path):
     return re.sub(r"%%.*%%", "", full_text)
 
 
-def replace_links(text, all_paths, docs_directory):
+def replace_links(text, all_paths, docs_directory, url_base):
     found_matches = re.findall(r"(?P<full_wiki_link>\[\[(?P<link_page>.*?)\]\]?)", text)
     output_text = text
 
@@ -42,13 +43,16 @@ def replace_links(text, all_paths, docs_directory):
 
         page_url = ""
         for path in all_paths:
-            # filename = path.split("/")[-1]
+            just_filename = path.split("/")[-1]
             filename = path.replace(f"{docs_directory}/", "")
 
             # print('link_page_name:', link_page_name)
             # print(f"replace_links filename is {filename}")
 
-            if link_page_name + ".md" == filename:
+            if (
+                link_page_name + ".md" == filename
+                or link_page_name + ".md" == just_filename
+            ):
                 page_url = path
                 print(f"    Replacement Path: {page_url}")
 
@@ -59,7 +63,7 @@ def replace_links(text, all_paths, docs_directory):
                 "["
                 + link_page_description.split("/")[-1]
                 + "]("
-                + page_url.replace(f"{docs_directory}/", "")
+                + page_url.replace(f"{docs_directory}/", f"{url_base}/")
                 .replace(":", " -")
                 .replace(".md", "")
                 + ")"
@@ -84,15 +88,15 @@ def replace_callouts(text):
     return text.replace("[!NOTE]", "📝")
 
 
-def replace_url(path, all_paths, docs_directory):
+def replace_url(path, all_paths, docs_directory, url_base):
     print(f"::group::{path}")
 
     full_text = get_file_full_text(path)
-    replaced_text = replace_links(full_text, all_paths, docs_directory)
+    replaced_text = replace_links(full_text, all_paths, docs_directory, url_base)
     replaced_text = replace_mermaid_blocks(replaced_text)
     replaced_text = replace_callouts(replaced_text)
 
-    # os.remove(path)
-    # with open(path.replace(":", " -"), "w") as f:
-    #     f.write(replaced_text)
+    os.remove(path)
+    with open(path.replace(":", " -"), "w") as f:
+        f.write(replaced_text)
     print("::endgroup::")

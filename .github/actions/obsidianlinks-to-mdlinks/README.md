@@ -1,1 +1,0 @@
-# obsidianlinks-to-mdlinks-action

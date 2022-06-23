@@ -20,8 +20,9 @@ the published docs will look like. This allows spotting of problems like formatt
 > As wiki links are used there is a step in the github build action that replaces them with Markdown links. This means you will not see them by default. You can run this manually if needed with the following commands. Do not check in any of the modified files.
 >
 > ```shell
-> export INPUT_SRCROOTDIRECTORY=/mnt/g/repos/gh/obsidian-tasks-x/docs
-> python3 .github/actions/obsidianlinks-to-mdlinks/linkconvert.py
+> export INPUT_SRC_ROOT_DIRECTORY=/mnt/g/repos/gh/obsidian-tasks-x/docs
+> export INPUT_URL_BASE=/obsidian-tasks-x
+> python3 .github/actions/obsidian-vault-to-jekyll-markdown/convert.py
 > ```
 
 ### Setup

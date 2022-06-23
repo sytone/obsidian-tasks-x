@@ -94,7 +94,7 @@ Instead you would have two queries, one for each condition:
 
 > `has start date` was Introduced in Tasks 1.6.0.
 
-When filtering queries by [start date](3-getting-started/dates.md#-start),
+When filtering queries by [[3-getting-started/dates.md#-start|start date]],
 the result will include tasks without a start date.
 This way, you can use the start date as a filter to filter out any tasks that you cannot yet work on.
 

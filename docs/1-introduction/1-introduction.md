@@ -30,11 +30,11 @@ To query your tasks you have two options using the version from `sytone/obsidian
 
 The version of the plugin that supports the SQL syntax is being updated with changes from the original plugin periodically. Changes are making their way back to the original plugin but there is no timeline for complete migration back.
 
-For bugs, ideas or help related to the **Tasks SQL Powered** version of the plugin use these links:
+For bugs, ideas or help related to the **[[5-queries-sql/5-queries-sql|Tasks SQL Powered]]** version of the plugin use these links:
 
 [Bugs and Issues](https://github.com/sytone/obsidian-tasks-x/issues), [Ideas](https://github.com/sytone/obsidian-tasks-x/discussions/categories/ideas), [Help](https://github.com/sytone/obsidian-tasks-x/discussions/categories/q-a), For changes in each release, please check the [CHANGELOG](https://github.com/sytone/obsidian-tasks-x/blob/main-tasks-sql/CHANGELOG.md).
 
-For bugs, ideas or help related to the **Original Tasks** version of the plugin use these links:
+For bugs, ideas or help related to the **[[4-queries-basic/4-queries-basic|Original Tasks]]** version of the plugin use these links:
 
 [Bugs and Issues](https://github.com/obsidian-tasks-group/obsidian-tasks/issues), [Ideas](https://github.com/obsidian-tasks-group/obsidian-tasks/discussions/categories/ideas), [Help](https://github.com/obsidian-tasks-group/obsidian-tasks/discussions/categories/q-a), For changes in each release, please check the [releases page](https://github.com/obsidian-tasks-group/obsidian-tasks/releases).
 

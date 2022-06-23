@@ -21,10 +21,11 @@ jobs:
       #     npm run build
 
       - name: Transform Links 🚀
-        uses: ./.github/actions/obsidianlinks-to-mdlinks
+        uses: ./.github/actions/obsidian-vault-to-jekyll-markdown
         with:
-          srcrootdirectory: docs
-          rootindexfilename: index.md
+          src_root_directory: docs
+          root_index_filename: index.md
+          url_base: ''
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3

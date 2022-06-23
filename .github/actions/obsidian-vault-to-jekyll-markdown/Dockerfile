@@ -11,4 +11,4 @@ FROM gcr.io/distroless/python3-debian10
 COPY --from=builder /app /app
 WORKDIR /app
 ENV PYTHONPATH /app
-CMD ["/app/linkconvert.py"]
+CMD ["/app/convert.py"]

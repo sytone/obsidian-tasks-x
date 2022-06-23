@@ -22,13 +22,13 @@ parent: Queries
 
 ## Basics
 
-By default Tasks sorts tasks by [a calculated score we call "urgency"](6-advanced/urgency.md).
+By default Tasks sorts tasks by [[6-advanced/urgency.md|a calculated score we call "urgency"]].
 
 To sort the results of a query different from the default, you must add at least one `sort by` line to the query.
 
 You can sort tasks by the following properties:
 
-1. `urgency` ([urgency](6-advanced/urgency.md))
+1. `urgency` ([[6-advanced/urgency.md)|urgency]]
 2. `status` (done or todo)
 3. `priority` (priority of the task; "low" is below "none")
 4. `start` (the date when the task starts)
