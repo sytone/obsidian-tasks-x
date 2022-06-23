@@ -25,7 +25,7 @@ jobs:
         with:
           src_root_directory: docs
           root_index_filename: index.md
-          url_base: ''
+          url_base: '/obsidian-tasks-x'
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
