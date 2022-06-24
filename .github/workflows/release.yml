@@ -42,7 +42,6 @@ jobs:
         run: |
           mkdir ${{ github.event.repository.name }}/vault
           cp -R docs/. ${{ github.event.repository.name }}/vault
-          rm -R ${{ github.event.repository.name }}/vault/_site/
           zip -r ${{ github.event.repository.name }}.vault.zip ${{ github.event.repository.name }}/vault
 
       # Get the release notes from the changelog.
