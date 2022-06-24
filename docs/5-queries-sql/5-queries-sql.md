@@ -18,49 +18,6 @@ By default you should only need the conditions of the SQL query, that is everyth
 
 ## General Queries
 
-The following columns are available to be used in the WHERE clauses.
-
-| Column Name                 | Description                                                                         | Type |
-| --------------------------- | ----------------------------------------------------------------------------------- | ---- |
-| status->indicator           | The value between the square brackets. ('x', ' ', '-', '/', etc)                    |      |
-| status->name                | The display name for the status. ('Done', 'Todo', 'Cancelled', 'In Progress')       |      |
-| status->nextStatusIndicator | The next indicator to be used when clicked on.  ('x', ' ', '/', etc)                |      |
-| description                 | The description of the task.                                                        |      |
-| path                        | The path to the note the task is in.                                                |      |
-| file                        | The TFile object in Obsidian.                                                       |      |
-| precedingHeader             | The heading that the task is under                                                  |      |
-| priority                    | The priority of the task. This has to be treated like a string ('1', '2', '3', '4') |      |
-
-| startDate: Date | null;
-| scheduledDate: Date | null;
-| dueDate: Date | null;
-| createdDate: Date | null;
-| doneDate: Date | null;
-| recurrence: RecurrenceRecord | null;
-| blockLink: string;
-| tags: string[] | [];
-
-### Date Columns
-
-When using the date columns you can use javascript commands in the WHERE clause. The example below will pull all tasks that were done in 2021.
-
-````markdown
-```task-sql
-WHERE ((dueDate->getUTCFullYear() = 2021 AND status->indicator = 'x') OR (dueDate->getUTCFullYear() = 2022 AND status->indicator = ' ')) AND description LIKE '%#%'
-```
-````
-
-- startDate: Date | null;
-- scheduledDate: Date | null;
-- dueDate: Date | null;
-- createdDate: Date | null;
-- doneDate: Date | null;
-- recurrence: RecurrenceRecord | null;
-- blockLink: string;
-- tags: string[] | [];
-
-Look at the [SQL Compatibility](https://github.com/AlaSQL/alasql/wiki/SQL%20keywords) table to see what SQL commands are supported.
-
 ### Queries using file
 
 basename is the name of the page

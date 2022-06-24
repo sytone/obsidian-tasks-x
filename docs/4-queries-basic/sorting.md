@@ -2,14 +2,14 @@
 layout: default
 title: Sorting
 nav_order: 2
-parent: Queries
+parent: Queries - Basic
 ---
 
 # Sorting
 
 {: .no_toc }
 
-<details open markdown="block">
+<details markdown="block">
   <summary>
     Table of contents
   </summary>

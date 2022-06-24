@@ -6,82 +6,80 @@ parent: Queries - SQL
 has_toc: false
 ---
 
-# Examples
-
-All open tasks that are due today:
+### All open tasks that are due today
 
     ```tasks
-    not done
-    due today
+    WHERE status->indicator = ' ' AND  moment()->[format]('YYYY-MM-DD') = moment(dueDate)->[format]('YYYY-MM-DD')
     ```
+
+```task-sql
+WHERE status->indicator = ' ' AND  moment()->[format]('YYYY-MM-DD') = moment(dueDate)->[format]('YYYY-MM-DD')
+```
 
 ---
 
-All open tasks that are due within the next two weeks, but are not overdue (due today or later):
+### All open tasks that are due within the next two weeks, but are not overdue (due today or later)
 
-    ```tasks
-    not done
-    due after yesterday
-    due before in two weeks
+    ```task-sql
+    WHERE status->indicator = ' ' AND moment(dueDate)->isBetween(moment()->startOf('day').subtract(1, 'days'), moment()->startOf('day').add(14, 'days'))
+
     ```
+
+```task-sql
+WHERE status->indicator = ' ' AND moment(dueDate)->isBetween(moment()->startOf('day').subtract(1, 'days'), moment()->startOf('day').add(14, 'days'))
+
+```
 
 ---
 
-All done tasks that are anywhere in the vault under a `tasks` heading (e.g. `## Tasks`):
+### All done tasks that are anywhere in the vault under a `tasks` heading (e.g. `## Tasks`)
 
-    ```tasks
-    done
-    heading includes tasks
+    ```task-sql
+    WHERE status->indicator = 'x' AND precedingHeader LIKE '%tasks%'
     ```
+
+```task-sql
+WHERE status->indicator = 'x' AND precedingHeader LIKE '%tasks%'
+```
 
 ---
 
-Show all tasks that aren't done, are due on the 9th of April 2021, and where the path includes `GitHub`:
+### Show all tasks that aren’t done, are due on the 9th of April 2021, and where the path includes `GitHub`
 
-    ```tasks
-    not done
-    due on 2021-04-09
-    path includes GitHub
+    ```task-sql
+    WHERE status->indicator = ' '
+    AND moment(dueDate)->[format]('YYYY-MM-DD') = '2021-04-09'
+    AND path LIKE '%GitHub%'
     ```
+
+```task-sql
+WHERE status->indicator = ' '
+AND moment(dueDate)->[format]('YYYY-MM-DD') = '2021-04-09'
+AND path LIKE '%GitHub%'
+```
 
 ---
 
-Show all open tasks that are due within two weeks and hide the due date and edit button:
+### All tasks with waiting, waits or wartet
 
-    ```tasks
-    not done
-    due after 2021-04-30
-    due before 2021-05-15
-    hide due date
-    hide edit button
+    ```task-sql
+    WHERE description LIKE '%waiting%' OR description LIKE '%waits%' OR description LIKE '%wartet%'
+    #short
     ```
+
+```task-sql
+WHERE description LIKE '%waiting%' OR description LIKE '%waits%' OR description LIKE '%wartet%'
+#short
+```
 
 ---
 
-Show all tasks that were done before the 1st of December 2020:
+### All tasks with 'trash' in the description
 
-    ```tasks
-    done before 2020-12-01
+    ```task-sql
+    WHERE description LIKE '%trash%'
     ```
 
----
-
-Show one task that is due on the 5th of May and includes `#prio1` in its description:
-
-    ```tasks
-    not done
-    due on 2021-05-05
-    description includes #prio1
-    limit to 1 tasks
-    ```
-
----
-
-All open tasks that are due today or earlier, sorted by due date, then grouped together by the folder containing the task:
-
-    ```tasks
-    not done
-    due before tomorrow
-    sort by due
-    group by folder
-    ```
+```task-sql
+WHERE description LIKE '%trash%'
+```

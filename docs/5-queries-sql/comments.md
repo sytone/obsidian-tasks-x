@@ -8,13 +8,16 @@ has_toc: false
 
 # Comments
 
-All query lines beginning with a `#` character are treated as
-comments, and will be ignored.
+The SQL Query block uses the `#` symbol for comments as well as rendering directives to change your layout. You can still use this to add comments to your query to make it simpler to understand.
 
 Example:
 
-    ```tasks
-    not done
-    # Uncomment the following line to enable short mode:
-    # short mode
-    ```
+````markdown
+```task-sql
+# This will show all my important tasks.
+WHERE status->indicator = '!'
+
+# The entry below will render the tasks using the short format.
+#short
+```
+````

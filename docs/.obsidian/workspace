@@ -4,12 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "3499b419562ba964",
+        "id": "d2539176ea4dfa09",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "1-introduction/1-introduction.md",
+            "file": "4-queries-basic/filters.md",
             "mode": "source",
             "source": false
           }
@@ -25,6 +25,7 @@
       {
         "id": "2de1cbfda89b36b0",
         "type": "tabs",
+        "dimension": 72.45934959349594,
         "children": [
           {
             "id": "5d588f4c134d1c8b",
@@ -40,7 +41,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "warning",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -50,26 +51,27 @@
             }
           }
         ]
-      }
-    ],
-    "direction": "horizontal",
-    "width": 300
-  },
-  "right": {
-    "id": "60a78cda4aa7eed1",
-    "type": "split",
-    "children": [
+      },
       {
-        "id": "be37cde0953b8487",
+        "id": "6fb1ca9d6e3a0b11",
         "type": "tabs",
+        "dimension": 27.540650406504064,
         "children": [
+          {
+            "id": "6909be45f005ca97",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
+          },
           {
             "id": "7c2f5695e478acbd",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1-introduction/1-introduction.md",
+                "file": "4-queries-basic/filters.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -84,20 +86,27 @@
       }
     ],
     "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "60a78cda4aa7eed1",
+    "type": "split",
+    "children": [],
+    "direction": "horizontal",
     "width": 300,
     "collapsed": true
   },
-  "active": "3499b419562ba964",
+  "active": "d2539176ea4dfa09",
   "lastOpenFiles": [
-    "1-introduction/1-introduction.md",
-    "3-getting-started/3-getting-started.md",
-    "5-queries-sql/5-queries-sql.md",
-    "README.md",
-    "2-installation/2-installation.md",
-    "6-advanced/6-advanced.md",
+    "4-queries-basic/filters.md",
+    "4-queries-basic/examples.md",
+    "4-queries-basic/comments.md",
     "4-queries-basic/4-queries-basic.md",
-    "5-queries-sql/sorting.md",
-    "5-queries-sql/limit.md",
-    "5-queries-sql/layout.md"
+    "5-queries-sql/columns.md",
+    "4-queries-basic/sorting.md",
+    "4-queries-basic/limit.md",
+    "4-queries-basic/layout.md",
+    "4-queries-basic/grouping.md",
+    "example-data/random-tasks.md"
   ]
 }

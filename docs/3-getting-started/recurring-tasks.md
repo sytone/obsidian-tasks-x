@@ -10,7 +10,7 @@ has_toc: false
 
 {: .no_toc }
 
-<details open markdown="block">
+<details markdown="block">
   <summary>
     Table of contents
   </summary>
@@ -139,3 +139,5 @@ Examples of possible recurrence rules (mix and match as desired; these should be
 - `🔁 every January on the 15th`
 - `🔁 every April and December on the 1st and 24th` (meaning every _April 1st_ and _December 24th_)
 - `🔁 every year`
+
+## rrule details

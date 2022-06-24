@@ -2208,6 +2208,11 @@ esbuild-openbsd-64@0.14.42:
   resolved "https://registry.yarnpkg.com/esbuild-openbsd-64/-/esbuild-openbsd-64-0.14.42.tgz#c29006f659eb4e55283044bbbd4eb4054fae8839"
   integrity sha512-M2meNVIKWsm2HMY7+TU9AxM7ZVwI9havdsw6m/6EzdXysyCFFSoaTQ/Jg03izjCsK17FsVRHqRe26Llj6x0MNA==
 
+esbuild-plugin-copy-file@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/esbuild-plugin-copy-file/-/esbuild-plugin-copy-file-0.0.2.tgz#cd767685fb95dfcb2b1da8da92f2d58fdb3239b7"
+  integrity sha512-pr9CTC68YKClMAusuEy3YlB8EbQIdKWsyCVrEEbskCxKvJ7ZfhFEMesteoJl4daBtcY92gfFt0MsZOwfzZKVmw==
+
 esbuild-sunos-64@0.14.42:
   version "0.14.42"
   resolved "https://registry.yarnpkg.com/esbuild-sunos-64/-/esbuild-sunos-64-0.14.42.tgz#aa9eec112cd1e7105e7bb37000eca7d460083f8f"

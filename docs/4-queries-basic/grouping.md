@@ -2,14 +2,14 @@
 layout: default
 title: Grouping
 nav_order: 3
-parent: Queries
+parent: Queries - Basic
 ---
 
 # Grouping
 
 {: .no_toc }
 
-<details open markdown="block">
+<details markdown="block">
   <summary>
     Table of contents
   </summary>
