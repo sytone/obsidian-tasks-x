@@ -1,3 +1,9 @@
+---
+layout: default
+title: Documentation for Obsidian Tasks
+nav_exclude: true
+---
+
 # Documentation for Obsidian Tasks
 
 ## Overview
