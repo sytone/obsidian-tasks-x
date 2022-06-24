@@ -7,40 +7,37 @@ has_children: true
 
 # Getting Started
 
-Tasks tracks your checklist items from your vault.
-The simplest way to create a new task is to create a new checklist item.
+Tasks tracks your checklist items from your vault. The simplest way to create a new task is to create a new checklist item.
 The markdown syntax for checklist items is a list item that starts with spaced brackets: `- [ ] take out the trash`.
 Now Tasks tracks that you need to take out the trash!
 
-This plugin has a more advanced query and display system. It also supports the original structure so you can still use the old format. To use the new format use `taskx` as the code block tag.
+## Live Examples
+
+If you download this documentation as a vault from the releases you can see all the queries execute live. If you are viewing this from the website you will not see any output for the queries.
 
 ## Tasks SQL Powered
 
-To list all open tasks in a markdown file, simply add a [Queries - SQL](/5-queries-sql/5-queries-sql) as a tasks code block like so:
+To list all open tasks in a markdown file, simply add a [Queries - SQL](/obsidian-tasks-x/5-queries-sql/5-queries-sql) as a tasks code block like so:
 
-````markdown
-```task-sql
-SELECT * FROM ? WHERE status->indicator != "x"
-```
-````
+ ```task-sql
+ WHERE status->indicator != "x"
+ ```
 
 Now you have a list of all open tasks! This is enough to get started with tasks.
 
-This new language requires a bit more explanation, this is covered in the [Queries - SQL](/5-queries-sql/5-queries-sql) Section.
+This new language requires a bit more explanation, this is covered in the [Queries - SQL](/obsidian-tasks-x/5-queries-sql/5-queries-sql) Section.
 
 ## Tasks Original
 
-To list all open tasks in a markdown file, simply add a [ Queries - Basic](/4-queries-basic/4-queries-basic) as a tasks code block like so:
+To list all open tasks in a markdown file, simply add a [ Queries - Basic](/obsidian-tasks-x/4-queries-basic/4-queries-basic) as a tasks code block like so:
 
-````markdown
-```tasks
-not done
-```
-````
+ ```tasks
+ not done
+ ```
 
 Now you have a list of all open tasks! This is enough to get started with tasks.
 You can _optionally_ start using one or more of the other features that Tasks offers.
-Like, for example, [priorities](/3-getting-started/priority) or [[3-getting-started/dates#start-date|dates]]
+Like, for example, [priorities](/obsidian-tasks-x/3-getting-started/priority) or [[3-getting-started/dates#start-date|dates]]
 
 A more convenient way to create a task is by using the `Tasks: Create or edit` command from the command palette.
 You can also bind a hotkey to the command.

@@ -19,10 +19,10 @@ make sure new notes are created via one of these two plugins, and not `Daily-not
 - **Calendar Plugin**: Just tap the day on the Calendar UI and a new daily note will be created
 - **Periodic Notes Plugin**: Install, migrate from `Daily-notes` if needed, and tap the new `Open Today` ribbon on the left-side dock. Below is an example if today was August 14, 2021.
 
-| | Daily Notes | Calendar | Periodic Notes |
-|-|-------------|----------|----------------|
+|                 | Daily Notes                                           | Calendar                                              | Periodic Notes                                        |
+| --------------- | ----------------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------- |
 | template syntax | `due on {% raw %}{{date+14d:YYYY-MM-DD}}{% endraw %}` | `due on {% raw %}{{date+14d:YYYY-MM-DD}}{% endraw %}` | `due on {% raw %}{{date+14d:YYYY-MM-DD}}{% endraw %}` |
-| output | `due on {% raw %}{{date+14d:YYYY-MM-DD}}{% endraw %}` | `due on 2021-08-28` | `due on 2021-08-28` |
+| output          | `due on {% raw %}{{date+14d:YYYY-MM-DD}}{% endraw %}` | `due on 2021-08-28`                                   | `due on 2021-08-28`                                   |
 
 ## Example Daily Agenda **template**
 

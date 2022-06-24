@@ -2,7 +2,7 @@
 layout: default
 title: Comments
 nav_order: 6
-parent: Queries
+parent: Queries - Basic
 has_toc: false
 ---
 

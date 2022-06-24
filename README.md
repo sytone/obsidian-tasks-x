@@ -10,6 +10,7 @@
 - The documentation is also a test and example vault for features of this plugin.
   - Keep all folder and note names in lowercase and us a `-` instead of a space
   - If a page has a order put a prefix on it, for root files put them in a folder so they are the same order as the navigation.
+- When adding in example queries indent the example and put a non indented version below so the output can be seen if the user downloads the vault.
 
 ## Test documentation locally with Jekyll
 

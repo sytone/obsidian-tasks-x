@@ -3,5 +3,6 @@
   "livePreview": true,
   "readableLineLength": false,
   "useMarkdownLinks": false,
-  "newLinkFormat": "absolute"
+  "newLinkFormat": "absolute",
+  "spellcheck": true
 }

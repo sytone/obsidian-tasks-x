@@ -1,15 +1,15 @@
 ---
 layout: default
 title: Layout
-nav_order: 4
+nav_order: 7
 parent: Queries - SQL
 ---
 
-# Layout options
+# Layout and Rendering options
 
 {: .no_toc }
 
-<details open markdown="block">
+<details markdown="block">
   <summary>
     Table of contents
   </summary>
@@ -36,15 +36,12 @@ The following options exist:
 
 Example:
 
-    ```tasks
-    no due date
-    path includes GitHub
-    hide recurrence rule
-    hide task count
-    hide backlink
-    ```
-
----
+ ```task-sql
+ WHERE status->indicator = '!'
+    #hide recurrence rule
+    #hide task count
+    #hide backlink
+ ```
 
 ## Short Mode
 
@@ -55,7 +52,7 @@ The option is `short mode`.
 
 Example:
 
-    ```tasks
-    not done
-    short mode
-    ```
+ ```task-sql
+ WHERE status->indicator = '!'
+    #short
+ ```

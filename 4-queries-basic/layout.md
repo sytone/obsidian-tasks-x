@@ -2,14 +2,14 @@
 layout: default
 title: Layout
 nav_order: 4
-parent: Queries
+parent: Queries - Basic
 ---
 
 # Layout options
 
 {: .no_toc }
 
-<details open markdown="block">
+<details markdown="block">
   <summary>
     Table of contents
   </summary>

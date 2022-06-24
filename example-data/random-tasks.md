@@ -1,0 +1,115 @@
+---
+layout: default
+title: Random Tasks
+nav_exclude: true
+---
+
+- [/] Fold a Paper Frog 🔽 ⏳ 2022-08-08 📅 2022-05-30
+- [ ] Listen to Music from Your Childhood #Chores ⏫
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth 📅 2022-05-30 ⏳ 2022-08-08
+- [ ] Contact a Friend Abroad ⏫ 📅 2022-05-31 🛫 2022-08-15
+- [ ] Watch an Animal Livestream #Learning 🔽
+- [/] Listen to Music from Your Childhood #Chores 🛫 2022-08-15 ⏳ 2022-08-08 📅 2022-05-31
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth #Context/Home ⏫
+- [ ] Complete a Sudoku #Context/Home 📅 2022-06-09 🛫 2022-08-15
+- [ ] Watch an Animal Livestream 🔼 📅 2022-06-13
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth #Chores 🔽
+- [ ] Do Jigsaw Puzzles at JigSawPuzzles.io #DeepWork 🔽 📅 2022-06-03 ⏳ 2022-06-04
+- [ ] Watch an Animal Livestream #BodyCare 🔽 📅 2022-08-17 ⏳ 2022-06-12 🛫 2022-07-22
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth #Context/Family 🔼
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth 🔽 ⏳ 2022-08-04
+- [ ] Play Skribbl.io Online (Draw and Guess) #NextWeek 🔽 📅 2022-08-20 ⏳ 2022-08-14 🛫 2022-06-30
+- [ ] Draw a Self-Portrait #Context/Work 🔼 📅 2022-08-17 🛫 2022-06-19
+- [/] Do Yoga #DeepWork 🔼 📅 2022-05-31
+- [ ] Do Yoga #Context/Life 🔽 📅 2022-06-09 ⏳ 2022-07-14
+- [ ] Draw a Self-Portrait #MindCare ⏫ 🛫 2022-07-14
+- [ ] Listen to Music from Your Childhood #DeepWork 🔼 📅 2022-07-25 🛫 2022-06-28
+- [ ] Do Jigsaw Puzzles at JigSawPuzzles.io #NextWeek 🔼 ⏳ 2022-07-31
+- [ ] Ask a Friend How Theyre Doing #DeepWork ⏫ 📅 2022-06-30 ⏳ 2022-06-14 🛫 2022-06-08
+- [ ] Listen to Music from Your Childhood #Context/Family 🔼 🛫 2022-07-29
+- [ ] Contact a Friend Abroad #Learning 🔽 ⏳ 2022-07-14
+- [ ] Ask a Friend How Theyre Doing 🔼 📅 2022-07-27
+- [ ] Draw a Self-Portrait #ShallowWork
+- [ ] Look at Your Old Photos #Context/Work 🔽 📅 2022-07-14 🛫 2022-06-11
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth #Chores 🔼 📅 2022-06-25
+- [ ] Play Skribbl.io Online (Draw and Guess) #ShallowWork 🔼 📅 2022-07-15
+- [ ] Look at Your Old Photos #People 🔼
+- [ ] Play Skribbl.io Online (Draw and Guess) #Learning
+- [ ] Do Jigsaw Puzzles at JigSawPuzzles.io #Learning 🔼 📅 2022-08-22
+- [ ] Contact a Friend Abroad #MindCare 🔽 ⏳ 2022-06-03 🛫 2022-08-24
+- [ ] Listen to Music from Your Childhood #People 🔽 📅 2022-08-10 ⏳ 2022-07-23
+- [ ] Contact a Friend Abroad ⏳ 2022-08-08 🛫 2022-07-24
+- [ ] Complete a Sudoku #Context/Work 🔽 ⏳ 2022-08-24
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth #People ⏫ 📅 2022-07-10 ⏳ 2022-07-20
+- [ ] Look at Your Old Photos 🔽 📅 2022-08-19 ⏳ 2022-07-10 🛫 2022-06-28
+- [ ] Draw a Self-Portrait #DeepWork 🔽 📅 2022-07-20
+- [ ] Complete a Sudoku #ShallowWork ⏫ ⏳ 2022-08-28 🛫 2022-08-17
+- [ ] Ask a Friend How Theyre Doing ⏫ 📅 2022-07-10 ⏳ 2022-06-17
+- [ ] Listen to Music from Your Childhood #Context/Home 📅 2022-07-05 ⏳ 2022-06-15
+- [ ] Ask a Friend How Theyre Doing #DeepWork 📅 2022-08-02 ⏳ 2022-07-16
+- [ ] Play Petanque Indoors 🔼 ⏳ 2022-06-17 🛫 2022-06-16
+- [ ] Play Among Us #Context/Friends ⏳ 2022-07-18
+- [ ] Play Among Us #People 🔽 ⏳ 2022-08-06
+- [ ] Play Skribbl.io Online (Draw and Guess) #People ⏫ 📅 2022-06-22 ⏳ 2022-06-22 🛫 2022-06-22
+- [ ] Look at Your Old Photos ⏳ 2022-07-07
+- [ ] Play Among Us #Context/Home 🔼 ⏳ 2022-07-24 🛫 2022-07-05
+- [ ] Do Jigsaw Puzzles at JigSawPuzzles.io 🔽 ⏳ 2022-07-16
+- [ ] Look at Your Old Photos #Chores 🔽 📅 2022-07-27 ⏳ 2022-07-03 🛫 2022-06-21
+- [ ] Ask a Friend How Theyre Doing #Learning ⏫ ⏳ 2022-06-05 🛫 2022-08-18
+- [ ] Complete a Sudoku #Context/Home ⏳ 2022-07-14 🛫 2022-07-24
+- [ ] Complete a Sudoku 🔼 📅 2022-06-24 ⏳ 2022-07-29
+- [ ] Contact a Friend Abroad #Context/Home 🔼 ⏳ 2022-08-13
+- [ ] Fold a Paper Frog #MindCare 📅 2022-06-08
+- [ ] Sign a Petition #MindCare ⏫ 📅 2022-06-29 🛫 2022-08-28
+- [ ] Complete a Sudoku #Context/Work 🔼 📅 2022-08-25 ⏳ 2022-06-18
+- [ ] Ask a Friend How Theyre Doing #DeepWork 🔼 📅 2022-07-18 ⏳ 2022-07-04 🛫 2022-08-09
+- [ ] Do Jigsaw Puzzles at JigSawPuzzles.io #MindCare
+- [ ] Draw a Self-Portrait #People 🔽 📅 2022-08-07 ⏳ 2022-08-18 🛫 2022-07-01
+- [ ] Play Skribbl.io Online (Draw and Guess) #BodyCare 📅 2022-07-04 ⏳ 2022-07-18
+- [ ] Look at Your Old Photos #Context/Home ⏫ 📅 2022-07-20
+- [ ] Contact a Friend Abroad #Context/Family 🔽 🛫 2022-07-19
+- [ ] Play Skribbl.io Online (Draw and Guess) #Context/Life 🔽 📅 2022-06-20 🛫 2022-08-28
+- [ ] Sign a Petition #Context/Life ⏫ 📅 2022-08-24
+- [ ] Play Among Us #ShallowWork 📅 2022-06-26 ⏳ 2022-08-20 🛫 2022-07-13
+- [ ] Draw a Self-Portrait #Context/Work 🔽 ⏳ 2022-08-10 🛫 2022-08-13
+- [ ] Fold a Paper Frog #Context/Family 🔽 📅 2022-08-09 ⏳ 2022-07-21 🛫 2022-08-25
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth #Context/Life ⏫ ⏳ 2022-08-20
+- [ ] Look at Your Old Photos #Context/Home 🔽 ⏳ 2022-07-23
+- [ ] Ask a Friend How Theyre Doing 🔼 ⏳ 2022-07-23
+- [ ] Complete a Sudoku #Context/Life ⏳ 2022-07-20
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth 📅 2022-08-09
+- [ ] Listen to Music from Your Childhood #Context/Friends 🔼 📅 2022-06-09 🛫 2022-07-06
+- [ ] Do Jigsaw Puzzles at JigSawPuzzles.io ⏫
+- [ ] Look at Your Old Photos 📅 2022-07-27 🛫 2022-06-09
+- [ ] Fold a Paper Frog #ShallowWork 🔽 📅 2022-06-22 🛫 2022-06-12
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth #People 🔽 ⏳ 2022-05-31 🛫 2022-08-14
+- [ ] Play Petanque Indoors #BodyCare 🔼
+- [ ] Play Petanque Indoors #Chores ⏳ 2022-06-10
+- [ ] Play Among Us 🔼 ⏳ 2022-07-13
+- [ ] Complete a Sudoku #BodyCare ⏳ 2022-06-17 🛫 2022-07-08
+- [ ] Draw a Self-Portrait #BodyCare ⏫
+- [/] Mindful Breathing Meditation #Context/Life 📅 2022-06-09
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth #People 🔽 📅 2022-06-11 🛫 2022-08-24
+- [ ] Complete a Sudoku #Chores ⏫ 🛫 2022-07-07
+- [ ] Draw a Self-Portrait #Context/Friends 🔼 ⏳ 2022-07-22
+- [ ] Play Skribbl.io Online (Draw and Guess) #Chores ⏳ 2022-06-07 🛫 2022-07-07
+- [/] Fold a Paper Frog #Context/Work 🔽 🛫 2022-07-09 📅 2022-06-08
+- [ ] Draw a Self-Portrait #Context/Work ⏫ 📅 2022-06-13 ⏳ 2022-06-20 🛫 2022-06-21
+- [ ] Do Yoga #Context/Life 🔼 🛫 2022-07-18
+- [ ] Sign a Petition #Context/Work 🔽 ⏳ 2022-08-25
+- [ ] Watch an Animal Livestream #Context/Friends ⏫ ⏳ 2022-07-05 🛫 2022-06-16
+- [ ] Play Among Us #ShallowWork 📅 2022-07-14 ⏳ 2022-06-21 🛫 2022-08-22
+- [ ] Play Among Us #Context/Work ⏫ 📅 2022-06-06 ⏳ 2022-07-15
+- [ ] Do Jigsaw Puzzles at JigSawPuzzles.io #Chores 🔼 📅 2022-07-04 🛫 2022-07-23
+- [ ] Do Yoga #Context/Friends 🔼 📅 2022-08-17
+- [ ] Fold a Paper Frog #DeepWork ⏫ 📅 2022-07-15 ⏳ 2022-06-11 🛫 2022-07-16
+- [ ] Mindful Breathing Meditation #Context/Family ⏫ 📅 2022-07-12 ⏳ 2022-06-17
+- [ ] Look at Your Old Photos #MindCare ⏫
+- [ ] Play Among Us #Context/Work ⏳ 2022-07-08
+- [ ] Sign a Petition #Context/Friends 🔼 📅 2022-07-16 ⏳ 2022-07-14 🛫 2022-07-02
+- [ ] Listen to Music from Your Childhood ⏫ 📅 2022-06-18 🛫 2022-06-06
+- [ ] Listen to Music from Your Childhood #BodyCare 📅 2022-07-10 🛫 2022-06-04
+- [ ] Play Petanque Indoors 🔼 📅 2022-08-19
+- [ ] Mindful Breathing Meditation #Context/Work 🛫 2022-07-26
+- [ ] Contact a Friend Abroad 🔽 ⏳ 2022-07-08 🛫 2022-06-30
+- [ ] Sign a Petition #NextWeek ⏫ 🛫 2022-07-17

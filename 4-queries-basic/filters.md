@@ -2,14 +2,14 @@
 layout: default
 title: Filters
 nav_order: 1
-parent: Queries
+parent: Queries - Basic
 ---
 
 # Filters
 
 {: .no_toc }
 
-<details open markdown="block">
+<details markdown="block">
   <summary>
     Table of contents
   </summary>

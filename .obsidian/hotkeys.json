@@ -1,1 +1,10 @@
-{}
+{
+  "obsidian-tasks-x-plugin:edit-task": [
+    {
+      "modifiers": [
+        "Alt"
+      ],
+      "key": "T"
+    }
+  ]
+}
