@@ -116,20 +116,6 @@ Tasks can only render inline footnotes. Regular footnotes are not supported.
 ⚠ Warning
 {: .label .label-yellow }
 
-Tasks can only render inline footnotes. Regular footnotes are not supported.
-
-```markdown
--   [ ] This is a task^[with a working inline footnote]
--   [ ] This footnote _will not work_[^notworking]
-```
-
-
-</div>
-
-<div class="code-example" markdown="1">
-⚠ Warning
-{: .label .label-yellow }
-
 Tasks' support for block quotes inside tasks is limited. It renders correctly, but since Tasks only supports a single line, the meta-data of the task will be inside the block quote.
 
 
