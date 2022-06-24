@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/sytone/obsidian-tasks-x/compare/2.3.0...2.4.0) (2022-06-24)
+
+
+### Features
+
+* add ability to log with trace id ([678ef27](https://github.com/sytone/obsidian-tasks-x/commits/678ef2778378bf8f76d063054306da3bf20a6861))
+* add hotkeys to specific task status types ([2a3ebf4](https://github.com/sytone/obsidian-tasks-x/commits/2a3ebf45c1941e74e4afb060996a4d7abe404a4c))
+* add page details query block is executing on ([11da4ea](https://github.com/sytone/obsidian-tasks-x/commits/11da4eaf6a675b0f642099a2d76628da41e17d4c))
+* add page details query block is executing on ([e1a7802](https://github.com/sytone/obsidian-tasks-x/commits/e1a7802145d5597556d35410bf790506cd75bcbb))
+* update logging to make tracing of queries simpler ([f0af6dc](https://github.com/sytone/obsidian-tasks-x/commits/f0af6dcea38fb28b33663d33f0e706fe306d7251))
+
+
+### Bug Fixes and Changes
+
+* resolve casing issue with config folder ([cb08924](https://github.com/sytone/obsidian-tasks-x/commits/cb08924c4d935b7aa4b2e9112f581fed365ad349))
+* resolve the casing oF the config folder ([4a99b1a](https://github.com/sytone/obsidian-tasks-x/commits/4a99b1aa344c1f014afa55f6746684ac701c0d93))
+
+
+### Internal
+
+* cleanup logging library and tasks services filename ([46d10f7](https://github.com/sytone/obsidian-tasks-x/commits/46d10f735525f1d700ffb660fcfedb61d9c55872))
+* code cleanup and correct feature usage ([48aeda4](https://github.com/sytone/obsidian-tasks-x/commits/48aeda41369333f7fcc2dad4b76b864d72657a7a))
+* implement faster header parsing saves a few ms per call ([9ecafac](https://github.com/sytone/obsidian-tasks-x/commits/9ecafac76c49ee318e5c1f1b0a0af80714798f98))
+* only render markdown if links, saves over 5ms per call ([60e3d0c](https://github.com/sytone/obsidian-tasks-x/commits/60e3d0c20388d08c94ebecee7ef209b535f1f436))
+
+
+### Documentation
+
+* add callout logic ([b8864c5](https://github.com/sytone/obsidian-tasks-x/commits/b8864c50c68e9ccd3064fd429f5488b03df19e50))
+* add more debug logging ([c9a66df](https://github.com/sytone/obsidian-tasks-x/commits/c9a66df23ec7282ec44cb5ca45b10dff2f12bfdf))
+* add obsidian to md link step ([ec54622](https://github.com/sytone/obsidian-tasks-x/commits/ec54622f0dbb8fbcdb7941674c9ffcc9b8f65582))
+* add proper callout conversion ([3772910](https://github.com/sytone/obsidian-tasks-x/commits/37729101a2c59cdbaa652476f099c8bb7b764323))
+* add template for discord notification ([01d15f4](https://github.com/sytone/obsidian-tasks-x/commits/01d15f40cfe617adff123db0a35b8d921756484f))
+* fix callout cleanup ([114da90](https://github.com/sytone/obsidian-tasks-x/commits/114da903800cf3e255f8ee54bdbf9743c6a3266b))
+* hide documentation development readme ([3d19c7a](https://github.com/sytone/obsidian-tasks-x/commits/3d19c7affc8a76d0e6e25305b342d86065eefb91))
+* remove page output and add grouping ([b0daab7](https://github.com/sytone/obsidian-tasks-x/commits/b0daab7f6482b0f49d9361e9c5f35806fa0144e4))
+* shift to use obsidian vault with documentation ([8cea7d6](https://github.com/sytone/obsidian-tasks-x/commits/8cea7d61dc24f1c7339ee99f5f3a96506ed6ec69))
+* update documenation and vault configuration ([622eed4](https://github.com/sytone/obsidian-tasks-x/commits/622eed43066b5f42b8a98645a71f9985ce02684e))
+* update to use wiki links internally and rename action ([90f5a4a](https://github.com/sytone/obsidian-tasks-x/commits/90f5a4a53718c5c4d3255d489d9c061b328a8291))
+
 ## [2.3.0](https://github.com/sytone/obsidian-tasks-x/compare/2.1.0...2.3.0) (2022-06-11)
 
 
