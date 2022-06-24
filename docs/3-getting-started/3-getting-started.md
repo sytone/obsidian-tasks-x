@@ -95,14 +95,6 @@ For example: `✅ 2021-04-09` means the task was done on the 9th of April, 2021.
 > ```
 
 > [!WARNING]
-> Tasks can only render inline footnotes. Regular footnotes are not supported.
->
-> ```markdown
-> -   [ ] This is a task^[with a working inline footnote]
-> -   [ ] This footnote _will not work_[^notworking]
-> ```
-
-> [!WARNING]
 > Tasks' support for block quotes inside tasks is limited. It renders correctly, but since Tasks only supports a single line, the meta-data of the task will be inside the block quote.
 
 > [!WARNING]
