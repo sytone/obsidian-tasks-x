@@ -5,7 +5,7 @@ import { replaceTaskWithTasks } from './File';
 import { TaskModal } from './TaskModal';
 import type { TasksEvents } from './TasksEvents';
 import type { Task } from './Task';
-import { log } from './Config/../lib/logging';
+import { logging } from './Config/../lib/logging';
 import type { IQuery } from './IQuery';
 import { QuerySql } from './QuerySql/QuerySql';
 import { Query } from './Query/Query';
@@ -14,6 +14,7 @@ import type { GroupHeading } from './Query/GroupHeading';
 export class QueryRenderer {
     public addQueryRenderChild = this._addQueryRenderChild.bind(this);
     public addQuerySqlRenderChild = this._addQuerySqlRenderChild.bind(this);
+    _logger = logging.getLogger('taskssql.QueryRenderer');
 
     private readonly app: App;
     private readonly events: TasksEvents;
@@ -27,7 +28,7 @@ export class QueryRenderer {
     }
 
     private async _addQueryRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        log('debug', `Adding Original Query Render for ${source} to context ${context.docId}`);
+        this._logger.debug(`Adding Original Query Render for ${source} to context ${context.docId}`);
         context.addChild(
             new QueryRenderChild({
                 app: this.app,
@@ -39,7 +40,7 @@ export class QueryRenderer {
     }
 
     private async _addQuerySqlRenderChild(source: string, element: HTMLElement, context: MarkdownPostProcessorContext) {
-        log('debug', `Adding SQL Query Render for ${source} to context ${context.docId}`);
+        this._logger.debug(`Adding SQL Query Render for ${source} to context ${context.docId}`);
         context.addChild(
             new QueryRenderChild({
                 app: this.app,
@@ -55,6 +56,7 @@ class QueryRenderChild extends MarkdownRenderChild {
     private readonly app: App;
     private readonly events: TasksEvents;
     private readonly queryEngine: IQuery;
+    _logger = logging.getLogger('taskssql.QueryRenderChild');
 
     private renderEventRef: EventRef | undefined;
     private queryReloadTimeout: NodeJS.Timeout | undefined;
@@ -76,7 +78,7 @@ class QueryRenderChild extends MarkdownRenderChild {
         this.events = events;
         this.queryEngine = queryEngine;
 
-        log('debug', `Query Render generated for class ${this.containerEl.className}`);
+        this._logger.debug(`Query Render generated for class ${this.containerEl.className}`);
     }
 
     onload() {
@@ -121,10 +123,20 @@ class QueryRenderChild extends MarkdownRenderChild {
     }
 
     private async render({ tasks, state }: { tasks: Task[]; state: State }) {
-        log('debug', `Render called for ${tasks.length} tasks, state: ${state}. Using ${this.queryEngine.name}`);
+        // This allows tracing of unique query renders through the plugin.
+        const startTime = new Date(Date.now());
+        //Old: Date.now() + Math.random().toString(36).slice(2, 9);
+        const queryId = this.queryEngine.sourceHash;
+
+        this._logger.debugWithId(
+            queryId,
+            `Render Start: ${tasks.length} tasks, state: ${state}. Using ${this.queryEngine.name}`,
+        );
         const content = this.containerEl.createEl('div');
+        content.setAttr('data-query-id', queryId);
+
         if (state === State.Warm && this.queryEngine.error === undefined) {
-            const tasksSortedLimitedGrouped = this.queryEngine.applyQueryToTasks(tasks);
+            const tasksSortedLimitedGrouped = this.queryEngine.applyQueryToTasks(queryId, tasks);
 
             for (const group of tasksSortedLimitedGrouped.groups) {
                 // If there were no 'group by' instructions, group.groupHeadings
@@ -140,13 +152,15 @@ class QueryRenderChild extends MarkdownRenderChild {
             const totalTasksCount = tasksSortedLimitedGrouped.totalTasksCount();
             this.addTaskCount(content, totalTasksCount);
         } else if (this.queryEngine.error !== undefined) {
-            log('error', `Tasks query (${this.queryEngine.name}) error: ${this.queryEngine.error}`);
+            this._logger.error(`Tasks query (${this.queryEngine.name}) error: ${this.queryEngine.error}`);
             content.setText(`Tasks query error: ${this.queryEngine.error}`);
         } else {
             content.setText('Loading Tasks ...');
         }
 
         this.containerEl.firstChild?.replaceWith(content);
+        const endTime = new Date(Date.now());
+        this._logger.debugWithId(queryId, `Render End: ${endTime.getTime() - startTime.getTime()}ms`);
     }
 
     private async createTasksList({

@@ -1,3 +1,4 @@
+import { logging } from './lib/logging';
 import { Status, StatusConfiguration } from './Status';
 
 /**
@@ -10,6 +11,7 @@ export class StatusRegistry {
     private static instance: StatusRegistry;
 
     private _registeredStatuses: Status[] = [];
+    logger = logging.getLogger('taskssql.StatusRegistry');
 
     /**
      * Creates an instance of Status and registers it for use. It will also check to see
@@ -18,7 +20,7 @@ export class StatusRegistry {
      * @memberof StatusRegistry
      */
     private constructor() {
-        this.clearStatuses();
+        this.addDefaultStatusTypes();
     }
 
     /**
@@ -29,6 +31,7 @@ export class StatusRegistry {
      * @memberof StatusRegistry
      */
     public get registeredStatuses(): Status[] {
+        this.logger.debug(`_registeredStatuses: [${this._registeredStatuses.length}]`);
         return this._registeredStatuses.filter(({ indicator }) => indicator !== Status.EMPTY.indicator);
     }
 
@@ -55,12 +58,7 @@ export class StatusRegistry {
      */
     public add(status: StatusConfiguration | Status): void {
         if (!this.hasIndicator(status.indicator)) {
-            if (status instanceof StatusConfiguration) {
-                this._registeredStatuses.push(new Status(status));
-            }
-            if (status instanceof Status) {
-                this._registeredStatuses.push(status);
-            }
+            this._registeredStatuses.push(new Status(status));
         }
     }
 
@@ -143,7 +141,11 @@ export class StatusRegistry {
      * @memberof StatusRegistry
      */
     private hasIndicator(indicatorToFind: string): boolean {
-        return this._registeredStatuses.filter(({ indicator }) => indicator === indicatorToFind).length > 0;
+        return (
+            this._registeredStatuses.find((element) => {
+                return element.indicator === indicatorToFind;
+            }) !== undefined
+        );
     }
 
     /**

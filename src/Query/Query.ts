@@ -1,7 +1,9 @@
+import { createHash } from 'crypto';
 import { LayoutOptions } from '../LayoutOptions';
 import type { Task } from '../Task';
 import type { IQuery } from '../IQuery';
 import { Status } from '../Status';
+import { logging } from '../lib/logging';
 import { Group } from './Group';
 import type { TaskGroups } from './TaskGroups';
 
@@ -41,6 +43,7 @@ export type Grouping = { property: GroupingProperty };
 
 export class Query implements IQuery {
     public source: string;
+    public sourceHash: string;
     public name: string;
 
     private _limit: number | undefined = undefined;
@@ -49,6 +52,8 @@ export class Query implements IQuery {
     private _error: string | undefined = undefined;
     private _sorting: Sorting[] = [];
     private _grouping: Grouping[] = [];
+
+    logger = logging.getLogger('taskssql.Query');
 
     private readonly noStartString = 'no start date';
     private readonly hasStartString = 'has start date';
@@ -84,6 +89,7 @@ export class Query implements IQuery {
     constructor({ source }: { source: string }) {
         this.name = 'Query';
         this.source = source;
+        this.sourceHash = createHash('sha1').update(source).digest('base64');
         source
             .split('\n')
             .map((line: string) => line.trim())
@@ -196,7 +202,9 @@ export class Query implements IQuery {
     //     return haystack.toLocaleLowerCase().includes(needle.toLocaleLowerCase());
     // }
 
-    public applyQueryToTasks(tasks: Task[]): TaskGroups {
+    public applyQueryToTasks(queryId: string, tasks: Task[]): TaskGroups {
+        this.logger.debugWithId(queryId, `Executing query: [${this.source}]`);
+
         this.filters.forEach((filter) => {
             tasks = tasks.filter(filter);
         });

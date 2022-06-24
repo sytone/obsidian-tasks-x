@@ -1,10 +1,10 @@
+import { createHash } from 'crypto';
 import alasql from 'alasql';
 import moment from 'moment';
 
 import { LayoutOptions } from '../LayoutOptions';
 
 import { Task, TaskRecord } from '../Task';
-import { logCall } from '../Config/../lib/logging';
 import type { IQuery } from '../IQuery';
 import { TaskGroups } from '../Query/TaskGroups';
 import { Group } from '../Query/Group';
@@ -19,6 +19,7 @@ export type Grouping = { property: GroupingProperty };
 export class QuerySql implements IQuery {
     public source: string;
     public name: string;
+    public sourceHash: string;
 
     // @ts-ignore
     private _sourcePath: string;
@@ -32,7 +33,7 @@ export class QuerySql implements IQuery {
     private _groupByFields: [string, string][] = [];
     private _rawMode: boolean = false;
     private _rawWithTasksMode: boolean = false;
-    logger = logging.getLogger('taskssql.querysql.QuerySql');
+    logger = logging.getLogger('taskssql.QuerySql');
 
     private _commentReplacementRegexp = /(^#.*$(\r\n|\r|\n)?)/gm;
     private _commentRegexp = /^#.*/;
@@ -51,6 +52,7 @@ export class QuerySql implements IQuery {
         frontmatter: any | null | undefined;
     }) {
         this.name = 'QuerySql';
+        this.sourceHash = createHash('sha1').update(source).digest('base64');
 
         this._sourcePath = sourcePath;
         this._frontmatter = frontmatter;
@@ -148,11 +150,8 @@ export class QuerySql implements IQuery {
     // public applyQueryToTasks(tasks: Task[]): TaskGroups {
     // }
 
-    @logCall
-    public applyQueryToTasks(tasks: Task[]): TaskGroups {
-        const queryId = Date.now() + Math.random().toString(36).slice(2, 9);
-
-        this.logger.debug(`Executing query:${queryId}[${this.source}]`);
+    public applyQueryToTasks(queryId: string, tasks: Task[]): TaskGroups {
+        this.logger.debugWithId(queryId, `Executing query: [${this.source}]`);
 
         const records: TaskRecord[] = tasks.map((task) => {
             return task.toRecord();
@@ -171,8 +170,6 @@ export class QuerySql implements IQuery {
         if (alasql(`SELECT keyvalue FROM pagedata WHERE name = "sourcePath${queryId}"`).length == 0) {
             alasql(`INSERT INTO pagedata VALUES ('sourcePath${queryId}','${this._sourcePath}')`);
         }
-
-        console.log(this._frontmatter);
 
         // Set moment() function available to AlaSQL
         alasql.fn.moment = moment;
@@ -207,15 +204,15 @@ export class QuerySql implements IQuery {
 
         if (this._rawMode && !this._rawWithTasksMode) {
             const rawResult = alasql(this.source);
-            this.logger.info('RAW Data result from AlaSQL query', rawResult);
+            this.logger.infoWithId(queryId, 'RAW Data result from AlaSQL query', rawResult);
             return new TaskGroups([], []);
         }
 
         let queryResult: TaskRecord[] = alasql(this.source, [records]);
-        this.logger.debug(`queryResult: ${queryResult.length}`);
+        this.logger.debugWithId(queryId, `queryResult: ${queryResult.length}`);
 
         if (this._rawMode && this._rawWithTasksMode) {
-            this.logger.info('RAW Data result from AlaSQL query', queryResult);
+            this.logger.infoWithId(queryId, 'RAW Data result from AlaSQL query', queryResult);
         }
 
         if (this._groupingPossible) {

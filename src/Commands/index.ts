@@ -62,6 +62,20 @@ export class Commands {
                 });
             },
         });
+
+        plugin.addCommand({
+            id: 'debug-export-tasks-object',
+            name: 'Debug: Export tasks objects to console log',
+            icon: 'pencil',
+            editorCheckCallback: (checking: boolean, _editor: Editor, _view: View) => {
+                if (checking) {
+                    return true;
+                }
+                this.plugin.cache?.getTasks().forEach((task) => {
+                    console.log(task);
+                });
+            },
+        });
     }
 
     private get app(): App {

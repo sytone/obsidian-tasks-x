@@ -30,6 +30,14 @@ export interface IQuery {
     source: string;
 
     /**
+     * A hash that links logging and ui properties to this query.
+     *
+     * @type {string}
+     * @memberof IQuery
+     */
+    sourceHash: string;
+
+    /**
      * Collection of groupings being used in this query, this is based off
      * the main task properties like backlink, heading, path, status, etc.
      *
@@ -63,9 +71,10 @@ export interface IQuery {
      * then the TaskGroup collection will contain a single TaskGroup with all tasks
      * found using the query.
      *
+     * @param {string} queryId
      * @param {Task[]} tasks
      * @return {*}  {TaskGroups}
      * @memberof Query
      */
-    applyQueryToTasks: (tasks: Task[]) => TaskGroups;
+    applyQueryToTasks: (queryId: string, tasks: Task[]) => TaskGroups;
 }

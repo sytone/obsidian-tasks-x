@@ -154,7 +154,7 @@ describe('QuerySql', () => {
             const query = new QuerySql({ source: input, sourcePath: '', frontmatter: '' });
 
             // Act
-            const groupedTasks = query.applyQueryToTasks(tasks);
+            const groupedTasks = query.applyQueryToTasks('', tasks);
 
             // Assert
             expect(groupedTasks.totalTasksCount()).toEqual(1);
@@ -204,7 +204,7 @@ describe('QuerySql', () => {
             const query = new QuerySql({ source: input, sourcePath: '', frontmatter: '' });
 
             // Act
-            const groupedTasks = query.applyQueryToTasks(tasks);
+            const groupedTasks = query.applyQueryToTasks('', tasks);
 
             // Assert
             expect(groupedTasks.totalTasksCount()).toEqual(1);

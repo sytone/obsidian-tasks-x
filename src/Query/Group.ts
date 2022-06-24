@@ -1,5 +1,4 @@
 import type { Task } from '../Task';
-import { log } from '../Config/../lib/logging';
 import type { Grouping, GroupingProperty } from './Query';
 import { TaskGroups } from './TaskGroups';
 
@@ -27,8 +26,6 @@ export class Group {
      * @param tasks The tasks that match the task block's Query
      */
     public static by(grouping: Grouping[], tasks: Task[]): TaskGroups {
-        log('debug', `${tasks.length}`);
-
         return new TaskGroups(grouping, tasks);
     }
 

@@ -494,7 +494,7 @@ describe('Query', () => {
             const tasks = createTasksFromMarkdown(tasksAsMarkdown, 'some_markdown_file', 'Some Heading');
 
             // Act
-            const groups = query.applyQueryToTasks(tasks);
+            const groups = query.applyQueryToTasks('', tasks);
 
             // Assert
             expect(groups.groups.length).toEqual(1);

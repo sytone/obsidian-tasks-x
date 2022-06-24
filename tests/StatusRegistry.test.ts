@@ -20,13 +20,13 @@ describe('StatusRegistry', () => {
         // Assert
         expect(statusRegistry).not.toBeNull();
 
-        expect(doneStatus).toEqual(Status.DONE);
+        expect(doneStatus.indicator).toEqual(Status.DONE.indicator);
 
-        expect(statusRegistry.byIndicator('x')).toEqual(Status.DONE);
-        expect(statusRegistry.byIndicator('')).toEqual(Status.EMPTY);
-        expect(statusRegistry.byIndicator(' ')).toEqual(Status.TODO);
-        expect(statusRegistry.byIndicator('-')).toEqual(Status.CANCELLED);
-        expect(statusRegistry.byIndicator('/')).toEqual(Status.IN_PROGRESS);
+        expect(statusRegistry.byIndicator('x').indicator).toEqual(Status.DONE.indicator);
+        expect(statusRegistry.byIndicator('').indicator).toEqual(Status.EMPTY.indicator);
+        expect(statusRegistry.byIndicator(' ').indicator).toEqual(Status.TODO.indicator);
+        expect(statusRegistry.byIndicator('-').indicator).toEqual(Status.CANCELLED.indicator);
+        expect(statusRegistry.byIndicator('/').indicator).toEqual(Status.IN_PROGRESS.indicator);
     });
 
     it('should allow task to toggle through standard transitions', () => {
@@ -51,16 +51,16 @@ describe('StatusRegistry', () => {
 
         // Assert
         expect(task).not.toBeNull();
-        expect(task!.status).toEqual(Status.TODO);
+        expect(task!.status.indicator).toEqual(Status.TODO.indicator);
 
         const toggledInProgress = task?.toggle()[0];
-        expect(toggledInProgress?.status).toEqual(Status.IN_PROGRESS);
+        expect(toggledInProgress?.status.indicator).toEqual(Status.IN_PROGRESS.indicator);
 
         const toggledDone = toggledInProgress?.toggle()[0];
-        expect(toggledDone?.status).toEqual(Status.DONE);
+        expect(toggledDone?.status.indicator).toEqual(Status.DONE.indicator);
 
         const toggledTodo = toggledDone?.toggle()[0];
-        expect(toggledTodo?.status).toEqual(Status.TODO);
+        expect(toggledTodo?.status.indicator).toEqual(Status.TODO.indicator);
     });
 
     it('should allow task to toggle from cancelled to todo', () => {
@@ -85,10 +85,10 @@ describe('StatusRegistry', () => {
 
         // Assert
         expect(task).not.toBeNull();
-        expect(task!.status).toEqual(Status.CANCELLED);
+        expect(task!.status.indicator).toEqual(Status.CANCELLED.indicator);
 
         const toggledTodo = task?.toggle()[0];
-        expect(toggledTodo?.status).toEqual(Status.TODO);
+        expect(toggledTodo?.status.indicator).toEqual(Status.TODO.indicator);
     });
 
     it('should allow lookup of next status for a status', () => {
@@ -143,18 +143,18 @@ describe('StatusRegistry', () => {
 
         // Assert
         expect(task).not.toBeNull();
-        expect(task!.status).toEqual(statusA);
+        expect(task!.status.indicator).toEqual(statusA.indicator);
 
         const toggledA = task?.toggle()[0];
-        expect(toggledA?.status).toEqual(statusB);
+        expect(toggledA?.status.indicator).toEqual(statusB.indicator);
 
         const toggledB = toggledA?.toggle()[0];
-        expect(toggledB?.status).toEqual(statusC);
+        expect(toggledB?.status.indicator).toEqual(statusC.indicator);
 
         const toggledC = toggledB?.toggle()[0];
-        expect(toggledC?.status).toEqual(statusD);
+        expect(toggledC?.status.indicator).toEqual(statusD.indicator);
 
         const toggledD = toggledC?.toggle()[0];
-        expect(toggledD?.status).toEqual(statusA);
+        expect(toggledD?.status.indicator).toEqual(statusA.indicator);
     });
 });

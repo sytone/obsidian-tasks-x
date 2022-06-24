@@ -41,7 +41,7 @@ describe('parsing', () => {
         // Assert
         expect(task).not.toBeNull();
         expect(task!.description).toEqual('this is a done task');
-        expect(task!.status).toStrictEqual(Status.DONE);
+        expect(task!.status.indicator).toStrictEqual(Status.DONE.indicator);
         expect(task!.dueDate).not.toBeNull();
         expect(task!.dueDate!.isSame(moment('2021-09-12', 'YYYY-MM-DD'))).toStrictEqual(true);
         expect(task!.doneDate).not.toBeNull();
@@ -96,7 +96,7 @@ describe('parsing', () => {
         // Assert
         expect(task).not.toBeNull();
         expect(task!.description).toEqual('this is a ✅ done task');
-        expect(task!.status).toStrictEqual(Status.DONE);
+        expect(task!.status.indicator).toStrictEqual(Status.DONE.indicator);
         expect(task!.dueDate).not.toBeNull();
         expect(task!.dueDate!.isSame(moment('2021-09-12', 'YYYY-MM-DD'))).toStrictEqual(true);
         expect(task!.doneDate).not.toBeNull();
@@ -124,7 +124,7 @@ describe('parsing', () => {
         // Assert
         expect(task).not.toBeNull();
         expect(task!.description).toEqual('this is a ✅ done task');
-        expect(task!.status).toStrictEqual(Status.DONE);
+        expect(task!.status.indicator).toStrictEqual(Status.DONE.indicator);
         expect(task!.dueDate).not.toBeNull();
         expect(task!.dueDate!.isSame(moment('2021-09-12', 'YYYY-MM-DD'))).toStrictEqual(true);
         expect(task!.doneDate).not.toBeNull();
@@ -377,7 +377,7 @@ describe('toggle done', () => {
 
         // Assert
         expect(toggled).not.toBeNull();
-        expect(toggled!.status).toStrictEqual(Status.IN_PROGRESS);
+        expect(toggled!.status.indicator).toStrictEqual(Status.IN_PROGRESS.indicator);
         expect(toggled!.doneDate).toBeNull();
         expect(toggled!.blockLink).toEqual(' ^my-precious');
     });

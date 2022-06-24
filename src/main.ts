@@ -16,7 +16,6 @@ import TasksServices from './TasksServices';
 export default class TasksPlugin extends Plugin {
     public inlineRenderer: InlineRenderer | undefined;
     public queryRenderer: QueryRenderer | undefined;
-    public statusRegistry: StatusRegistry | undefined;
     public cache: Cache | undefined;
 
     async onload(): Promise<void> {
@@ -37,6 +36,8 @@ export default class TasksPlugin extends Plugin {
         // Load the settings and UI.
         await this.loadSettings();
         this.addSettingTab(new SettingsTab({ plugin: this }));
+        await this.loadTaskStatuses();
+
         /**
          * Fire the initial indexing only if layoutReady = true
          * avoids trying to create an index while obsidian is indexing files
@@ -56,9 +57,6 @@ export default class TasksPlugin extends Plugin {
             });
             this.inlineRenderer = new InlineRenderer({ plugin: this });
             this.queryRenderer = new QueryRenderer({ plugin: this, events });
-            this.statusRegistry = StatusRegistry.getInstance();
-
-            await this.loadTaskStatuses();
 
             this.registerEditorExtension(newLivePreviewExtension());
             new Commands({ plugin: this });
@@ -68,15 +66,19 @@ export default class TasksPlugin extends Plugin {
     async loadTaskStatuses() {
         const { statusTypes } = getSettings();
 
+        console.log(statusTypes);
+
         // Reset the registry as this may also come from a settings add/delete.
-        this.statusRegistry?.clearStatuses();
+
+        StatusRegistry.getInstance().clearStatuses();
         log('info', `Adding ${statusTypes.length} custom status types`);
         statusTypes.forEach((statusType) => {
-            this.statusRegistry?.add(statusType);
+            console.log(statusType);
+
+            StatusRegistry.getInstance().add(statusType);
         });
-        // status_types.forEach((status_type) => {
-        //     this.statusRegistry?.add(new Status(new StatusConfiguration( status_type[0], status_type[1], status_type[2]));
-        // });
+
+        console.log(StatusRegistry.getInstance());
     }
 
     onunload() {
