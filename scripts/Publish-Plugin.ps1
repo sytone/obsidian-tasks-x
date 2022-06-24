@@ -22,9 +22,9 @@ param (
     [Parameter(Mandatory = $true)]
     $Version,
     [Parameter(Mandatory = $true)]
-    $MinimumObsidianVersion,
-    [switch]
-    $DocumentationOnly
+    $MinimumObsidianVersion
+    # [switch]
+    # $DocumentationOnly
 )
 
 [Parameter(Position = 0, Mandatory = $true)]
@@ -43,14 +43,14 @@ Push-Location '..'
 Write-Output "Updating to version ${Version} with minimum obsidian version ${MinimumObsidianVersion}"
 
 if ($DocumentationOnly) {
-    $publish = Read-Host 'Update documentation? (y/n)'
-    if ($publish -ieq 'y') {
-        git switch gh-pages
-        git merge $mainBranchName
-        $env:LEFTHOOK = 0
-        git push
-        git switch -
-    }
+    # $publish = Read-Host 'Update documentation? (y/n)'
+    # if ($publish -ieq 'y') {
+    #     git switch gh-pages
+    #     git merge $mainBranchName
+    #     $env:LEFTHOOK = 0
+    #     git push
+    #     git switch -
+    # }
 } else {
     $publish = Read-Host 'Update versions in files? (y/n)'
 
@@ -85,13 +85,13 @@ if ($DocumentationOnly) {
         git push --tags
     }
 
-    $publish = Read-Host 'Update documentation? (y/n)'
-    if ($publish -ieq 'y') {
-        git switch gh-pages
-        git merge $mainBranchName
-        $env:LEFTHOOK = 0
-        git push
-        git switch -
-    }
+    # $publish = Read-Host 'Update documentation? (y/n)'
+    # if ($publish -ieq 'y') {
+    #     git switch gh-pages
+    #     git merge $mainBranchName
+    #     $env:LEFTHOOK = 0
+    #     git push
+    #     git switch -
+    # }
 
 }
