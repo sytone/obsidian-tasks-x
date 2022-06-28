@@ -127,7 +127,7 @@
     ],
     "commitUrlFormat": "https://github.com/sytone/obsidian-tasks-x/commits/{{hash}}",
     "compareUrlFormat": "https://github.com/sytone/obsidian-tasks-x/compare/{{previousTag}}...{{currentTag}}",
-    "issueUrlFormat": "",
+    "issueUrlFormat": "https://github.com/sytone/obsidian-tasks-x/issues/{{id}}",
     "bumpFiles": [
       {
         "filename": "package.json",
