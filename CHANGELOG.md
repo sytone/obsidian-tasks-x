@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/sytone/obsidian-tasks-x/compare/2.4.2...2.5.0) (2022-06-29)
+
+
+### Features
+
+* add created date and custom functions ([77270aa](https://github.com/sytone/obsidian-tasks-x/commits/77270aa8293ae20319cc7ddb3c46166515d0cd3c))
+* **tasksv1:** merge with tasks v1 code base ([aeffb3c](https://github.com/sytone/obsidian-tasks-x/commits/aeffb3c20f8d8ab534036aa4950abd4295bb54bb)), closes [#840](https://github.com/sytone/obsidian-tasks-x/issues/840) [#830](https://github.com/sytone/obsidian-tasks-x/issues/830) [#828](https://github.com/sytone/obsidian-tasks-x/issues/828) [#819](https://github.com/sytone/obsidian-tasks-x/issues/819) [#818](https://github.com/sytone/obsidian-tasks-x/issues/818) [#817](https://github.com/sytone/obsidian-tasks-x/issues/817) [#816](https://github.com/sytone/obsidian-tasks-x/issues/816) [#815](https://github.com/sytone/obsidian-tasks-x/issues/815) [#814](https://github.com/sytone/obsidian-tasks-x/issues/814) [#813](https://github.com/sytone/obsidian-tasks-x/issues/813) [#812](https://github.com/sytone/obsidian-tasks-x/issues/812) [#811](https://github.com/sytone/obsidian-tasks-x/issues/811) [#808](https://github.com/sytone/obsidian-tasks-x/issues/808) [#802](https://github.com/sytone/obsidian-tasks-x/issues/802) [#654](https://github.com/sytone/obsidian-tasks-x/issues/654) [#807](https://github.com/sytone/obsidian-tasks-x/issues/807) [#654](https://github.com/sytone/obsidian-tasks-x/issues/654) [#806](https://github.com/sytone/obsidian-tasks-x/issues/806) [#804](https://github.com/sytone/obsidian-tasks-x/issues/804) [#803](https://github.com/sytone/obsidian-tasks-x/issues/803) [#801](https://github.com/sytone/obsidian-tasks-x/issues/801) [#800](https://github.com/sytone/obsidian-tasks-x/issues/800) [#791](https://github.com/sytone/obsidian-tasks-x/issues/791) [#779](https://github.com/sytone/obsidian-tasks-x/issues/779) [#777](https://github.com/sytone/obsidian-tasks-x/issues/777) [#776](https://github.com/sytone/obsidian-tasks-x/issues/776) [#754](https://github.com/sytone/obsidian-tasks-x/issues/754) [#774](https://github.com/sytone/obsidian-tasks-x/issues/774) [#773](https://github.com/sytone/obsidian-tasks-x/issues/773) [#772](https://github.com/sytone/obsidian-tasks-x/issues/772) [#771](https://github.com/sytone/obsidian-tasks-x/issues/771) [#764](https://github.com/sytone/obsidian-tasks-x/issues/764) [#758](https://github.com/sytone/obsidian-tasks-x/issues/758) [#757](https://github.com/sytone/obsidian-tasks-x/issues/757) [#760](https://github.com/sytone/obsidian-tasks-x/issues/760) [#759](https://github.com/sytone/obsidian-tasks-x/issues/759) [#756](https://github.com/sytone/obsidian-tasks-x/issues/756) [#755](https://github.com/sytone/obsidian-tasks-x/issues/755) [#579](https://github.com/sytone/obsidian-tasks-x/issues/579) [#749](https://github.com/sytone/obsidian-tasks-x/issues/749) [#748](https://github.com/sytone/obsidian-tasks-x/issues/748) [#744](https://github.com/sytone/obsidian-tasks-x/issues/744) [#739](https://github.com/sytone/obsidian-tasks-x/issues/739) [#735](https://github.com/sytone/obsidian-tasks-x/issues/735) [#733](https://github.com/sytone/obsidian-tasks-x/issues/733) [#731](https://github.com/sytone/obsidian-tasks-x/issues/731) [#720](https://github.com/sytone/obsidian-tasks-x/issues/720) [#714](https://github.com/sytone/obsidian-tasks-x/issues/714) [#710](https://github.com/sytone/obsidian-tasks-x/issues/710) [#707](https://github.com/sytone/obsidian-tasks-x/issues/707) [#706](https://github.com/sytone/obsidian-tasks-x/issues/706) [#705](https://github.com/sytone/obsidian-tasks-x/issues/705) [#701](https://github.com/sytone/obsidian-tasks-x/issues/701) [#700](https://github.com/sytone/obsidian-tasks-x/issues/700) [#699](https://github.com/sytone/obsidian-tasks-x/issues/699) [#683](https://github.com/sytone/obsidian-tasks-x/issues/683) [#660](https://github.com/sytone/obsidian-tasks-x/issues/660) [#655](https://github.com/sytone/obsidian-tasks-x/issues/655) [#696](https://github.com/sytone/obsidian-tasks-x/issues/696) [#690](https://github.com/sytone/obsidian-tasks-x/issues/690)
+
+
+### Documentation
+
+* add custom function documentation ([940610c](https://github.com/sytone/obsidian-tasks-x/commits/940610c62e755cd868fc4ffddb1cb789594c5fc3))
+* add docs example for not done to validate fix ([47cc0b1](https://github.com/sytone/obsidian-tasks-x/commits/47cc0b148527c493f06d580cd79b3bdb4bcf3db3))
+* add static index page for redirect and upload updated manifest ([eb1f33c](https://github.com/sytone/obsidian-tasks-x/commits/eb1f33c40caf449cb06b1fe405ef33a3692a4abd))
+* fixed duplicate example from PR [#8](https://github.com/sytone/obsidian-tasks-x/issues/8) ([3e56998](https://github.com/sytone/obsidian-tasks-x/commits/3e5699865f7f349fc0c59d8b609756a12ce48428))
+* update mapping to jekyll ([e73cead](https://github.com/sytone/obsidian-tasks-x/commits/e73cead25208534168e05d9831eb35b405bdcd16))
+
+
+### Bug Fixes and Changes
+
+* 'not done' filter returning all statuses [#9](https://github.com/sytone/obsidian-tasks-x/issues/9) ([0716757](https://github.com/sytone/obsidian-tasks-x/commits/0716757d833023ff017452745daa06d91f99187f))
+* update invalid feature and legacy settings replication ([b0c3561](https://github.com/sytone/obsidian-tasks-x/commits/b0c35613abb11f4cdecd995d475962ba9421c177))
+
 ### [2.4.2](https://github.com/sytone/obsidian-tasks-x/compare/2.4.1...2.4.2) (2022-06-24)
 
 ### [2.4.1](https://github.com/sytone/obsidian-tasks-x/compare/2.4.0...2.4.1) (2022-06-24)
