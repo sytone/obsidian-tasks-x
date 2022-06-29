@@ -1,4 +1,5 @@
-import { createHash } from 'crypto';
+import ADLER32 from 'adler-32';
+
 import { LayoutOptions } from '../LayoutOptions';
 import type { Task } from '../Task';
 import type { IQuery } from '../IQuery';
@@ -86,7 +87,7 @@ export class Query implements IQuery {
     constructor({ source }: { source: string }) {
         this.name = 'Query';
         this.source = source;
-        this.sourceHash = createHash('sha1').update(source).digest('base64');
+        this.sourceHash = ADLER32.str(source).toString();
         source
             .split('\n')
             .map((line: string) => line.trim())

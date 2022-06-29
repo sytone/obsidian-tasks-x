@@ -1,6 +1,7 @@
-import { createHash } from 'crypto';
 import alasql from 'alasql';
 import moment from 'moment';
+
+import ADLER32 from 'adler-32';
 
 import { LayoutOptions } from '../LayoutOptions';
 
@@ -55,7 +56,8 @@ export class QuerySql implements IQuery {
         frontmatter: any | null | undefined;
     }) {
         this.name = 'QuerySql';
-        this.sourceHash = createHash('sha1').update(source).digest('base64');
+
+        this.sourceHash = ADLER32.str(source).toString();
 
         this._sourcePath = sourcePath;
         this._frontmatter = frontmatter;
