@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "d2539176ea4dfa09",
+        "id": "971b1ee749234f52",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "4-queries-basic/filters.md",
-            "mode": "source",
+            "file": "1-introduction/1-introduction.md",
+            "mode": "preview",
             "source": false
           }
         }
@@ -71,7 +71,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "4-queries-basic/filters.md",
+                "file": "1-introduction/1-introduction.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -96,17 +96,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "d2539176ea4dfa09",
+  "active": "971b1ee749234f52",
   "lastOpenFiles": [
+    "1-introduction/1-introduction.md",
+    "6-advanced/custom-functions.md",
+    "customjs/custom-functions-js.md",
+    "README.md",
+    "example-data/static-tasks.md",
+    "example-data/random-tasks.md",
+    "6-advanced/daily-agenda.md",
     "4-queries-basic/filters.md",
     "4-queries-basic/examples.md",
-    "4-queries-basic/comments.md",
-    "4-queries-basic/4-queries-basic.md",
-    "5-queries-sql/columns.md",
-    "4-queries-basic/sorting.md",
-    "4-queries-basic/limit.md",
-    "4-queries-basic/layout.md",
-    "4-queries-basic/grouping.md",
-    "example-data/random-tasks.md"
+    "4-queries-basic/comments.md"
   ]
 }

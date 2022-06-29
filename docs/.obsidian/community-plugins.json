@@ -1,9 +1,10 @@
 [
-  "folder-note-core",
   "alx-folder-note",
   "table-editor-obsidian",
   "cm-editor-syntax-highlight-obsidian",
   "customizable-sidebar",
+  "customjs",
+  "obsidian-tasks-x-plugin",
   "obsidian-excel-to-markdown-table",
-  "obsidian-tasks-x-plugin"
+  "folder-note-core"
 ]

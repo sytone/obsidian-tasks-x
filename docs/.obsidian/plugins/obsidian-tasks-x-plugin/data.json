@@ -1,0 +1,146 @@
+{
+  "globalFilter": "",
+  "removeGlobalFilter": false,
+  "setDoneDate": true,
+  "status_types": [
+    [
+      "",
+      "",
+      ""
+    ]
+  ],
+  "statusTypes": [
+    {
+      "indicator": ">",
+      "name": "Forwarded",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "<",
+      "name": "Schedule",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "?",
+      "name": "Question",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "!",
+      "name": "Important",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "\"",
+      "name": "Quote",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "-",
+      "name": "Canceled",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "*",
+      "name": "Star",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "l",
+      "name": "Location",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "i",
+      "name": "Info",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "S",
+      "name": "Amount/savings/money",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "I",
+      "name": "Idea/lightbulb",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "f",
+      "name": "Fire",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "k",
+      "name": "Key",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "u",
+      "name": "Up",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "d",
+      "name": "Down",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "w",
+      "name": "Win",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "p",
+      "name": "Pros",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "c",
+      "name": "Cons",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    },
+    {
+      "indicator": "b",
+      "name": "Bookmark",
+      "nextStatusIndicator": "x",
+      "availableAsCommand": false
+    }
+  ],
+  "features": {
+    "TASK_STATUS_MENU": true,
+    "APPEND_GLOBAL_FILTER": true,
+    "ENABLE_SQL_QUERY": true
+  },
+  "generalSettings": {
+    "globalFilter": "",
+    "removeGlobalFilter": false,
+    "setDoneDate": true,
+    "appendGlobalFilter": true
+  },
+  "headingOpened": {
+    "Tasks, SQL Powered": true,
+    "Task Settings": true,
+    "Documentation and Support": true,
+    "Optional or in development features": true,
+    "Tasks Status Types": false
+  }
+}
