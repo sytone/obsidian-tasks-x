@@ -1,0 +1,15 @@
+{
+  "sidebarCommands": [
+    {
+      "id": "editor:toggle-source",
+      "name": "Toggle Live Preview/Source mode",
+      "icon": "code-glyph"
+    },
+    {
+      "id": "customizable-sidebar:theme-toggle",
+      "name": "Customizable Sidebar: Toggle Dark/Light Mode",
+      "icon": "feather-eye"
+    }
+  ],
+  "hiddenCommands": []
+}

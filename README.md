@@ -35,6 +35,12 @@ export INPUT_URL_BASE=/obsidian-tasks-x
 python3 .github/actions/obsidian-vault-to-jekyll-markdown/convert.py
 ```
 
+```PowerShell
+$env:INPUT_SRC_ROOT_DIRECTORY="G:/repos/gh/obsidian-tasks-x/docs"
+$env:INPUT_URL_BASE="/obsidian-tasks-x"
+python3 .github/actions/obsidian-vault-to-jekyll-markdown/convert.py
+```
+
 
 </div>
 

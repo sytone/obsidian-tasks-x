@@ -61,9 +61,9 @@ You can access properties by using `recurrence->property_name`. The table below 
 | rrule         | Reoccurance string following the iCal RFC                                                       | string  |
 | baseOnToday   | If true the reoccurance is based on the day you complete the task. If False the `referenceDate` | boolean |
 | referenceDate | Date to base the reoccurance off is `basedOnToday` is false.                                    | Date    |
-| startDate     | See [[3-getting-started/recurring-tasks#Priority of Dates\|Priority of Dates]]                  | Date    |
-| scheduledDate | See [[3-getting-started/recurring-tasks#Priority of Dates\|Priority of Dates]]                  | Date    |
-| dueDate       | See [[3-getting-started/recurring-tasks#Priority of Dates\|Priority of Dates]]                  | Date    |
+| startDate     | See [Priority of Dates](/obsidian-tasks-x/3-getting-started/recurring-tasks#Priority of Dates)                  | Date    |
+| scheduledDate | See [Priority of Dates](/obsidian-tasks-x/3-getting-started/recurring-tasks#Priority of Dates)                  | Date    |
+| dueDate       | See [Priority of Dates](/obsidian-tasks-x/3-getting-started/recurring-tasks#Priority of Dates)                  | Date    |
 
 Object Type Details
 

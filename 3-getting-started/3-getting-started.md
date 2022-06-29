@@ -37,7 +37,7 @@ To list all open tasks in a markdown file, simply add a [ Queries - Basic](/obsi
 
 Now you have a list of all open tasks! This is enough to get started with tasks.
 You can _optionally_ start using one or more of the other features that Tasks offers.
-Like, for example, [priorities](/obsidian-tasks-x/3-getting-started/priority) or [[3-getting-started/dates#start-date|dates]]
+Like, for example, [priorities](/obsidian-tasks-x/3-getting-started/priority) or [dates](/obsidian-tasks-x/3-getting-started/dates#start-date)
 
 A more convenient way to create a task is by using the `Tasks: Create or edit` command from the command palette.
 You can also bind a hotkey to the command.
