@@ -5,13 +5,13 @@ import moment from 'moment';
 import { DueDateField } from '../../../src/Query/Filter/DueDateField';
 import type { FilterOrErrorMessage } from '../../../src/Query/Filter/Filter';
 import { TaskBuilder } from '../../TestingTools/TaskBuilder';
-import { testTaskFilter } from '../../TestingTools/FilterTestHelpers';
+import { testFilter } from '../../TestingTools/FilterTestHelpers';
 
 window.moment = moment;
 
 function testTaskFilterForTaskWithDueDate(filter: FilterOrErrorMessage, dueDate: string | null, expected: boolean) {
     const builder = new TaskBuilder();
-    testTaskFilter(filter, builder.dueDate(dueDate).build(), expected);
+    testFilter(filter, builder.dueDate(dueDate), expected);
 }
 
 describe('due date', () => {

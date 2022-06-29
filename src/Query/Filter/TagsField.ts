@@ -13,7 +13,7 @@ export class TagsField extends Field {
 
     public createFilterOrErrorMessage(line: string): FilterOrErrorMessage {
         const result = new FilterOrErrorMessage();
-        const tagMatch = line.match(this.filterRegexp());
+        const tagMatch = Field.getMatch(this.filterRegexp(), line);
         if (tagMatch !== null) {
             const filterMethod = tagMatch[2];
 

@@ -7,12 +7,12 @@ node_modules
 yarn-error.log
 
 # build
-main.js
+/main.js
 *.js.map
 .log
 
 # obsidian
-data.json
+/data.json
 
 # osx
 .DS_Store
@@ -20,9 +20,14 @@ data.json
 # asdf
 .tool-versions
 
+# files in sample vaults
+/resources/sample_vaults/Tasks-Demo/.obsidian/workspace
+
 # Backup files.
 *.bak
 
 # If the folder is symlinked make sure this is not checked in.
 .hotreload
+
+# Exclude py files if testing GH action locally
 .github/actions/obsidian-vault-to-jekyll-markdown/__pycache__

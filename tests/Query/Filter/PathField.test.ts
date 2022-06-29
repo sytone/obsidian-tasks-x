@@ -1,11 +1,11 @@
 import { PathField } from '../../../src/Query/Filter/PathField';
 import type { FilterOrErrorMessage } from '../../../src/Query/Filter/Filter';
 import { TaskBuilder } from '../../TestingTools/TaskBuilder';
-import { testTaskFilter } from '../../TestingTools/FilterTestHelpers';
+import { testFilter } from '../../TestingTools/FilterTestHelpers';
 
 function testTaskFilterForTaskWithPath(filter: FilterOrErrorMessage, path: string, expected: boolean) {
     const builder = new TaskBuilder();
-    testTaskFilter(filter, builder.path(path).build(), expected);
+    testFilter(filter, builder.path(path), expected);
 }
 
 describe('path', () => {

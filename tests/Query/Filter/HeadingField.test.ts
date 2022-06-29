@@ -1,11 +1,11 @@
 import { HeadingField } from '../../../src/Query/Filter/HeadingField';
 import type { FilterOrErrorMessage } from '../../../src/Query/Filter/Filter';
 import { TaskBuilder } from '../../TestingTools/TaskBuilder';
-import { testTaskFilter } from '../../TestingTools/FilterTestHelpers';
+import { testFilter } from '../../TestingTools/FilterTestHelpers';
 
 function testTaskFilterForHeading(filter: FilterOrErrorMessage, precedingHeader: string | null, expected: boolean) {
     const builder = new TaskBuilder();
-    testTaskFilter(filter, builder.precedingHeader(precedingHeader).build(), expected);
+    testFilter(filter, builder.precedingHeader(precedingHeader), expected);
 }
 
 describe('heading', () => {

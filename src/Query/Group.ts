@@ -1,5 +1,5 @@
+import type { Grouping, GroupingProperty } from '../Query/Query';
 import type { Task } from '../Task';
-import type { Grouping, GroupingProperty } from './Query';
 import { TaskGroups } from './TaskGroups';
 
 /**
@@ -11,14 +11,7 @@ type Grouper = (task: Task) => string;
  * Implementation of the 'group by' instruction.
  */
 export class Group {
-    private static groupers: Record<GroupingProperty, Grouper> = {
-        backlink: Group.groupByBacklink,
-        filename: Group.groupByFileName,
-        folder: Group.groupByFolder,
-        heading: Group.groupByHeading,
-        path: Group.groupByPath,
-        status: Group.groupByStatus,
-    };
+    private static readonly groupDateFormat = 'YYYY-MM-DD dddd';
 
     /**
      * Group a list of tasks, according to one or more task properties
@@ -65,6 +58,42 @@ export class Group {
     public static getGroupNameForTask(property: GroupingProperty, task: Task): string {
         const grouper = Group.groupers[property];
         return grouper(task);
+    }
+
+    private static groupers: Record<GroupingProperty, Grouper> = {
+        backlink: Group.groupByBacklink,
+        done: Group.groupByDoneDate,
+        due: Group.groupByDueDate,
+        filename: Group.groupByFileName,
+        folder: Group.groupByFolder,
+        heading: Group.groupByHeading,
+        path: Group.groupByPath,
+        scheduled: Group.groupByScheduledDate,
+        start: Group.groupByStartDate,
+        status: Group.groupByStatus,
+    };
+
+    private static groupByStartDate(task: Task): string {
+        return Group.groupByDate(task.startDate, 'start');
+    }
+
+    private static groupByScheduledDate(task: Task): string {
+        return Group.groupByDate(task.scheduledDate, 'scheduled');
+    }
+
+    private static groupByDueDate(task: Task): string {
+        return Group.groupByDate(task.dueDate, 'due');
+    }
+
+    private static groupByDoneDate(task: Task): string {
+        return Group.groupByDate(task.doneDate, 'done');
+    }
+
+    private static groupByDate(date: moment.Moment | null, field: string) {
+        if (date === null) {
+            return 'No ' + field + ' date';
+        }
+        return date.format(Group.groupDateFormat);
     }
 
     private static groupByPath(task: Task): string {

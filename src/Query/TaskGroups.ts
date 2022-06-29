@@ -1,5 +1,5 @@
+import type { Grouping } from '../Query/Query';
 import type { Task } from '../Task';
-import type { Grouping } from './Query';
 import { GroupHeadings } from './GroupHeadings';
 import { IntermediateTaskGroups } from './IntermediateTaskGroups';
 import { TaskGroup } from './TaskGroup';
@@ -19,7 +19,7 @@ export class TaskGroups {
      *                         matching the query, already in sort order
      */
     constructor(groups: Grouping[], tasks: Task[]) {
-        const initialGroups = new IntermediateTaskGroups(<Grouping[]>groups, tasks);
+        const initialGroups = new IntermediateTaskGroups(groups, tasks);
         this.addTasks(initialGroups);
     }
 

@@ -63,7 +63,7 @@
     "esbuild-plugin-copy-file": "^0.0.2",
     "eventemitter2": "^6.4.5",
     "handlebars": "^4.7.7",
-    "rrule": "^2.6.8"
+    "rrule": "^2.7.0"
   },
   "standard-version": {
     "tag-prefix": "",
