@@ -1,4 +1,6 @@
 import { App, Editor, MarkdownView, View } from 'obsidian';
+import { CreatedDateProperty } from 'TaskProperties';
+import moment from 'moment';
 import { StatusRegistry } from '../StatusRegistry';
 import { TaskModal } from '../TaskModal';
 import { Status } from '../Status';
@@ -70,6 +72,7 @@ const taskFromLine = ({ line, path }: { line: string; path: string }): Task => {
             scheduledDate: null,
             dueDate: null,
             doneDate: null,
+            createdDate: new CreatedDateProperty(moment()),
             recurrence: null,
             // We don't need the following fields to edit here in the editor.
             sectionStart: 0,
@@ -77,6 +80,7 @@ const taskFromLine = ({ line, path }: { line: string; path: string }): Task => {
             precedingHeader: null,
             blockLink: '',
             tags: [],
+            originalMarkdown: '',
         });
     }
 
@@ -104,11 +108,13 @@ const taskFromLine = ({ line, path }: { line: string; path: string }): Task => {
         scheduledDate: null,
         dueDate: null,
         doneDate: null,
+        createdDate: new CreatedDateProperty(moment()),
         recurrence: null,
         // We don't need the following fields to edit here in the editor.
         sectionStart: 0,
         sectionIndex: 0,
         precedingHeader: null,
         tags: [],
+        originalMarkdown: '',
     });
 };

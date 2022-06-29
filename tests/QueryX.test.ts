@@ -127,9 +127,11 @@ describe('QuerySql', () => {
                     scheduledDate: null,
                     dueDate: null,
                     doneDate: null,
+                    createdDate: null,
                     recurrence: null,
                     blockLink: '',
                     tags: [],
+                    originalMarkdown: '',
                 }),
                 new Task({
                     status: Status.TODO,
@@ -145,9 +147,11 @@ describe('QuerySql', () => {
                     scheduledDate: null,
                     dueDate: null,
                     doneDate: null,
+                    createdDate: null,
                     recurrence: null,
                     blockLink: '',
                     tags: [],
+                    originalMarkdown: '',
                 }),
             ];
             const input = 'SELECT * FROM Tasks WHERE Path LIKE "ab/c d"';
@@ -177,9 +181,11 @@ describe('QuerySql', () => {
                     scheduledDate: null,
                     dueDate: null,
                     doneDate: null,
+                    createdDate: null,
                     recurrence: null,
                     blockLink: '',
                     tags: [],
+                    originalMarkdown: '',
                 }),
                 new Task({
                     status: Status.DONE,
@@ -195,9 +201,11 @@ describe('QuerySql', () => {
                     scheduledDate: null,
                     dueDate: null,
                     doneDate: null,
+                    createdDate: null,
                     recurrence: null,
                     blockLink: '',
                     tags: [],
+                    originalMarkdown: '',
                 }),
             ];
             const input = 'SELECT * FROM Tasks WHERE status->indicator = "x"';

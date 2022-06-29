@@ -10,6 +10,7 @@ import { Recurrence, RecurrenceRecord } from './Recurrence';
 import { getGeneralSetting, getSettings, isFeatureEnabled } from './Config/Settings';
 import { Urgency } from './Urgency';
 import { Feature } from './Config/Feature';
+import { CreatedDateProperty } from './TaskProperties';
 
 /**
  * When sorting, make sure low always comes after none. This way any tasks with low will be below any exiting
@@ -43,6 +44,7 @@ export type TaskRecord = {
     recurrence: RecurrenceRecord | null;
     blockLink: string;
     tags: string[] | [];
+    originalMarkdown: string;
 };
 
 export class TaskRegularExpressions {
@@ -105,10 +107,13 @@ export class Task {
     public readonly scheduledDate: Moment | null;
     public readonly dueDate: Moment | null;
     public readonly doneDate: Moment | null;
+    public readonly createdDate: CreatedDateProperty | null;
 
     public readonly recurrence: Recurrence | null;
     /** The blockLink is a "^" annotation after the dates/recurrence rules. */
     public readonly blockLink: string;
+
+    public readonly originalMarkdown: string;
 
     private _urgency: number | null = null;
 
@@ -126,9 +131,11 @@ export class Task {
         scheduledDate,
         dueDate,
         doneDate,
+        createdDate,
         recurrence,
         blockLink,
         tags,
+        originalMarkdown,
     }: {
         status: Status;
         description: string;
@@ -143,9 +150,11 @@ export class Task {
         scheduledDate: moment.Moment | null;
         dueDate: moment.Moment | null;
         doneDate: moment.Moment | null;
+        createdDate: CreatedDateProperty | null;
         recurrence: Recurrence | null;
         blockLink: string;
         tags: string[] | [];
+        originalMarkdown: string;
     }) {
         this.status = status;
         this.description = description;
@@ -164,9 +173,11 @@ export class Task {
         this.scheduledDate = scheduledDate;
         this.dueDate = dueDate;
         this.doneDate = doneDate;
+        this.createdDate = createdDate;
 
         this.recurrence = recurrence;
         this.blockLink = blockLink;
+        this.originalMarkdown = originalMarkdown;
     }
 
     public get urgency(): number {
@@ -201,9 +212,11 @@ export class Task {
             scheduledDate: record.scheduledDate !== null ? moment(record.scheduledDate) : null,
             dueDate: record.dueDate !== null ? moment(record.dueDate) : null,
             doneDate: record.doneDate !== null ? moment(record.doneDate) : null,
+            createdDate: record.createdDate !== null ? new CreatedDateProperty(record.createdDate) : null,
             recurrence: record.recurrence ? Recurrence.fromRecurrenceRecord(record.recurrence) : null,
             blockLink: record.blockLink,
             tags: record.tags,
+            originalMarkdown: record.originalMarkdown,
         });
     }
 
@@ -273,6 +286,11 @@ export class Task {
         if (blockLink !== '') {
             description = description.replace(TaskRegularExpressions.blockLinkRegex, '').trim();
         }
+
+        // New process of parsing the task, used by created date.
+
+        const createdDate = new CreatedDateProperty(description);
+        description.replace(createdDate.toMarkdownString(), '').trim();
 
         // Keep matching and removing special strings from the end of the
         // description in any order. The loop should only run once if the
@@ -375,9 +393,11 @@ export class Task {
             scheduledDate,
             dueDate,
             doneDate,
+            createdDate,
             recurrence,
             blockLink,
             tags,
+            originalMarkdown: line,
         });
 
         return task;
@@ -537,6 +557,11 @@ export class Task {
             taskString = `${globalFilter} ${taskString}`.trim();
         }
 
+        // Add before the existing tags as they use old processing logic.
+        if (this.createdDate && this.createdDate.isRendered && this.createdDate.hasValue) {
+            taskString += this.createdDate.toRenderedString(layoutOptions.shortMode);
+        }
+
         if (!layoutOptions.hidePriority) {
             let priority: string = '';
 
@@ -617,9 +642,10 @@ export class Task {
             startDate: this.startDate ? this.startDate.toDate() : null,
             scheduledDate: this.scheduledDate ? this.scheduledDate.toDate() : null,
             dueDate: this.dueDate ? this.dueDate.toDate() : null,
-            createdDate: this.startDate ? this.startDate.toDate() : null,
+            createdDate: this.createdDate && this.createdDate.value ? this.createdDate.value.toDate() : null,
             doneDate: this.doneDate ? this.doneDate.toDate() : null,
             recurrence: this.recurrence ? this.recurrence.toRecord() : null,
+            originalMarkdown: this.originalMarkdown,
         };
     }
 

@@ -41,6 +41,9 @@ export class QuerySql implements IQuery {
         /^hide (task count|backlink|priority|start date|scheduled date|done date|due date|recurrence rule|edit button)/;
     private _shortModeRegexp = /^short/;
     private _rawQuery = /^raw (empty|tasks)/;
+    private _customJSRegexp = /^customjs (.*) (.*)/;
+
+    private _customJsClasses: Array<[string, string]>;
 
     constructor({
         source,
@@ -56,6 +59,7 @@ export class QuerySql implements IQuery {
 
         this._sourcePath = sourcePath;
         this._frontmatter = frontmatter;
+        this._customJsClasses = [];
 
         source
             .split('\n')
@@ -84,6 +88,15 @@ export class QuerySql implements IQuery {
                                     this._rawWithTasksMode = false;
                                 } else {
                                     this._rawWithTasksMode = true;
+                                }
+                            } else if (this._customJSRegexp.test(directive)) {
+                                const customJSClasses = directive.match(this._customJSRegexp);
+                                if (
+                                    customJSClasses !== null &&
+                                    customJSClasses[1].trim() !== '' &&
+                                    customJSClasses[2].trim() !== ''
+                                ) {
+                                    this._customJsClasses.push([customJSClasses[1].trim(), customJSClasses[2].trim()]);
                                 }
                             }
                         }
@@ -176,6 +189,15 @@ export class QuerySql implements IQuery {
 
         alasql.fn.pageProperty = function (field) {
             return field;
+        };
+
+        this._customJsClasses.forEach((element) => {
+            alasql.fn[element[1]] = window.customJS[element[0]][element[1]];
+        });
+
+        alasql.fn.debugMe = function () {
+            // eslint-disable-next-line no-debugger
+            debugger;
         };
 
         alasql.fn.queryBlockFile = function () {

@@ -6,6 +6,7 @@ import { Priority, Task } from '../../src/Task';
 import type { Recurrence } from '../../src/Recurrence';
 import { DateParser } from '../../src/Query/DateParser';
 import { Status } from '../../src/Status';
+import type { CreatedDateProperty } from '../../src/TaskProperties';
 
 /**
  * A fluent class for creating tasks for tests.
@@ -37,6 +38,7 @@ export class TaskBuilder {
     private _scheduledDate: Moment | null = null;
     private _dueDate: Moment | null = null;
     private _doneDate: Moment | null = null;
+    private _createdDate: CreatedDateProperty | null = null;
 
     private _recurrence: Recurrence | null = null;
     private _blockLink: string = '';
@@ -75,10 +77,12 @@ export class TaskBuilder {
             startDate: this._startDate,
             scheduledDate: this._scheduledDate,
             dueDate: this._dueDate,
+            createdDate: this._createdDate,
             doneDate: this._doneDate,
             recurrence: this._recurrence,
             blockLink: this._blockLink,
             tags: this._tags,
+            originalMarkdown: '',
         });
     }
 
