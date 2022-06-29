@@ -78,9 +78,11 @@ export const updateGeneralSetting = (name: string, value: string | boolean): Set
     settings.generalSettings[name] = value;
 
     // sync the old settings for the moment so a larger change is not needed.
-    updateSettings({ globalFilter: <string>settings.generalSettings['globalFilter'] });
-    updateSettings({ removeGlobalFilter: <boolean>settings.generalSettings['removeGlobalFilter'] });
-    updateSettings({ setDoneDate: <boolean>settings.generalSettings['setDoneDate'] });
+    updateSettings({
+        globalFilter: <string>settings.generalSettings['globalFilter'],
+        removeGlobalFilter: <boolean>settings.generalSettings['removeGlobalFilter'],
+        setDoneDate: <boolean>settings.generalSettings['setDoneDate'],
+    });
 
     return getSettings();
 };

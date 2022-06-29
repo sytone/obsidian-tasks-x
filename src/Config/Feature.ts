@@ -61,7 +61,7 @@ export class Feature {
     ) {}
 
     static get values(): Feature[] {
-        return [this.TASK_STATUS_MENU, this.APPEND_GLOBAL_FILTER, this.ENABLE_SQL_QUERY];
+        return [this.APPEND_GLOBAL_FILTER, this.ENABLE_SQL_QUERY];
     }
 
     static get settingsFlags(): FeatureFlag {
