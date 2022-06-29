@@ -18,3 +18,9 @@ Example:
     # Uncomment the following line to enable short mode:
     # short mode
     ```
+
+```tasks
+not done
+# Uncomment the following line to enable short mode:
+# short mode
+```
