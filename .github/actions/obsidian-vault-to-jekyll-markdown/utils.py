@@ -12,7 +12,7 @@ def get_all_document_paths(source_directory):
         for filename in filenames:
             path = os.path.join(dirpath, filename)
             if "_site" not in dirpath:
-                all_paths.append(path)
+                all_paths.append(path.replace("\\", "/"))
 
     all_paths.sort(reverse=True)
 
@@ -21,7 +21,7 @@ def get_all_document_paths(source_directory):
 
 def get_file_full_text(path):
     print(f"get_file_full_text path is {path}")
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         full_text = f.read()
 
     return re.sub(r"%%.*%%", "", full_text)
@@ -34,7 +34,12 @@ def replace_links(text, all_paths, docs_directory, url_base):
     for item in found_matches:
         full_wiki_link = item[0]
         link_page_src = item[1]
-        link_page_name = re.sub(r"\|.*$", "", link_page_src)
+        link_page_name = re.sub(r"\|.*$", "", link_page_src).split("#")[0]
+        link_page_name_anchor = (
+            "#" + re.sub(r"\|.*$", "", link_page_src).split("#")[1].replace("\\", "")
+            if len(re.sub(r"\|.*$", "", link_page_src).split("#")) > 1
+            else ""
+        )
         link_page_description = re.sub(r"^.*\|", "", link_page_src)
 
         print(f"       Original Link: {full_wiki_link}")
@@ -64,8 +69,9 @@ def replace_links(text, all_paths, docs_directory, url_base):
                 + link_page_description.split("/")[-1]
                 + "]("
                 + page_url.replace(f"{docs_directory}/", f"{url_base}/")
-                .replace(":", " -")
+                # .replace(":", " -")
                 .replace(".md", "")
+                + link_page_name_anchor
                 + ")"
             )
         else:
@@ -132,6 +138,6 @@ def replace_url(path, all_paths, docs_directory, url_base):
     replaced_text = replace_callouts(replaced_text)
 
     os.remove(path)
-    with open(path.replace(":", " -"), "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         f.write(replaced_text)
     print("::endgroup::")
