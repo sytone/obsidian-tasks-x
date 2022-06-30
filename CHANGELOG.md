@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.2](https://github.com/sytone/obsidian-tasks-x/compare/2.5.0...2.5.2) (2022-06-30)
+
+
+### Documentation
+
+* update workspace layout ([212ed33](https://github.com/sytone/obsidian-tasks-x/commits/212ed33fd4dfc9b2844581a31e8e33cc8bd5d6c9))
+
+
+### Bug Fixes and Changes
+
+* switch to adler32 from crypto ([18276f6](https://github.com/sytone/obsidian-tasks-x/commits/18276f64f5405873aa2af5aeca09b15cea2f980a))
+
 ## [2.5.0](https://github.com/sytone/obsidian-tasks-x/compare/2.4.2...2.5.0) (2022-06-29)
 
 
