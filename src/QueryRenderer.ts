@@ -1,5 +1,6 @@
 import { App, EventRef, MarkdownPostProcessorContext, MarkdownRenderChild, Plugin, TFile } from 'obsidian';
 
+import { TaskEvents } from 'TaskEvents';
 import { State } from './Cache';
 import { replaceTaskWithTasks } from './File';
 import { TaskModal } from './TaskModal';
@@ -10,6 +11,9 @@ import type { IQuery } from './IQuery';
 import { QuerySql } from './QuerySql/QuerySql';
 import { Query } from './Query/Query';
 import type { GroupHeading } from './Query/GroupHeading';
+import { TaskRenderer } from './TaskRenderer';
+import { isFeatureEnabled } from './Config/Settings';
+import { Feature } from './Config/Feature';
 
 export class QueryRenderer {
     public addQueryRenderChild = this._addQueryRenderChild.bind(this);
@@ -163,6 +167,20 @@ class QueryRenderChild extends MarkdownRenderChild {
         this._logger.debugWithId(queryId, `Render End: ${endTime.getTime() - startTime.getTime()}ms`);
     }
 
+    /**
+     * Creates the UL that contains all the tasks found by the query.
+     *
+     * @private
+     * @param {{
+     *         tasks: Task[];
+     *         content: HTMLDivElement;
+     *     }} {
+     *         tasks,
+     *         content,
+     *     }
+     * @return {*}  {Promise<{ taskList: HTMLUListElement; tasksCount: number }>}
+     * @memberof QueryRenderChild
+     */
     private async createTasksList({
         tasks,
         content,
@@ -178,27 +196,32 @@ class QueryRenderChild extends MarkdownRenderChild {
             const task = tasks[i];
             const isFilenameUnique = this.isFilenameUnique({ task });
 
-            const listItem = await task.toLi({
-                parentUlElement: taskList,
-                listIndex: i,
-                layoutOptions: this.queryEngine.layoutOptions,
-                isFilenameUnique,
-            });
+            let listItem;
+            if (isFeatureEnabled(Feature.ENABLE_TEMPLATE_RENDERING.internalName)) {
+                const te = new TaskEvents(this.app, new TaskRenderer());
+                listItem = await te.getRenderedHTMLWithEvents(taskList, i, task);
+            } else {
+                listItem = await task.toLi({
+                    parentUlElement: taskList,
+                    listIndex: i,
+                    layoutOptions: this.queryEngine.layoutOptions,
+                    isFilenameUnique,
+                });
+                const postInfo = listItem.createSpan();
+                const shortMode = this.queryEngine.layoutOptions.shortMode;
+
+                if (!this.queryEngine.layoutOptions.hideBacklinks) {
+                    this.addBacklinks(postInfo, task, shortMode);
+                }
+
+                if (!this.queryEngine.layoutOptions.hideEditButton) {
+                    this.addEditButton(postInfo, task);
+                }
+            }
 
             // Remove all footnotes. They don't re-appear in another document.
             const footnotes = listItem.querySelectorAll('[data-footnote-id]');
             footnotes.forEach((footnote) => footnote.remove());
-
-            const postInfo = listItem.createSpan();
-            const shortMode = this.queryEngine.layoutOptions.shortMode;
-
-            if (!this.queryEngine.layoutOptions.hideBacklinks) {
-                this.addBacklinks(postInfo, task, shortMode, isFilenameUnique);
-            }
-
-            if (!this.queryEngine.layoutOptions.hideEditButton) {
-                this.addEditButton(postInfo, task);
-            }
 
             taskList.appendChild(listItem);
         }
@@ -265,12 +288,7 @@ class QueryRenderChild extends MarkdownRenderChild {
         header.appendText(group.name);
     }
 
-    private addBacklinks(
-        postInfo: HTMLSpanElement,
-        task: Task,
-        shortMode: boolean,
-        isFilenameUnique: boolean | undefined,
-    ) {
+    private addBacklinks(postInfo: HTMLSpanElement, task: Task, shortMode: boolean) {
         postInfo.addClass('tasks-backlink');
         if (!shortMode) {
             postInfo.append(' (');
@@ -295,7 +313,7 @@ class QueryRenderChild extends MarkdownRenderChild {
         if (shortMode) {
             linkText = ' 🔗';
         } else {
-            linkText = task.getLinkText({ isFilenameUnique }) ?? '';
+            linkText = task.getLinkText() ?? '';
         }
 
         link.setText(linkText);

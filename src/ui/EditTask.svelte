@@ -1,5 +1,5 @@
 <script lang="ts">
-    import chrono from 'chrono-node';
+    import * as chrono from 'chrono-node';
     import { onMount } from 'svelte';
     import { Recurrence } from '../Recurrence';
     import { getSettings } from '../Config/Settings';

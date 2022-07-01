@@ -66,7 +66,7 @@ export class CreatedDateProperty {
                 this.locationIndex = value.indexOf(match[0]);
                 this.length = match[0].length;
                 this._value = window.moment(match[1], this.valueMarkdownFormat);
-                console.log(JSON.stringify(this));
+                // console.log(JSON.stringify(this));
             }
         } else if (value instanceof Date) {
             this._value = window.moment(value);
@@ -131,7 +131,6 @@ export class CreatedDateProperty {
         if (this.suffixes.length > 0) {
             finalRegExp += `[${this.suffixes.join('')}]`;
         }
-        console.log(finalRegExp);
         return new RegExp(finalRegExp, 'ud');
     }
 
@@ -176,7 +175,7 @@ export class DueDateProperty {
                 this.locationIndex = value.indexOf(match[0]);
                 this.length = match[0].length;
                 this._value = window.moment(match[1], this.valueMarkdownFormat);
-                console.log(JSON.stringify(this));
+                // console.log(JSON.stringify(this));
             }
         } else if (this.isMoment(value)) {
             this._value = value;
@@ -231,7 +230,7 @@ export class DueDateProperty {
         if (this.suffixes.length > 0) {
             finalRegExp += `[${this.suffixes.join('')}]`;
         }
-        console.log(finalRegExp);
+        // console.log(finalRegExp);
         return new RegExp(finalRegExp, 'ud');
     }
 

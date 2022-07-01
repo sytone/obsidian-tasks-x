@@ -11,6 +11,7 @@ import { getGeneralSetting, getSettings, isFeatureEnabled } from './Config/Setti
 import { Urgency } from './Urgency';
 import { Feature } from './Config/Feature';
 import { CreatedDateProperty } from './TaskProperties';
+import TasksServices from './TasksServices';
 
 /**
  * When sorting, make sure low always comes after none. This way any tasks with low will be below any exiting
@@ -195,6 +196,37 @@ export class Task {
         } else {
             return null;
         }
+    }
+
+    private _isFilenameUnique: boolean | undefined = undefined;
+
+    public get isFilenameUnique(): boolean | undefined {
+        // Will match the filename without extension (the file's "basename").
+        const filenameMatch = this.path.match(/([^/]*)\..+$/i);
+        if (filenameMatch === null) {
+            return undefined;
+        }
+
+        if (this._isFilenameUnique !== undefined) {
+            return this._isFilenameUnique;
+        }
+
+        const filename = filenameMatch[1];
+
+        // If this is not set we are out of Obsidian, so return true by default.
+        if (TasksServices.obsidianApp === undefined) {
+            return true;
+        }
+        const allFilesWithSameName = TasksServices.obsidianApp.vault.getMarkdownFiles().filter((file: TFile) => {
+            if (file.basename === filename) {
+                // Found a file with the same name (it might actually be the same file, but we'll take that into account later.)
+                this._isFilenameUnique = true;
+                return this._isFilenameUnique;
+            }
+        });
+
+        this._isFilenameUnique = allFilesWithSameName.length < 2;
+        return this._isFilenameUnique;
     }
 
     static fromTaskRecord(record: TaskRecord): Task {
@@ -432,7 +464,6 @@ export class Task {
         parentUlElement,
         listIndex,
         layoutOptions,
-        isFilenameUnique,
     }: {
         parentUlElement: HTMLElement;
         /** The nth item in this list (including non-tasks). */
@@ -521,7 +552,7 @@ export class Task {
         li.prepend(checkbox);
 
         if (layoutOptions?.shortMode) {
-            this.addTooltip({ element: textSpan, isFilenameUnique });
+            this.addTooltip({ element: textSpan });
         }
 
         return li;
@@ -718,9 +749,9 @@ export class Task {
      *                                        If set to `true`, the full path will be returned.
      */
 
-    public getLinkText({ isFilenameUnique }: { isFilenameUnique: boolean | undefined }): string | null {
+    public getLinkText(): string | null {
         let linkText: string | null;
-        if (isFilenameUnique) {
+        if (this.isFilenameUnique) {
             linkText = this.filename;
         } else {
             // A slash at the beginning indicates this is a path, not a filename.
@@ -739,13 +770,7 @@ export class Task {
         return linkText;
     }
 
-    private addTooltip({
-        element,
-        isFilenameUnique,
-    }: {
-        element: HTMLElement;
-        isFilenameUnique: boolean | undefined;
-    }): void {
+    private addTooltip({ element }: { element: HTMLElement }): void {
         element.addEventListener('mouseenter', () => {
             const tooltip = element.createDiv();
             tooltip.addClasses(['tooltip', 'mod-right']);
@@ -795,7 +820,7 @@ export class Task {
                 );
             }
 
-            const linkText = this.getLinkText({ isFilenameUnique });
+            const linkText = this.getLinkText();
             if (linkText) {
                 const backlinkDiv = tooltip.createDiv();
                 backlinkDiv.setText(`🔗 ${linkText}`);

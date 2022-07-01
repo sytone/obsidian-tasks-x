@@ -1,6 +1,7 @@
 // Builder
 import type { Moment } from 'moment';
 import type { TFile } from 'obsidian';
+import moment from 'moment';
 import { StatusRegistry } from '../../src/StatusRegistry';
 import { Priority, Task } from '../../src/Task';
 import type { Recurrence } from '../../src/Recurrence';
@@ -145,23 +146,39 @@ export class TaskBuilder {
         return this;
     }
 
-    public startDate(startDate: string | null): TaskBuilder {
-        this._startDate = TaskBuilder.parseDate(startDate);
+    public startDate(startDate: string | Moment | null): TaskBuilder {
+        if (moment.isMoment(startDate)) {
+            this._startDate = startDate;
+        } else {
+            this._startDate = TaskBuilder.parseDate(startDate);
+        }
         return this;
     }
 
-    public scheduledDate(scheduledDate: string | null): TaskBuilder {
-        this._scheduledDate = TaskBuilder.parseDate(scheduledDate);
+    public scheduledDate(scheduledDate: string | Moment | null): TaskBuilder {
+        if (moment.isMoment(scheduledDate)) {
+            this._scheduledDate = scheduledDate;
+        } else {
+            this._scheduledDate = TaskBuilder.parseDate(scheduledDate);
+        }
         return this;
     }
 
-    public dueDate(dueDate: string | null): TaskBuilder {
-        this._dueDate = TaskBuilder.parseDate(dueDate);
+    public dueDate(dueDate: string | Moment | null): TaskBuilder {
+        if (moment.isMoment(dueDate)) {
+            this._dueDate = dueDate;
+        } else {
+            this._dueDate = TaskBuilder.parseDate(dueDate);
+        }
         return this;
     }
 
-    public doneDate(doneDate: string | null): TaskBuilder {
-        this._doneDate = TaskBuilder.parseDate(doneDate);
+    public doneDate(doneDate: string | Moment | null): TaskBuilder {
+        if (moment.isMoment(doneDate)) {
+            this._doneDate = doneDate;
+        } else {
+            this._doneDate = TaskBuilder.parseDate(doneDate);
+        }
         return this;
     }
 
