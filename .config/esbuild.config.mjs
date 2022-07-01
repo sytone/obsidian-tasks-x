@@ -130,8 +130,8 @@ THE SOFTWARE.
 */
 `;
 
-const prod = process.argv[2] === 'production';
-const dev = process.argv[2] === 'development';
+const prod = process.argv[2] === 'production' ? true : false;
+const watch = process.argv[2] === 'watch' ? true : false;
 
 esbuild
     .build({
@@ -162,7 +162,7 @@ esbuild
         ],
         format: 'cjs',
         logLevel: 'info',
-        minify: prod ? true : !prod && !dev ? false : true,
+        minify: prod,
         outfile: 'main.js',
         plugins: [
             esbuildSvelte({
@@ -181,8 +181,8 @@ esbuild
             }),
         ],
         sourcemap: prod ? false : 'inline',
-        target: 'es2016',
+        target: 'es2020',
         treeShaking: true,
-        watch: !prod && !dev,
+        watch: watch,
     })
     .catch(() => process.exit(1));
