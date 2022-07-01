@@ -16,7 +16,7 @@ nav_exclude: true
 - [ ] Listen to the #1 Charted Song from the Day of Your Birth #Chores 🔽
 - [ ] Do Jigsaw Puzzles at JigSawPuzzles.io #DeepWork 🔽 📅 2022-06-03 ⏳ 2022-06-04
 - [ ] Watch an Animal Livestream #BodyCare 🔽 📅 2022-08-17 ⏳ 2022-06-12 🛫 2022-07-22
-- [ ] Listen to the #1 Charted Song from the Day of Your Birth #Context/Family 🔼
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth #Context/Family 🔼 📅 2023-06-30
 - [ ] Listen to the #1 Charted Song from the Day of Your Birth 🔽 ⏳ 2022-08-04
 - [ ] Play Skribbl.io Online (Draw and Guess) #NextWeek 🔽 📅 2022-08-20 ⏳ 2022-08-14 🛫 2022-06-30
 - [ ] Draw a Self-Portrait #Context/Work 🔼 📅 2022-08-17 🛫 2022-06-19
@@ -25,7 +25,7 @@ nav_exclude: true
 - [ ] Draw a Self-Portrait #MindCare ⏫ 🛫 2022-07-14
 - [ ] Listen to Music from Your Childhood #DeepWork 🔼 📅 2022-07-25 🛫 2022-06-28
 - [ ] Do Jigsaw Puzzles at JigSawPuzzles.io #NextWeek 🔼 ⏳ 2022-07-31
-- [ ] Ask a Friend How Theyre Doing #DeepWork ⏫ 📅 2022-06-30 ⏳ 2022-06-14 🛫 2022-06-08
+- [!] Ask a Friend How they are doing #personal ⏫ 🛫 2022-06-08 ⏳ 2022-06-14 📅 2022-06-30
 - [ ] Listen to Music from Your Childhood #Context/Family 🔼 🛫 2022-07-29
 - [ ] Contact a Friend Abroad #Learning 🔽 ⏳ 2022-07-14
 - [ ] Ask a Friend How Theyre Doing 🔼 📅 2022-07-27
@@ -60,7 +60,7 @@ nav_exclude: true
 - [ ] Complete a Sudoku 🔼 📅 2022-06-24 ⏳ 2022-07-29
 - [ ] Contact a Friend Abroad #Context/Home 🔼 ⏳ 2022-08-13
 - [ ] Fold a Paper Frog #MindCare 📅 2022-06-08
-- [ ] Sign a Petition #MindCare ⏫ 📅 2022-06-29 🛫 2022-08-28
+- [ ] Sign a Petition [[cool petiution]] #MindCare ⏫ 📅 2022-06-29 🛫 2022-08-28
 - [ ] Complete a Sudoku #Context/Work 🔼 📅 2022-08-25 ⏳ 2022-06-18
 - [ ] Ask a Friend How Theyre Doing #DeepWork 🔼 📅 2022-07-18 ⏳ 2022-07-04 🛫 2022-08-09
 - [ ] Do Jigsaw Puzzles at JigSawPuzzles.io #MindCare

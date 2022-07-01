@@ -9,8 +9,8 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "1-introduction/1-introduction.md",
-            "mode": "preview",
+            "file": "5-queries-sql/examples.md",
+            "mode": "source",
             "source": false
           }
         }
@@ -71,7 +71,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1-introduction/1-introduction.md",
+                "file": "5-queries-sql/examples.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -98,15 +98,15 @@
   },
   "active": "971b1ee749234f52",
   "lastOpenFiles": [
-    "1-introduction/1-introduction.md",
-    "6-advanced/quickadd.md",
-    "6-advanced/notifications.md",
-    "6-advanced/daily-agenda.md",
-    "6-advanced/custom-functions.md",
-    "7-scenarios/filter-time-of-day.md",
-    "7-scenarios/7-scenarios.md",
     "5-queries-sql/examples.md",
+    "5-queries-sql/comments.md",
+    "example-data/random-tasks.md",
     "5-queries-sql/columns.md",
-    "5-queries-sql/5-queries-sql.md"
+    "example-data/static-tasks.md",
+    "4-queries-basic/examples.md",
+    "4-queries-basic/4-queries-basic.md",
+    "5-queries-sql/5-queries-sql.md",
+    "3-getting-started/3-getting-started.md",
+    "1-introduction/1-introduction.md"
   ]
 }

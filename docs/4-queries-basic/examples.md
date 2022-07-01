@@ -15,6 +15,11 @@ All open tasks that are due today:
     due today
     ```
 
+```tasks
+not done
+due today
+```
+
 ---
 
 All open tasks that are due within the next two weeks, but are not overdue (due today or later):
