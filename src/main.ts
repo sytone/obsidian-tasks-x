@@ -21,21 +21,20 @@ export default class TasksPlugin extends Plugin {
     async onload(): Promise<void> {
         //monkeyPatchConsole(this);
         TasksServices.obsidianApp = this.app;
-        logging
-            .configure({
-                minLevels: {
-                    '': 'debug',
-                    taskssql: 'debug',
-                    'taskssql.perf': 'debug',
-                    'taskssql.QuerySql.QuerySql': 'debug',
-                },
-            })
-            .registerConsoleLogger();
+        logging.registerConsoleLogger();
         log('info', `loading plugin "${this.manifest.name}" v${this.manifest.version}`);
 
-        // Load the settings and UI.
+        // Load the settings.
         await this.loadSettings();
+        const { loggingOptions } = getSettings();
+
+        // Configure logging.
+        logging.configure(loggingOptions);
+
+        // Setup the UI tab.
         this.addSettingTab(new SettingsTab({ plugin: this }));
+
+        // Load configured status types.
         await this.loadTaskStatuses();
 
         /**
@@ -66,19 +65,12 @@ export default class TasksPlugin extends Plugin {
     async loadTaskStatuses() {
         const { statusTypes } = getSettings();
 
-        console.log(statusTypes);
-
         // Reset the registry as this may also come from a settings add/delete.
-
         StatusRegistry.getInstance().clearStatuses();
         log('info', `Adding ${statusTypes.length} custom status types`);
         statusTypes.forEach((statusType) => {
-            console.log(statusType);
-
             StatusRegistry.getInstance().add(statusType);
         });
-
-        console.log(StatusRegistry.getInstance());
     }
 
     onunload() {

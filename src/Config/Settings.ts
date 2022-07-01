@@ -1,5 +1,5 @@
 import type { StatusConfiguration } from '../Status';
-import { log } from './../lib/logging';
+import { LogOptions, log } from './../lib/logging';
 import { Feature, FeatureFlag } from './Feature';
 
 interface SettingsMap {
@@ -29,6 +29,8 @@ export interface Settings {
 
     // Tracks the stage of the headings in the settings UI.
     headingOpened: HeadingState;
+
+    loggingOptions: LogOptions;
 }
 
 const defaultSettings: Settings = {
@@ -49,6 +51,14 @@ const defaultSettings: Settings = {
         defaultRenderTemplate: '',
     },
     headingOpened: {}, //;  { 'Documentation and Support': true },
+    loggingOptions: {
+        minLevels: {
+            '': 'info',
+            taskssql: 'info',
+            'taskssql.perf': 'info',
+            'taskssql.QuerySql.QuerySql': 'info',
+        },
+    },
 };
 
 let settings: Settings = { ...defaultSettings };
