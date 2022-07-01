@@ -85,7 +85,9 @@ export class SettingsTab extends PluginSettingTab {
                         .setDesc(setting.description)
                         .addToggle((toggle) => {
                             const settings = getSettings();
-
+                            if (!settings.generalSettings[setting.settingName]) {
+                                updateGeneralSetting(setting.settingName, setting.initialValue);
+                            }
                             toggle
                                 .setValue(<boolean>settings.generalSettings[setting.settingName])
                                 .onChange(async (value) => {
@@ -99,6 +101,9 @@ export class SettingsTab extends PluginSettingTab {
                         .setDesc(setting.description)
                         .addText((text) => {
                             const settings = getSettings();
+                            if (!settings.generalSettings[setting.settingName]) {
+                                updateGeneralSetting(setting.settingName, setting.initialValue);
+                            }
                             text.setPlaceholder(setting.placeholder.toString())
                                 .setValue(settings.generalSettings[setting.settingName].toString())
                                 .onChange(async (value) => {
@@ -272,7 +277,6 @@ export class SettingsTab extends PluginSettingTab {
                     ];
 
                     minimalSupportedStatuses.forEach((importedStatus) => {
-                        console.log(importedStatus);
                         const hasStatus = statusTypes.find((element) => {
                             return (
                                 element.indicator == importedStatus[0] &&
@@ -331,7 +335,6 @@ export class SettingsTab extends PluginSettingTab {
                     ];
 
                     supportedStatuses.forEach((importedStatus) => {
-                        console.log(importedStatus);
                         const hasStatus = statusTypes.find((element) => {
                             return (
                                 element.indicator == importedStatus[0] &&

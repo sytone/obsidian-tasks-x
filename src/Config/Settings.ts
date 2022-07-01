@@ -45,6 +45,8 @@ const defaultSettings: Settings = {
 
         // Allows the filter to be pushed to the end of the tag. Available if APPEND_GLOBAL_FILTER feature enabled.
         appendGlobalFilter: false,
+
+        defaultRenderTemplate: '',
     },
     headingOpened: {}, //;  { 'Documentation and Support': true },
 };

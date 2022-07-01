@@ -37,16 +37,31 @@ export class Feature {
             'might require this, or you might prefer how it looks. If you change this when tasks are modified using the \n' +
             'Task edit box they will have the tag moved to the beginning or end of the description.',
         'Creates / Supports tasks with the global filter at end',
-        false,
-        false,
+        true,
+        true,
     );
 
     static readonly ENABLE_SQL_QUERY = new Feature(
         'ENABLE_SQL_QUERY',
         0,
         'Enable the ability to use SQL based queries to find tasks. This new syntax can be used by annotating the code block \n' +
-            ' with "taskx" instead of "task"',
+            ' with "task-sql" instead of "task"',
         'Enabled SQL based queries',
+        true,
+        true,
+    );
+
+    static readonly ENABLE_TEMPLATE_RENDERING = new Feature(
+        'ENABLE_TEMPLATE_RENDERING',
+        0,
+        `
+ This is an enhanced form of rendering the query results that
+ allows the user full control over the format of the rendered task
+ that a query returns. It uses handlebars based templates with
+ helpers that ensure the results work with Obsidian removing the need
+ for user to know the internals of the Obsidian HTML structure.
+        `,
+        'Enable templated rendering',
         false,
         false,
     );
@@ -61,7 +76,7 @@ export class Feature {
     ) {}
 
     static get values(): Feature[] {
-        return [this.APPEND_GLOBAL_FILTER, this.ENABLE_SQL_QUERY];
+        return [this.APPEND_GLOBAL_FILTER, this.ENABLE_SQL_QUERY, this.ENABLE_TEMPLATE_RENDERING];
     }
 
     static get settingsFlags(): FeatureFlag {
