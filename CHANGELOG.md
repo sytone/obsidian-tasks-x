@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/sytone/obsidian-tasks-x/compare/2.5.2...2.6.0) (2022-07-02)
+
+
+### Features
+
+* add feature to customize render ([72636aa](https://github.com/sytone/obsidian-tasks-x/commits/72636aadf72fabb065e6c7d58cfdec93b6b6de8c))
+* add template based rendering flag and setting ([a2d7bad](https://github.com/sytone/obsidian-tasks-x/commits/a2d7bad8cb6591526f66d002f905b8f493510552))
+* added created to ui ([ae01177](https://github.com/sytone/obsidian-tasks-x/commits/ae0117754c4615a04d40ed4adca001fcb9cb067a))
+
+
+### Documentation
+
+* settings update ([24ccf10](https://github.com/sytone/obsidian-tasks-x/commits/24ccf10a441aaa45f30491758bc68b613c47f3f3))
+
 ### [2.5.2](https://github.com/sytone/obsidian-tasks-x/compare/2.5.0...2.5.2) (2022-06-30)
 
 
