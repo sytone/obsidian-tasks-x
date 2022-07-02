@@ -9,11 +9,11 @@ has_toc: false
 ### All open tasks that are due today
 
     ```tasks
-    WHERE status->indicator = ' ' AND  moment()->[format]('YYYY-MM-DD') = moment(dueDate)->[format]('YYYY-MM-DD')
+    WHERE status->indicator = '!' AND  moment()->[format]('YYYY-MM-DD') = moment(dueDate)->[format]('YYYY-MM-DD')
     ```
 
 ```task-sql
-WHERE status->indicator = ' ' AND  moment()->[format]('YYYY-MM-DD') = moment(dueDate)->[format]('YYYY-MM-DD')
+WHERE status->indicator = '!' AND  moment()->[format]('YYYY-MM-DD') = moment(dueDate)->[format]('YYYY-MM-DD')
 ```
 
 ---
