@@ -11,13 +11,13 @@ nav_exclude: true
 - [ ] Watch an Animal Livestream #Learning 🔽
 - [/] Listen to Music from Your Childhood #Chores 🛫 2022-08-15 ⏳ 2022-08-08 📅 2022-05-31
 - [ ] Listen to the #1 Charted Song from the Day of Your Birth #Context/Home ⏫
-- [ ] Complete a Sudoku #Context/Home 📅 2022-06-09 🛫 2022-08-15
-- [ ] Watch an Animal Livestream 🔼 📅 2022-06-13
+- [ ] Complete a Sudoku #Context/Home ➕ 2022-07-06 🛫 2022-08-15 📅 2022-06-09
+- [ ] Watch an Animal Livestream ➕ 2022-06-01 🔼 📅 2022-06-13
 - [ ] Listen to the #1 Charted Song from the Day of Your Birth #Chores 🔽
 - [ ] Do Jigsaw Puzzles at JigSawPuzzles.io #DeepWork 🔽 📅 2022-06-03 ⏳ 2022-06-04
 - [ ] Watch an Animal Livestream #BodyCare 🔽 📅 2022-08-17 ⏳ 2022-06-12 🛫 2022-07-22
 - [ ] Listen to the #1 Charted Song from the Day of Your Birth #Context/Family 🔼 📅 2023-06-30
-- [ ] Listen to the #1 Charted Song from the Day of Your Birth 🔽 ⏳ 2022-08-04
+- [ ] Listen to the #1 Charted Song from the Day of Your Birth ➕ 2021-07-01 🔽 ⏳ 2022-08-04
 - [ ] Play Skribbl.io Online (Draw and Guess) #NextWeek 🔽 📅 2022-08-20 ⏳ 2022-08-14 🛫 2022-06-30
 - [ ] Draw a Self-Portrait #Context/Work 🔼 📅 2022-08-17 🛫 2022-06-19
 - [/] Do Yoga #DeepWork 🔼 📅 2022-05-31

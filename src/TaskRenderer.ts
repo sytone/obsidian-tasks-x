@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Component, MarkdownRenderer } from 'obsidian';
 import { log } from './lib/logging';
 import { Priority, Task } from './Task';
+import { getGeneralSetting } from './Config/Settings';
 
 export type RenderData = {
     task: Task;
@@ -151,21 +152,24 @@ export class TaskRenderer {
 
         if (template === undefined) {
             this.template =
-                '{{#li}}' +
-                '{{input}}' +
-                '{{#text}}' +
-                '{{#if task.description}}{{description}} {{/if}}' +
-                '{{#if task.createdDate}}{{moment task.createdDate prefix="➕ "}} {{/if}}' +
-                '{{#if task.priority}}{{priority}} {{/if}}' +
-                '{{#if task.recurrence}}{{recurrence}} {{/if}}' +
-                '{{#if task.startDate}}{{moment task.startDate prefix="🛫 "}} {{/if}}' +
-                '{{#if task.scheduledDate}}{{moment task.scheduledDate prefix="⏳ "}} {{/if}}' +
-                '{{#if task.dueDate}}{{moment task.dueDate prefix="📅 "}} {{/if}}' +
-                '{{#if task.doneDate}}{{moment task.doneDate prefix="✅ "}} {{/if}}' +
-                '{{#if task.blockLink}}{{task.blockLink}} {{/if}}' +
-                '{{/text}}' +
-                '{{editicon}}' +
-                '{{/li}}';
+                getGeneralSetting('defaultRenderTemplate') === undefined ||
+                getGeneralSetting('defaultRenderTemplate') === ''
+                    ? '{{#li}}' +
+                      '{{input}}' +
+                      '{{#text}}' +
+                      '{{#if task.description}}{{description}} {{/if}}' +
+                      '{{#if task.createdDate}}{{moment task.createdDate prefix="➕ "}} {{/if}}' +
+                      '{{#if task.priority}}{{priority}} {{/if}}' +
+                      '{{#if task.recurrence}}{{recurrence}} {{/if}}' +
+                      '{{#if task.startDate}}{{moment task.startDate prefix="🛫 "}} {{/if}}' +
+                      '{{#if task.scheduledDate}}{{moment task.scheduledDate prefix="⏳ "}} {{/if}}' +
+                      '{{#if task.dueDate}}{{moment task.dueDate prefix="📅 "}} {{/if}}' +
+                      '{{#if task.doneDate}}{{moment task.doneDate prefix="✅ "}} {{/if}}' +
+                      '{{#if task.blockLink}}{{task.blockLink}} {{/if}}' +
+                      '{{/text}}' +
+                      '{{editicon}}' +
+                      '{{/li}}'
+                    : <string>getGeneralSetting('defaultRenderTemplate');
         } else {
             this.template = template;
         }

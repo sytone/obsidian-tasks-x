@@ -1,4 +1,4 @@
-import { Notice, PluginSettingTab, Setting } from 'obsidian';
+import { Notice, PluginSettingTab, Setting, debounce } from 'obsidian';
 import { StatusConfiguration } from 'Status';
 import type TasksPlugin from '../main';
 import { log } from './../lib/logging';
@@ -104,12 +104,37 @@ export class SettingsTab extends PluginSettingTab {
                             if (!settings.generalSettings[setting.settingName]) {
                                 updateGeneralSetting(setting.settingName, setting.initialValue);
                             }
+
+                            const onChange = async (value: string) => {
+                                updateGeneralSetting(setting.settingName, value);
+                                await this.plugin.saveSettings();
+                            };
+
                             text.setPlaceholder(setting.placeholder.toString())
                                 .setValue(settings.generalSettings[setting.settingName].toString())
-                                .onChange(async (value) => {
-                                    updateGeneralSetting(setting.settingName, value);
-                                    await this.plugin.saveSettings();
-                                });
+                                .onChange(debounce(onChange, 500, true));
+                        });
+                } else if (setting.type === 'textarea') {
+                    new Setting(detailsContainer)
+                        .setName(setting.name)
+                        .setDesc(setting.description)
+                        .addTextArea((text) => {
+                            const settings = getSettings();
+                            if (!settings.generalSettings[setting.settingName]) {
+                                updateGeneralSetting(setting.settingName, setting.initialValue);
+                            }
+
+                            const onChange = async (value: string) => {
+                                updateGeneralSetting(setting.settingName, value);
+                                await this.plugin.saveSettings();
+                            };
+
+                            text.setPlaceholder(setting.placeholder.toString())
+                                .setValue(settings.generalSettings[setting.settingName].toString())
+                                .onChange(debounce(onChange, 500, true));
+
+                            text.inputEl.rows = 8;
+                            text.inputEl.cols = 40;
                         });
                 } else if (setting.type === 'function') {
                     this.customFunctions[setting.settingName](detailsContainer, this);

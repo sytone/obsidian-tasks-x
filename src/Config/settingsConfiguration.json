@@ -69,8 +69,8 @@
       {
         "name": "Default Render Template",
         "description": "This is the template used when rendering the task output. If used the formatting commands like short are not followed at this point. This is subject to change as it becomes more stable.",
-        "type": "text",
-        "initialValue": "{{#li}}{{input}}{{#text}}{{#if task.description}}{{description}} {{\/if}}{{#if task.createdDate}}{{moment task.createdDate prefix=\"\u2795 \"}} {{\/if}}{{#if task.priority}}{{priority}} {{\/if}}{{#if task.recurrence}}{{recurrence}} {{\/if}}{{#if task.startDate}}{{moment task.startDate prefix=\"\uD83D\uDEEB \"}} {{\/if}}{{#if task.scheduledDate}}{{moment task.scheduledDate prefix=\"\u23F3 \"}} {{\/if}}{{#if task.dueDate}}{{moment task.dueDate prefix=\"\uD83D\uDCC5 \"}} {{\/if}}{{#if task.doneDate}}{{moment task.doneDate prefix=\"\u2705 \"}} {{\/if}}{{#if task.blockLink}}{{task.blockLink}} {{\/if}}{{\/text}}{{editicon}}{{\/li}}",
+        "type": "textarea",
+        "initialValue": "{{#li}}{{input}}{{#text}}{{#if task.description}}{{description}} {{\/if}}{{#if task.createdDate}}{{moment task.createdDate prefix=\"➕ \"}} {{\/if}}{{#if task.priority}}{{priority}} {{\/if}}{{#if task.recurrence}}{{recurrence}} {{\/if}}{{#if task.startDate}}{{moment task.startDate prefix=\"🛫 \"}} {{\/if}}{{#if task.scheduledDate}}{{moment task.scheduledDate prefix=\"⏳ \"}} {{\/if}}{{#if task.dueDate}}{{moment task.dueDate prefix=\"📅 \"}} {{\/if}}{{#if task.doneDate}}{{moment task.doneDate prefix=\"✅ \"}} {{\/if}}{{#if task.blockLink}}{{task.blockLink}} {{\/if}}{{\/text}}{{editicon}}{{\/li}}",
         "placeholder": "Handlebars template",
         "settingName": "defaultRenderTemplate",
         "featureFlag": "ENABLE_TEMPLATE_RENDERING",

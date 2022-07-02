@@ -101,12 +101,12 @@
     "5-queries-sql/examples.md",
     "5-queries-sql/comments.md",
     "example-data/random-tasks.md",
+    "5-queries-sql/filters.md",
     "5-queries-sql/columns.md",
     "example-data/static-tasks.md",
     "4-queries-basic/examples.md",
     "4-queries-basic/4-queries-basic.md",
     "5-queries-sql/5-queries-sql.md",
-    "3-getting-started/3-getting-started.md",
-    "1-introduction/1-introduction.md"
+    "3-getting-started/3-getting-started.md"
   ]
 }

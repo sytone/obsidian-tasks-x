@@ -126,23 +126,22 @@
     }
   ],
   "features": {
-    "TASK_STATUS_MENU": true,
     "APPEND_GLOBAL_FILTER": true,
     "ENABLE_SQL_QUERY": true,
-    "ENABLE_TEMPLATE_RENDERING": true
+    "ENABLE_TEMPLATE_RENDERING": false
   },
   "generalSettings": {
     "globalFilter": "",
     "removeGlobalFilter": true,
     "setDoneDate": true,
     "appendGlobalFilter": true,
-    "defaultRenderTemplate": "{{#li}}{{input}}{{#text}}{{#if task.description}}{{description}} {{/if}}{{#if task.createdDate}}{{moment task.createdDate prefix=\"➕ \"}} {{/if}}{{#if task.priority}}{{priority}} {{/if}}{{#if task.recurrence}}{{recurrence}} {{/if}}{{#if task.startDate}}{{moment task.startDate prefix=\"🛫 \"}} {{/if}}{{#if task.scheduledDate}}{{moment task.scheduledDate prefix=\"⏳ \"}} {{/if}}{{#if task.dueDate}}{{moment task.dueDate prefix=\"📅 \"}} {{/if}}{{#if task.doneDate}}{{moment task.doneDate prefix=\"✅ \"}} {{/if}}{{#if task.blockLink}}{{task.blockLink}} {{/if}}{{/text}}{{editicon}}{{/li}}"
+    "defaultRenderTemplate": "{{#li}}{{input}}{{#text}}Here be the template {{#if task.description}}{{description}} {{/if}}{{#if task.createdDate}}{{moment task.createdDate prefix=\"➕ \"}} {{/if}}{{#if task.priority}}{{priority}} {{/if}}{{#if task.recurrence}}{{recurrence}} {{/if}}{{#if task.startDate}}{{moment task.startDate prefix=\"🛫 \"}} {{/if}}{{#if task.scheduledDate}}{{moment task.scheduledDate prefix=\"⏳ \"}} {{/if}}{{#if task.dueDate}}{{moment task.dueDate prefix=\"📅 \"}} {{/if}}{{#if task.doneDate}}{{moment task.doneDate prefix=\"✅ \"}} {{/if}}{{#if task.blockLink}}{{task.blockLink}} {{/if}}{{/text}}{{editicon}}{{/li}}"
   },
   "headingOpened": {
     "Tasks, SQL Powered": true,
     "Task Settings": true,
     "Documentation and Support": true,
-    "Optional or in development features": false,
+    "Optional or in development features": true,
     "Tasks Status Types": false
   },
   "loggingOptions": {

@@ -198,6 +198,13 @@ export class Task {
         }
     }
 
+    public get created(): moment.Moment | null {
+        if (this.createdDate?.value) {
+            return this.createdDate.value;
+        }
+        return null;
+    }
+
     private _isFilenameUnique: boolean | undefined = undefined;
 
     public get isFilenameUnique(): boolean | undefined {
@@ -590,7 +597,7 @@ export class Task {
 
         // Add before the existing tags as they use old processing logic.
         if (this.createdDate && this.createdDate.isRendered && this.createdDate.hasValue) {
-            taskString += this.createdDate.toRenderedString(layoutOptions.shortMode);
+            taskString += ' ' + this.createdDate.toRenderedString(layoutOptions.shortMode);
         }
 
         if (!layoutOptions.hidePriority) {

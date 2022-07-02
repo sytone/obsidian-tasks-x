@@ -7,6 +7,7 @@
     import { Status } from '../Status';
     import { StatusRegistry } from '../StatusRegistry';
     import { doAutocomplete } from '../DateAbbreviations';
+    import { CreatedDateProperty } from 'TaskProperties';
 
     export let task: Task;
     export let onSubmit: (updatedTasks: Task[]) => void | Promise<void>;
@@ -21,6 +22,7 @@
         scheduledDate: string;
         dueDate: string;
         doneDate: string;
+        createdDate: string;
     } = {
         description: '',
         status: Status.TODO,
@@ -30,6 +32,7 @@
         scheduledDate: '',
         dueDate: '',
         doneDate: '',
+        createdDate: '',
     };
 
     let parsedStartDate: string = '';
@@ -37,13 +40,14 @@
     let parsedDueDate: string = '';
     let parsedRecurrence: string = '';
     let parsedDone: string = '';
+    let parsedCreatedDate: string = '';
     let statusOptions = StatusRegistry.getInstance().registeredStatuses;
 
     // 'weekend' abbreviation ommitted due to lack of space.
     let datePlaceholder = "Try 'Monday' or 'tomorrow', or [td|tm|yd|tw|nw|we] then space.";
 
     function parseDate(
-        type: 'start' | 'scheduled' | 'due' | 'done',
+        type: 'start' | 'scheduled' | 'due' | 'done' | 'created',
         date: string,
         forwardDate: Date | undefined = undefined,
     ): string {
@@ -72,6 +76,11 @@
     $: {
         editableTask.dueDate = doAutocomplete(editableTask.dueDate);
         parsedDueDate = parseDate('due', editableTask.dueDate, new Date());
+    }
+
+    $: {
+        editableTask.createdDate = doAutocomplete(editableTask.createdDate);
+        parsedCreatedDate = parseDate('created', editableTask.createdDate, new Date());
     }
 
     $: {
@@ -115,6 +124,7 @@
             scheduledDate: task.scheduledDate ? task.scheduledDate.format('YYYY-MM-DD') : '',
             dueDate: task.dueDate ? task.dueDate.format('YYYY-MM-DD') : '',
             doneDate: task.doneDate ? task.doneDate.format('YYYY-MM-DD') : '',
+            createdDate: task.created ? task.created.format('YYYY-MM-DD') : '',
         };
         setTimeout(() => {
             descriptionInput.focus();
@@ -140,6 +150,12 @@
         const parsedDueDate = chrono.parseDate(editableTask.dueDate, new Date(), { forwardDate: true });
         if (parsedDueDate !== null) {
             dueDate = window.moment(parsedDueDate);
+        }
+
+        let createdDate: moment.Moment | null = null;
+        const parsedCreatedDate = chrono.parseDate(editableTask.createdDate, new Date(), { forwardDate: true });
+        if (parsedCreatedDate !== null) {
+            createdDate = window.moment(parsedCreatedDate);
         }
 
         let recurrence: Recurrence | null = null;
@@ -179,6 +195,7 @@
             doneDate: window.moment(editableTask.doneDate, 'YYYY-MM-DD').isValid()
                 ? window.moment(editableTask.doneDate, 'YYYY-MM-DD')
                 : null,
+            createdDate: new CreatedDateProperty(createdDate),
         });
 
         onSubmit([updatedTask]);
@@ -240,6 +257,11 @@
                 <label for="start">Start</label>
                 <input bind:value={editableTask.startDate} id="start" type="text" placeholder={datePlaceholder} />
                 <code>🛫 {@html parsedStartDate}</code>
+            </div>
+            <div class="tasks-modal-date">
+                <label for="created">Created</label>
+                <input bind:value={editableTask.createdDate} id="created" type="text" placeholder={datePlaceholder} />
+                <code>➕ {@html parsedCreatedDate}</code>
             </div>
         </div>
         <hr />
