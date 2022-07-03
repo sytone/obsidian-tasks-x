@@ -66,6 +66,19 @@ export class Feature {
         false,
     );
 
+    static readonly ENABLE_ORIGINAL_TASK_REGISTRATION = new Feature(
+        'ENABLE_ORIGINAL_TASK_REGISTRATION',
+        0,
+        `
+ This plugin is synced with the original tasks plugin, if you enable this you
+ only need to have this plugin installed. This also means the rendering logic will
+ work for the original string based queries as well.
+        `,
+        'Enable original task plugin query processing',
+        false,
+        true,
+    );
+
     private constructor(
         public readonly internalName: string,
         public readonly index: number,
@@ -76,7 +89,12 @@ export class Feature {
     ) {}
 
     static get values(): Feature[] {
-        return [this.APPEND_GLOBAL_FILTER, this.ENABLE_SQL_QUERY, this.ENABLE_TEMPLATE_RENDERING];
+        return [
+            this.APPEND_GLOBAL_FILTER,
+            this.ENABLE_SQL_QUERY,
+            this.ENABLE_TEMPLATE_RENDERING,
+            this.ENABLE_ORIGINAL_TASK_REGISTRATION,
+        ];
     }
 
     static get settingsFlags(): FeatureFlag {

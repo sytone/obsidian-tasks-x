@@ -27,7 +27,9 @@ export class QueryRenderer {
         this.app = plugin.app;
         this.events = events;
 
-        plugin.registerMarkdownCodeBlockProcessor('tasks', this._addQueryRenderChild.bind(this));
+        if (isFeatureEnabled(Feature.ENABLE_ORIGINAL_TASK_REGISTRATION.internalName)) {
+            plugin.registerMarkdownCodeBlockProcessor('tasks', this._addQueryRenderChild.bind(this));
+        }
         plugin.registerMarkdownCodeBlockProcessor('task-sql', this._addQuerySqlRenderChild.bind(this));
     }
 
