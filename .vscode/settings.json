@@ -2,6 +2,8 @@
   "npm.packageManager": "yarn",
   "cSpell.words": [
     "alasql",
+    "backlink",
+    "backlinks",
     "taskssql"
   ],
   "terminal.integrated.defaultProfile.linux": "pwsh",
