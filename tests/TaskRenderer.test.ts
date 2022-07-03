@@ -17,12 +17,41 @@ describe('moment block helper', () => {
     });
 });
 
+describe('editicon block helper', () => {
+    it('parses a task and renders editicon', () => {
+        const r = new TaskRenderer('{{editicon}}');
+        const task = new TaskBuilder().build();
+
+        expect(r.toRenderedString(task)).toBe('<a class="tasks-edit"></a>');
+    });
+});
+
+describe('backlinks block helper', () => {
+    it('parses a task and renders backlink', () => {
+        const r = new TaskRenderer('{{backlink}}');
+        const task = new TaskBuilder().build();
+
+        expect(r.toRenderedString(task)).toBe(
+            '<span class="tasks-backlink"> (<a href="" data-href="" rel="noopener" target="_blank" class="internal-link">/</a>)</span>',
+        );
+    });
+
+    it('parses a task and renders short backlink', () => {
+        const r = new TaskRenderer('{{backlink short="true"}}');
+        const task = new TaskBuilder().build();
+
+        expect(r.toRenderedString(task)).toBe(
+            '<span class="tasks-backlink"><a href="" data-href="" rel="noopener" target="_blank" class="internal-link internal-link-short-mode"> 🔗</a></span>',
+        );
+    });
+});
+
 describe('Html Element', () => {
     it('handles default template', () => {
         const r = new TaskRenderer();
         const task = new TaskBuilder().dueDate(moment('2022-02-02 14:34:23')).build();
         expect(r.toRenderedString(task)).toBe(
-            '<li data-line="1" data-task="" class="task-list-item plugin-tasks-list-item"><input data-line="1" type="checkbox" class="task-list-item-checkbox"><span class="tasks-list-text">my description  📅 2022-02-02 </span><a class="tasks-edit"></a></li>',
+            '<li data-line="1" data-task="" class="task-list-item plugin-tasks-list-item"><input data-line="1" type="checkbox" class="task-list-item-checkbox"><span class="tasks-list-text">my description  📅 2022-02-02 </span><span class="tasks-backlink"> (<a href="" data-href="" rel="noopener" target="_blank" class="internal-link">/</a>)</span><a class="tasks-edit"></a></li>',
         );
     });
 

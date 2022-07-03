@@ -205,6 +205,22 @@ export class Task {
         return null;
     }
 
+    /**
+     * Returns the page back link for this task including
+     * the header is available.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof Task
+     */
+    public get backlinkHref(): string {
+        let linkHref = this.path;
+        if (this.precedingHeader !== null) {
+            linkHref = linkHref + '#' + this.precedingHeader;
+        }
+        return linkHref;
+    }
+
     private _isFilenameUnique: boolean | undefined = undefined;
 
     public get isFilenameUnique(): boolean | undefined {

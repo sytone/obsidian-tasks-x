@@ -8,7 +8,6 @@ import { getGeneralSetting } from './Config/Settings';
 export type RenderData = {
     task: Task;
     dataLine: number;
-    isFilenameUnique: boolean;
 };
 
 export class TaskRenderer {
@@ -48,14 +47,24 @@ export class TaskRenderer {
             return new Handlebars.SafeString('<a class="tasks-edit"></a>');
         });
 
-        Handlebars.registerHelper('backlinks', function (this: RenderData) {
-            let linkHref = this.task.path;
-            if (this.task.precedingHeader !== null) {
-                linkHref = linkHref + '#' + this.task.precedingHeader;
+        Handlebars.registerHelper('backlink', function (this: RenderData, options) {
+            console.log(options);
+
+            const shortMode = options && options.hash && options.hash.short;
+            let linkCss = 'internal-link';
+            let linkContent = this.task.getLinkText() ?? '';
+
+            if (shortMode) {
+                linkCss += ' internal-link-short-mode';
+                linkContent = ' 🔗';
             }
-            const backlink = `<span class="tasks-backlink"> (<a href="${linkHref}" data-href="${linkHref}" rel="noopener" target="_blank" class="internal-link">${
-                this.task.getLinkText() ?? ''
-            }</a>)`;
+
+            const linkHtmlStart = `<a href="${this.task.backlinkHref}" data-href="${this.task.backlinkHref}" rel="noopener" target="_blank" class="${linkCss}">`;
+
+            const backlink = `<span class="tasks-backlink">${shortMode ? '' : ' ('}${linkHtmlStart}${linkContent}</a>${
+                shortMode ? '' : ')'
+            }</span>`;
+
             return new Handlebars.SafeString(backlink);
         });
 
@@ -89,7 +98,16 @@ export class TaskRenderer {
         });
 
         Handlebars.registerHelper('input', function (this: RenderData) {
-            const input = '<input data-line="' + this.dataLine + '" type="checkbox" class="task-list-item-checkbox">';
+            let checked = '';
+            if (this.task.status.indicator !== ' ') {
+                checked = ' checked';
+            }
+            const input =
+                '<input data-line="' +
+                this.dataLine +
+                '"' +
+                checked +
+                ' type="checkbox" class="task-list-item-checkbox">';
             return new Handlebars.SafeString(input);
         });
 
@@ -167,6 +185,7 @@ export class TaskRenderer {
                       '{{#if task.doneDate}}{{moment task.doneDate prefix="✅ "}} {{/if}}' +
                       '{{#if task.blockLink}}{{task.blockLink}} {{/if}}' +
                       '{{/text}}' +
+                      '{{backlink}}' +
                       '{{editicon}}' +
                       '{{/li}}'
                     : <string>getGeneralSetting('defaultRenderTemplate');
