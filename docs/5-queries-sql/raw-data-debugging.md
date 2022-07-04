@@ -59,7 +59,8 @@ LIMIT 10
 ```
 
 ```task-sql
-#SELECT * FROM pagedata; SHOW TABLES FROM alasql
-SELECT *, queryId(), queryBlockFile() FROM ? LIMIT 10
-#raw tasks
+SELECT * FROM pagedata; SHOW TABLES FROM alasql
+#SELECT *, queryId(), queryBlockFile() FROM tasks LIMIT 10
+#SELECT queryId()  
+#raw empty
 ```
