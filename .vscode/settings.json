@@ -133,5 +133,9 @@
   "commit-message-editor.view.rulers": [
     50,
     72
-  ]
+  ],
+  "eslint.format.enable": true,
+  "eslint.lintTask.enable": true,
+  "eslint.lintTask.options": ". --cache",
+  "eslint.packageManager": "yarn",
 }
