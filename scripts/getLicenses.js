@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 const FS = require('fs');
 
 const packageJSON = JSON.parse(FS.readFileSync('package.json').toString());
