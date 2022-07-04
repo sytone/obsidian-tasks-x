@@ -48,8 +48,6 @@ export class TaskRenderer {
         });
 
         Handlebars.registerHelper('backlink', function (this: RenderData, options) {
-            console.log(options);
-
             const shortMode = options && options.hash && options.hash.short;
             let linkCss = 'internal-link';
             let linkContent = this.task.getLinkText() ?? '';
