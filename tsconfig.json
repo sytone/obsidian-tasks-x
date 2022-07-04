@@ -21,7 +21,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "module": "ESNext",
-    "target": "es6",
+    "target": "es2020",
     "experimentalDecorators": true,
     "allowJs": true,
     "noImplicitAny": true,
