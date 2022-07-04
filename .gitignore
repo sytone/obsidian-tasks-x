@@ -31,3 +31,12 @@ yarn-error.log
 
 # Exclude py files if testing GH action locally
 .github/actions/obsidian-vault-to-jekyll-markdown/__pycache__
+
+# Store the info about processed files in order to only operate on the changed ones.
+.eslintcache
+
+# Jekyll generated site data
+/docs/_site
+/docs/.sass-cache
+/docs/.jekyll-cache
+/docs/.jekyll-metadata
