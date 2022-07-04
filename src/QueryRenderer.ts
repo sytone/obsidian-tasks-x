@@ -1,4 +1,4 @@
-import { App, EventRef, MarkdownPostProcessorContext, MarkdownRenderChild, Plugin, TFile } from 'obsidian';
+import { App, EventRef, MarkdownPostProcessorContext, MarkdownRenderChild, Plugin } from 'obsidian';
 
 import { TaskEvents } from 'TaskEvents';
 import { State } from './Cache';
@@ -334,20 +334,6 @@ class QueryRenderChild extends MarkdownRenderChild {
     }
 
     private isFilenameUnique({ task }: { task: Task }): boolean | undefined {
-        // Will match the filename without extension (the file's "basename").
-        const filenameMatch = task.path.match(/([^/]*)\..+$/i);
-        if (filenameMatch === null) {
-            return undefined;
-        }
-
-        const filename = filenameMatch[1];
-        const allFilesWithSameName = this.app.vault.getMarkdownFiles().filter((file: TFile) => {
-            if (file.basename === filename) {
-                // Found a file with the same name (it might actually be the same file, but we'll take that into account later.)
-                return true;
-            }
-        });
-
-        return allFilesWithSameName.length < 2;
+        return task.isFilenameUnique;
     }
 }
