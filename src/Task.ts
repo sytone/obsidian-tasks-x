@@ -3,7 +3,7 @@ import { Component, MarkdownRenderer, TFile } from 'obsidian';
 import moment from 'moment';
 
 import { StatusRegistry } from './StatusRegistry';
-import type { Status } from './Status';
+import { Status } from './Status';
 import { replaceTaskWithTasks } from './File';
 import { LayoutOptions } from './LayoutOptions';
 import { Recurrence, RecurrenceRecord } from './Recurrence';
@@ -157,14 +157,14 @@ export class Task {
         tags: string[] | [];
         originalMarkdown: string;
     }) {
-        this.status = status;
-        this.description = description;
-        this.path = path;
+        this.status = status === undefined ? Status.TODO : status;
+        this.description = description === undefined ? '' : description;
+        this.path = path === undefined ? '' : path;
         this.file = file;
-        this.indentation = indentation;
+        this.indentation = indentation === undefined ? '' : indentation;
         this.sectionStart = sectionStart;
         this.sectionIndex = sectionIndex;
-        this.precedingHeader = precedingHeader;
+        this.precedingHeader = precedingHeader === undefined ? '' : precedingHeader;
 
         this.tags = tags;
 
@@ -224,6 +224,10 @@ export class Task {
     private _isFilenameUnique: boolean | undefined = undefined;
 
     public get isFilenameUnique(): boolean | undefined {
+        if (this.path === '' || this.path === undefined) {
+            return undefined;
+        }
+
         // Will match the filename without extension (the file's "basename").
         const filenameMatch = this.path.match(/([^/]*)\..+$/i);
         if (filenameMatch === null) {
