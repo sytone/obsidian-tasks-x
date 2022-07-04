@@ -223,6 +223,10 @@ export class QuerySql implements IQuery {
             };
         };
 
+        alasql.fn.queryId = function () {
+            return queryId;
+        };
+
         alasql.options.nocount = true; // Disable row count for queries.
         //console.log(alasql(`DECLARE @queryId STRING = '${queryId}';`));
 
