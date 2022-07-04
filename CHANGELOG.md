@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.6.1](https://github.com/sytone/obsidian-tasks-x/compare/2.6.0...2.6.1) (2022-07-04)
+
+
+### Features
+
+* add backlink with short option to render template ([47f66d2](https://github.com/sytone/obsidian-tasks-x/commits/47f66d243f87c13a42c634dc007ab474ac093166))
+* disable registration of original tasks processor by default ([8505437](https://github.com/sytone/obsidian-tasks-x/commits/8505437414af87c923d0378286cad481bdd5c812))
+
+
+### Internal
+
+* cleanup isFilenameUnique references ([7a761d7](https://github.com/sytone/obsidian-tasks-x/commits/7a761d78b4cd47e310c37ec1d99b1cd27eb2423f))
+
+
+### Bug Fixes and Changes
+
+* add queryId as a function available in sql query ([01930ba](https://github.com/sytone/obsidian-tasks-x/commits/01930ba91deaf53e65e9d5cf4e955030698051e6))
+* better default handling ([c3f8dde](https://github.com/sytone/obsidian-tasks-x/commits/c3f8dde3e4bb9f79bf61d8486ca9a52cd582aedb))
+* remove extra cobnsole log ([306751f](https://github.com/sytone/obsidian-tasks-x/commits/306751f083f0bdb4084ef688a59d5d9443c58470))
+
+
+### Documentation
+
+* add details on rendering template ([c45f548](https://github.com/sytone/obsidian-tasks-x/commits/c45f54838d7b3dbf05b9a1d9719a52659c983093))
+* update plugin ([8495f30](https://github.com/sytone/obsidian-tasks-x/commits/8495f30ccd7d72ad0f574d65f8bad8ed10cc2b76))
+
 ## [2.6.0](https://github.com/sytone/obsidian-tasks-x/compare/2.5.2...2.6.0) (2022-07-02)
 
 
