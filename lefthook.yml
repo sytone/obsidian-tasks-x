@@ -5,20 +5,23 @@ pre-push:
       run: yarn build
     lint:
       run: yarn lint
-    lint-markdown:
-      run: yarn lint:markdown
     test:
       run: yarn test
 
 pre-commit:
   parallel: true
   commands:
-    lint:
+    lint-es:
       glob: '*.ts'
-      run: yarn lint {staged_files} && git add {staged_files}
+      run: yarn lint:es {staged_files} && git add {staged_files}
+    lint-ts:
+      glob: '*.ts'
+      run: yarn lint:ts {staged_files} && git add {staged_files}
+    lint-svelte:
+      run: yarn lint:svelte
     lint-markdown:
       glob: '*.md'
-      run: yarn lint:markdown && git add {staged_files}
+      run: yarn lint:markdown
     test:
       glob: '*.ts'
       run: yarn test {staged_files} --findRelatedTests --passWithNoTests
