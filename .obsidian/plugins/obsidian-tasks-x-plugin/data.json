@@ -128,14 +128,15 @@
   "features": {
     "APPEND_GLOBAL_FILTER": true,
     "ENABLE_SQL_QUERY": true,
-    "ENABLE_TEMPLATE_RENDERING": false
+    "ENABLE_TEMPLATE_RENDERING": true,
+    "ENABLE_ORIGINAL_TASK_REGISTRATION": false
   },
   "generalSettings": {
     "globalFilter": "",
     "removeGlobalFilter": true,
     "setDoneDate": true,
     "appendGlobalFilter": true,
-    "defaultRenderTemplate": "{{#li}}{{input}}{{#text}}Here be the template {{#if task.description}}{{description}} {{/if}}{{#if task.createdDate}}{{moment task.createdDate prefix=\"➕ \"}} {{/if}}{{#if task.priority}}{{priority}} {{/if}}{{#if task.recurrence}}{{recurrence}} {{/if}}{{#if task.startDate}}{{moment task.startDate prefix=\"🛫 \"}} {{/if}}{{#if task.scheduledDate}}{{moment task.scheduledDate prefix=\"⏳ \"}} {{/if}}{{#if task.dueDate}}{{moment task.dueDate prefix=\"📅 \"}} {{/if}}{{#if task.doneDate}}{{moment task.doneDate prefix=\"✅ \"}} {{/if}}{{#if task.blockLink}}{{task.blockLink}} {{/if}}{{/text}}{{editicon}}{{/li}}"
+    "defaultRenderTemplate": "{{#li}}{{input}}{{#text}}{{#if task.description}}{{description}} {{/if}}{{#if task.createdDate}}{{moment task.createdDate prefix=\"➕ \"}} {{/if}}{{#if task.priority}}{{priority}} {{/if}}{{#if task.recurrence}}{{recurrence}} {{/if}}{{#if task.startDate}}{{moment task.startDate prefix=\"🛫 \"}} {{/if}}{{#if task.scheduledDate}}{{moment task.scheduledDate prefix=\"⏳ \"}} {{/if}}{{#if task.dueDate}}<span style=\"background-color: #663399\">{{moment task.dueDate}}</span> {{/if}}{{#if task.doneDate}}{{moment task.doneDate prefix=\"✅ \"}} {{/if}}{{#if task.blockLink}}{{task.blockLink}} {{/if}}{{/text}}{{backlink short=\"true\"}}{{editicon}}{{/li}}"
   },
   "headingOpened": {
     "Tasks, SQL Powered": true,

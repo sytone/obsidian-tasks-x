@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "971b1ee749234f52",
+        "id": "f9e96f5aec7956c3",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "5-queries-sql/examples.md",
-            "mode": "source",
+            "file": "1-introduction/1-introduction.md",
+            "mode": "preview",
             "source": false
           }
         }
@@ -41,7 +41,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "warning",
+                "query": "queryBlockFile",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -71,7 +71,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "5-queries-sql/examples.md",
+                "file": "1-introduction/1-introduction.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -86,7 +86,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 196
   },
   "right": {
     "id": "60a78cda4aa7eed1",
@@ -96,17 +96,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "971b1ee749234f52",
+  "active": "f9e96f5aec7956c3",
   "lastOpenFiles": [
+    "1-introduction/1-introduction.md",
+    "2-installation/2-installation.md",
     "5-queries-sql/examples.md",
     "5-queries-sql/comments.md",
-    "example-data/random-tasks.md",
-    "5-queries-sql/filters.md",
-    "5-queries-sql/columns.md",
-    "example-data/static-tasks.md",
-    "4-queries-basic/examples.md",
-    "4-queries-basic/4-queries-basic.md",
-    "5-queries-sql/5-queries-sql.md",
-    "3-getting-started/3-getting-started.md"
+    "5-queries-sql/raw-data-debugging.md",
+    "5-queries-sql/operators.md",
+    "5-queries-sql/limit.md",
+    "3-getting-started/template-rendering.md",
+    "3-getting-started/features.md",
+    "3-getting-started/global-filter.md"
   ]
 }

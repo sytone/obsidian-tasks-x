@@ -57,3 +57,10 @@ WHERE tags->includes('#Chores')
 LIMIT 10
 #raw tasks
 ```
+
+```task-sql
+SELECT * FROM pagedata; SHOW TABLES FROM alasql
+#SELECT *, queryId(), queryBlockFile() FROM tasks LIMIT 10
+#SELECT queryId()  
+#raw empty
+```
