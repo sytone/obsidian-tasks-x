@@ -53,7 +53,7 @@
     "obsidian": "0.13.21",
     "prettier": "^2.2.1",
     "standard-version": "^9.5.0",
-    "svelte": "^3.37.0",
+    "svelte": "^3.49.0",
     "svelte-check": "^1.5.2",
     "svelte-preprocess": "^4.10.1",
     "ts-jest": "^27.0.7",
