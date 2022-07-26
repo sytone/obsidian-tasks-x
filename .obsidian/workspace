@@ -98,15 +98,15 @@
   },
   "active": "f9e96f5aec7956c3",
   "lastOpenFiles": [
+    "7-scenarios/issue-13-created-duplication.md",
+    "7-scenarios/filter-time-of-day.md",
+    "7-scenarios/7-scenarios.md",
     "1-introduction/1-introduction.md",
     "2-installation/2-installation.md",
     "5-queries-sql/examples.md",
     "5-queries-sql/comments.md",
     "5-queries-sql/raw-data-debugging.md",
     "5-queries-sql/operators.md",
-    "5-queries-sql/limit.md",
-    "3-getting-started/template-rendering.md",
-    "3-getting-started/features.md",
-    "3-getting-started/global-filter.md"
+    "5-queries-sql/limit.md"
   ]
 }
