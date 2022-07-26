@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/sytone/obsidian-tasks-x/compare/2.6.1...2.7.0) (2022-07-26)
+
+
+### Bug Fixes and Changes
+
+* created date appearing twice ([e356861](https://github.com/sytone/obsidian-tasks-x/commits/e356861dedaf65eae25955f1ad71a172b707aa53)), closes [#13](https://github.com/sytone/obsidian-tasks-x/issues/13)
+
 ### [2.6.1](https://github.com/sytone/obsidian-tasks-x/compare/2.6.0...2.6.1) (2022-07-04)
 
 
