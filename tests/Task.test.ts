@@ -48,6 +48,33 @@ describe('parsing', () => {
         expect(task!.doneDate!.isSame(moment('2021-06-20', 'YYYY-MM-DD'))).toStrictEqual(true);
     });
 
+    it('parses a created date out of task line #13', () => {
+        // Arrange
+        const line = '- [x] this is a done task ➕ 2022-07-25';
+        const path = 'this/is a path/to a/file.md';
+        const sectionStart = 1337;
+        const sectionIndex = 1209;
+        const precedingHeader = 'Eloquent Section';
+
+        // Act
+        const task = Task.fromLine({
+            line,
+            path,
+            file: null,
+            sectionStart,
+            sectionIndex,
+            precedingHeader,
+        });
+
+        // Assert
+        expect(task).not.toBeNull();
+        expect(task!.createdDate!.toMarkdownString()).toEqual('➕ 2022-07-25');
+        expect(task!.description).toEqual('this is a done task');
+        expect(task!.status.indicator).toStrictEqual(Status.DONE.indicator);
+        expect(task!.createdDate).not.toBeNull();
+        expect(task!.createdDate!.value!.isSame(moment('2022-07-25', 'YYYY-MM-DD'))).toStrictEqual(true);
+    });
+
     it('returns null when task does not have global filter', () => {
         // Arrange
         const originalSettings = getSettings();
