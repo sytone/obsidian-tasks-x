@@ -349,7 +349,7 @@ export class Task {
         // New process of parsing the task, used by created date.
 
         const createdDate = new CreatedDateProperty(description);
-        description.replace(createdDate.toMarkdownString(), '').trim();
+        description = description.replace(createdDate.toMarkdownString(), '').trim();
 
         // Keep matching and removing special strings from the end of the
         // description in any order. The loop should only run once if the
