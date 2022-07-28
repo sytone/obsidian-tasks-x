@@ -469,6 +469,7 @@ esbuild
                     './docs/.obsidian/plugins/obsidian-tasks-x-plugin/main.js': './main.js',
                     './docs/.obsidian/plugins/obsidian-tasks-x-plugin/manifest.json': './manifest.json',
                     './docs/.obsidian/plugins/obsidian-tasks-x-plugin/styles.css': './styles.css',
+                    './docs/CHANGELOG.md': './CHANGELOG.md',
                 },
             }),
         ],

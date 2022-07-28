@@ -9,7 +9,7 @@
     "build": "node .config/esbuild.config.mjs production",
     "build:dev": "node .config/esbuild.config.mjs",
     "lint": "eslint ./src --fix && eslint ./tests --fix && tsc --noEmit --pretty && svelte-check",
-    "lint:markdown": "markdownlint-cli2-config \".config/.markdownlint-cli2.jsonc\" \"**/*.md\" \"#node_modules\" \"#CHANGELOG.md\"",
+    "lint:markdown": "markdownlint-cli2-config \".config/.markdownlint-cli2.jsonc\" \"**/*.md\" \"#node_modules\" \"#CHANGELOG.md\" \"#docs/CHANGELOG.md\"",
     "test": "jest --ci",
     "test:dev": "jest --watch",
     "test:obsidian": "pwsh -ExecutionPolicy Unrestricted -NoProfile -File ./scripts/Test-TasksInLocalObsidian.ps1",
