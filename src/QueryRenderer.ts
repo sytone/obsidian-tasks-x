@@ -13,7 +13,6 @@ import { Query } from './Query/Query';
 import type { GroupHeading } from './Query/GroupHeading';
 import { TaskRenderer } from './TaskRenderer';
 import { isFeatureEnabled } from './Config/Settings';
-import { Feature } from './Config/Feature';
 
 export class QueryRenderer {
     public addQueryRenderChild = this._addQueryRenderChild.bind(this);
@@ -27,7 +26,7 @@ export class QueryRenderer {
         this.app = plugin.app;
         this.events = events;
 
-        if (isFeatureEnabled(Feature.ENABLE_ORIGINAL_TASK_REGISTRATION.internalName)) {
+        if (isFeatureEnabled('ENABLE_ORIGINAL_TASK_REGISTRATION')) {
             plugin.registerMarkdownCodeBlockProcessor('tasks', this._addQueryRenderChild.bind(this));
         }
         plugin.registerMarkdownCodeBlockProcessor('task-sql', this._addQuerySqlRenderChild.bind(this));
@@ -199,7 +198,7 @@ class QueryRenderChild extends MarkdownRenderChild {
             const isFilenameUnique = this.isFilenameUnique({ task });
 
             let listItem;
-            if (isFeatureEnabled(Feature.ENABLE_TEMPLATE_RENDERING.internalName)) {
+            if (isFeatureEnabled('ENABLE_TEMPLATE_RENDERING')) {
                 const te = new TaskEvents(this.app, new TaskRenderer());
                 listItem = await te.getRenderedHTMLWithEvents(taskList, i, task);
             } else {

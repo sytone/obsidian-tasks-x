@@ -9,7 +9,6 @@ import { LayoutOptions } from './LayoutOptions';
 import { Recurrence, RecurrenceRecord } from './Recurrence';
 import { getGeneralSetting, getSettings, isFeatureEnabled } from './Config/Settings';
 import { Urgency } from './Urgency';
-import { Feature } from './Config/Feature';
 import { CreatedDateProperty } from './TaskProperties';
 import TasksServices from './TasksServices';
 
@@ -608,7 +607,7 @@ export class Task {
 
         // New feature. Only enabled if user turns on the APPEND_GLOBAL_FILTER feature. Will
         // append the filter rather than forcing it to the front.
-        if (isFeatureEnabled(Feature.APPEND_GLOBAL_FILTER.internalName) && getGeneralSetting('appendGlobalFilter')) {
+        if (isFeatureEnabled('APPEND_GLOBAL_FILTER') && getGeneralSetting('appendGlobalFilter')) {
             taskString = `${taskString} ${globalFilter}`.trim();
         } else {
             // Default is to have filter at front.

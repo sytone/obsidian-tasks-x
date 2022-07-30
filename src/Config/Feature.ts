@@ -1,3 +1,5 @@
+import featuresJson from './featureConfiguration.json';
+
 export type FeatureFlag = {
     [internalName: string]: boolean;
 };
@@ -21,64 +23,6 @@ export type FeatureFlag = {
  * @since 2022-05-29
  */
 export class Feature {
-    static readonly TASK_STATUS_MENU = new Feature(
-        'TASK_STATUS_MENU',
-        0,
-        'Enables a right click menu for each task to allow you to select the task Status from the available next transition states.',
-        'Task Status Menu',
-        false,
-        false,
-    );
-
-    static readonly APPEND_GLOBAL_FILTER = new Feature(
-        'APPEND_GLOBAL_FILTER',
-        0,
-        'Enabling this places the global filter at the end of the task description. Some plugins, such as Day Planner, \n' +
-            'might require this, or you might prefer how it looks. If you change this when tasks are modified using the \n' +
-            'Task edit box they will have the tag moved to the beginning or end of the description.',
-        'Creates / Supports tasks with the global filter at end',
-        true,
-        true,
-    );
-
-    static readonly ENABLE_SQL_QUERY = new Feature(
-        'ENABLE_SQL_QUERY',
-        0,
-        'Enable the ability to use SQL based queries to find tasks. This new syntax can be used by annotating the code block \n' +
-            ' with "task-sql" instead of "task"',
-        'Enabled SQL based queries',
-        true,
-        true,
-    );
-
-    static readonly ENABLE_TEMPLATE_RENDERING = new Feature(
-        'ENABLE_TEMPLATE_RENDERING',
-        0,
-        `
- This is an enhanced form of rendering the query results that
- allows the user full control over the format of the rendered task
- that a query returns. It uses handlebars based templates with
- helpers that ensure the results work with Obsidian removing the need
- for user to know the internals of the Obsidian HTML structure.
-        `,
-        'Enable templated rendering',
-        false,
-        false,
-    );
-
-    static readonly ENABLE_ORIGINAL_TASK_REGISTRATION = new Feature(
-        'ENABLE_ORIGINAL_TASK_REGISTRATION',
-        0,
-        `
- This plugin is synced with the original tasks plugin, if you enable this you
- only need to have this plugin installed. This also means the rendering logic will
- work for the original string based queries as well.
-        `,
-        'Enable original task plugin query processing',
-        false,
-        true,
-    );
-
     private constructor(
         public readonly internalName: string,
         public readonly index: number,
@@ -88,15 +32,41 @@ export class Feature {
         public readonly stable: boolean,
     ) {}
 
+    /**
+     * Returns the list of all available features.
+     *
+     * @readonly
+     * @static
+     * @type {Feature[]}
+     * @memberof Feature
+     */
     static get values(): Feature[] {
-        return [
-            this.APPEND_GLOBAL_FILTER,
-            this.ENABLE_SQL_QUERY,
-            this.ENABLE_TEMPLATE_RENDERING,
-            this.ENABLE_ORIGINAL_TASK_REGISTRATION,
-        ];
+        let availableFeatures: Feature[] = [];
+
+        featuresJson.forEach((feature) => {
+            availableFeatures = [
+                ...availableFeatures,
+                new Feature(
+                    feature.internalName,
+                    feature.index,
+                    feature.description,
+                    feature.displayName,
+                    feature.enabledByDefault,
+                    feature.stable,
+                ),
+            ];
+        });
+        return availableFeatures;
     }
 
+    /**
+     * Returns the enabled state of the feature.
+     *
+     * @readonly
+     * @static
+     * @type {FeatureFlag}
+     * @memberof Feature
+     */
     static get settingsFlags(): FeatureFlag {
         const featureFlags: { [internalName: string]: boolean } = {};
 
