@@ -3,12 +3,16 @@ pre-push:
   commands:
     build:
       run: yarn build
+      exclude: '.vscode|lefthook.yml'
     lint:
       run: yarn lint
+      exclude: '.vscode|lefthook.yml'
     lint-markdown:
       run: yarn lint:markdown
+      exclude: '.vscode|lefthook.yml'
     test:
       run: yarn test
+      exclude: '.vscode|lefthook.yml'
 
 pre-commit:
   parallel: true
@@ -16,12 +20,15 @@ pre-commit:
     lint:
       glob: '*.ts'
       run: yarn lint {staged_files} && git add {staged_files}
+      exclude: '.vscode|lefthook.yml'
     lint-markdown:
       glob: '*.md'
       run: yarn lint:markdown && git add {staged_files}
+      exclude: '.vscode|lefthook.yml'
     test:
       glob: '*.ts'
       run: yarn test {staged_files} --findRelatedTests --passWithNoTests
+      exclude: '.vscode|lefthook.yml'
 
 commit-msg:
   commands:
