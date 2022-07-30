@@ -25,69 +25,83 @@
       "label": "Type",
       "name": "type",
       "type": "enum",
+      "description": "Type of changes",
       "options": [
         {
           "label": "---",
           "value": ""
         },
         {
-          "label": "build",
+          "label": "build - hidden",
+          "value": "build",
           "description": "The commit alters the build system or external dependencies of the product (adding, removing, or upgrading dependencies)."
         },
         {
-          "label": "change",
+          "label": "change existing - Bug Fixes and Changes",
+          "value": "change",
           "description": "The commit changes the implementation of an existing feature."
         },
         {
-          "label": "chore",
+          "label": "chore - hidden",
+          "value": "chore",
           "description": "Updating grunt tasks etc; no production code change"
         },
         {
-          "label": "ci",
+          "label": "ci - hidden",
+          "value": "ci",
           "description": "Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)"
         },
         {
-          "label": "deprecate",
+          "label": "deprecate - Bug Fixes and Changes",
+          "value": "deprecate",
           "description": "The commit deprecates existing functionality, but does not remove it from the product. For example, sometimes older public APIs may get deprecated because newer, more efficient APIs are available. Removing the APIs could break existing integrations so the APIs may be marked as deprecated in order to encourage the integration developers to migrate to the newer APIs while also giving them time before removing older functionality."
         },
         {
-          "label": "docs",
+          "label": "docs - Documentation",
+          "value": "docs",
           "description": "Documentation only changes"
         },
         {
-          "label": "feat",
+          "label": "feat - Features",
+          "value": "feat",
           "description": "A new feature"
         },
         {
-          "label": "fix",
+          "label": "fix - Bug Fixes and Changes",
+          "value": "fix",
           "description": "A bug fix"
         },
         {
-          "label": "perf",
+          "label": "perf - Internal",
+          "value": "perf",
           "description": "A code change that improves performance"
         },
         {
-          "label": "refactor",
+          "label": "refactor - Internal",
+          "value": "refactor",
           "description": "A code change that neither fixes a bug nor adds a feature"
         },
         {
-          "label": "revert",
+          "label": "revert - hidden",
+          "value": "revert",
           "description": "The commit reverts one or more commits that were previously included in the product, but were accidentally merged or serious issues were discovered that required their removal from the main branch."
         },
         {
-          "label": "security",
+          "label": "security - Internal",
+          "value": "security",
           "description": "The commit improves the security of the product or resolves a security issue that has been reported."
         },
         {
-          "label": "style",
+          "label": "style - hidden",
+          "value": "style",
           "description": "Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)"
         },
         {
-          "label": "test",
+          "label": "test - Internal",
+          "value": "test",
           "description": "Adding missing tests or correcting existing tests"
         }
-      ],
-      "description": "Type of changes"
+      ]
     },
     {
       "label": "Scope",
@@ -138,4 +152,32 @@
   "eslint.lintTask.enable": true,
   "eslint.lintTask.options": ". --cache",
   "eslint.packageManager": "yarn",
+  "commit-message-editor.staticTemplate": [
+    "{type}{scope}: {description}",
+    "",
+    "This is a description of the change you are making to the platform or component. It should explain ",
+    "why the change is being made. Link to any documents as required. This should indicate any addtional",
+    "testing done outside of the existing build pipelines.",
+    "",
+    "## Checklist",
+    "",
+    "- [ ] My code follows the style guidelines of this project",
+    "- [ ] I have performed a self-review of my own code and corrected any misspellings",
+    "- [ ] I have commented my code, particularly in hard-to-understand areas so future engineers have context",
+    "- [ ] I have made corresponding changes to the documentation and created TSGs where needed",
+    "- [ ] My changes generate no new warnings in the build",
+    "- [ ] I have added tests that prove my fix is effective or that my feature works",
+    "- [ ] New and existing unit tests pass locally with my changes",
+    "- [ ] Any dependent changes have been merged and published in downstream modules",
+    "",
+    "",
+    "Related work items: #"
+  ],
+  "commit-message-editor.dynamicTemplate": [
+    "{type}{scope}: {description}",
+    "",
+    "{body}",
+    "",
+    "{footer}"
+  ],
 }
