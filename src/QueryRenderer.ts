@@ -148,9 +148,15 @@ class QueryRenderChild extends MarkdownRenderChild {
                 // will be empty, and no headings will be added.
                 QueryRenderChild.addGroupHeadings(content, group.groupHeadings);
 
+                let templateOverride = '';
+                if (isFeatureEnabled('ENABLE_INLINE_TEMPLATE')) {
+                    templateOverride = this.queryEngine.template === undefined ? '' : this.queryEngine.template;
+                }
+
                 const { taskList } = await this.createTasksList({
                     tasks: group.tasks,
                     content: content,
+                    template: templateOverride,
                 });
                 content.appendChild(taskList);
             }
@@ -185,9 +191,11 @@ class QueryRenderChild extends MarkdownRenderChild {
     private async createTasksList({
         tasks,
         content,
+        template,
     }: {
         tasks: Task[];
         content: HTMLDivElement;
+        template: string;
     }): Promise<{ taskList: HTMLUListElement; tasksCount: number }> {
         const tasksCount = tasks.length;
 
@@ -199,7 +207,14 @@ class QueryRenderChild extends MarkdownRenderChild {
 
             let listItem;
             if (isFeatureEnabled('ENABLE_TEMPLATE_RENDERING')) {
-                const te = new TaskEvents(this.app, new TaskRenderer());
+                let renderingEngine = new TaskRenderer();
+                if (isFeatureEnabled('ENABLE_INLINE_TEMPLATE')) {
+                    if (template !== undefined && template !== '') {
+                        renderingEngine = new TaskRenderer(template);
+                    }
+                }
+
+                const te = new TaskEvents(this.app, renderingEngine);
                 listItem = await te.getRenderedHTMLWithEvents(taskList, i, task);
             } else {
                 listItem = await task.toLi({

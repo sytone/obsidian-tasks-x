@@ -56,6 +56,14 @@ export interface IQuery {
     error: string | undefined;
 
     /**
+     * The template used to render the query results.
+     *
+     * @type {(string | undefined)}
+     * @memberof IQuery
+     */
+    template: string | undefined;
+
+    /**
      * Any layout options the query engine should be aware of or
      * used in the query.
      *

@@ -1,9 +1,9 @@
 import Handlebars from 'handlebars';
 import moment from 'moment';
 import { Component, MarkdownRenderer } from 'obsidian';
-import { log } from './lib/logging';
 import { Priority, Task } from './Task';
 import { getGeneralSetting } from './Config/Settings';
+import { logging } from './lib/logging';
 
 export type RenderData = {
     task: Task;
@@ -14,6 +14,7 @@ export class TaskRenderer {
     public template: string;
 
     private static _helpersRegistered: boolean;
+    logger = logging.getLogger('taskssql.TaskRenderer');
 
     private static registerHandlebarHelpers() {
         Handlebars.registerHelper('moment', function (context, options) {
@@ -162,6 +163,7 @@ export class TaskRenderer {
      */
     constructor(template?: string) {
         if (!TaskRenderer._helpersRegistered) {
+            this.logger.debug('Registering Handlebars helpers');
             TaskRenderer.registerHandlebarHelpers();
             TaskRenderer._helpersRegistered = true;
         }
@@ -191,7 +193,7 @@ export class TaskRenderer {
             this.template = template;
         }
 
-        log('debug', this.template);
+        this.logger.debug('debug', this.template);
     }
 
     public async toHTMLElement(parentUlElement: HTMLElement, index: number, task: Task): Promise<HTMLElement> {

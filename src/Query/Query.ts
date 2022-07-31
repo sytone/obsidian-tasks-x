@@ -169,6 +169,10 @@ export class Query implements IQuery {
         return this._error;
     }
 
+    public get template(): string | undefined {
+        return '';
+    }
+
     public applyQueryToTasks(queryId: string, tasks: Task[]): TaskGroups {
         this.logger.debugWithId(queryId, `Executing query: [${this.source}]`);
 

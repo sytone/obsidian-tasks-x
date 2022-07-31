@@ -13,6 +13,7 @@ import { TaskGroup } from '../Query/TaskGroup';
 import { GroupHeading } from '../Query/GroupHeading';
 import { logging } from '../lib/logging';
 import TasksServices from '../TasksServices';
+import { isFeatureEnabled } from '../Config/Settings';
 
 export type GroupingProperty = 'backlink' | 'filename' | 'folder' | 'heading' | 'path' | 'status';
 export type Grouping = { property: GroupingProperty };
@@ -43,8 +44,10 @@ export class QuerySql implements IQuery {
     private _shortModeRegexp = /^short/;
     private _rawQuery = /^raw (empty|tasks)/;
     private _customJSRegexp = /^customjs (.*) (.*)/;
+    private _customTemplateRegexp = /^template (.*)/;
 
     private _customJsClasses: Array<[string, string]>;
+    private _customTemplate: string = '';
 
     constructor({
         source,
@@ -99,6 +102,14 @@ export class QuerySql implements IQuery {
                                     customJSClasses[2].trim() !== ''
                                 ) {
                                     this._customJsClasses.push([customJSClasses[1].trim(), customJSClasses[2].trim()]);
+                                }
+                            } else if (this._customTemplateRegexp.test(directive)) {
+                                // Search for #template <template>.
+                                if (isFeatureEnabled('ENABLE_INLINE_TEMPLATE')) {
+                                    const customTemplate = directive.match(this._customTemplateRegexp);
+                                    if (customTemplate !== null && customTemplate[1].trim() !== '') {
+                                        this._customTemplate = customTemplate[1].trim();
+                                    }
                                 }
                             }
                         }
@@ -156,6 +167,10 @@ export class QuerySql implements IQuery {
 
     public get error(): string | undefined {
         return this._error;
+    }
+
+    public get template(): string | undefined {
+        return this._customTemplate;
     }
 
     public get layoutOptions(): LayoutOptions {
