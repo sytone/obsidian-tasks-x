@@ -61,6 +61,6 @@ LIMIT 10
 ```task-sql
 SELECT * FROM pagedata; SHOW TABLES FROM alasql
 #SELECT *, queryId(), queryBlockFile() FROM tasks LIMIT 10
-#SELECT queryId()  
+#SELECT queryId()
 #raw empty
 ```

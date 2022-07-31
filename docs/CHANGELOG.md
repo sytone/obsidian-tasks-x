@@ -2,22 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/sytone/obsidian-tasks-x/compare/2.6.1...2.7.0) (2022-07-26)
+
+
+### Bug Fixes and Changes
+
+* created date appearing twice ([e356861](https://github.com/sytone/obsidian-tasks-x/commits/e356861dedaf65eae25955f1ad71a172b707aa53)), closes [#13](https://github.com/sytone/obsidian-tasks-x/issues/13)
+
 ### [2.6.1](https://github.com/sytone/obsidian-tasks-x/compare/2.6.0...2.6.1) (2022-07-04)
+
 
 ### Features
 
 * add backlink with short option to render template ([47f66d2](https://github.com/sytone/obsidian-tasks-x/commits/47f66d243f87c13a42c634dc007ab474ac093166))
 * disable registration of original tasks processor by default ([8505437](https://github.com/sytone/obsidian-tasks-x/commits/8505437414af87c923d0378286cad481bdd5c812))
 
+
 ### Internal
 
 * cleanup isFilenameUnique references ([7a761d7](https://github.com/sytone/obsidian-tasks-x/commits/7a761d78b4cd47e310c37ec1d99b1cd27eb2423f))
+
 
 ### Bug Fixes and Changes
 
 * add queryId as a function available in sql query ([01930ba](https://github.com/sytone/obsidian-tasks-x/commits/01930ba91deaf53e65e9d5cf4e955030698051e6))
 * better default handling ([c3f8dde](https://github.com/sytone/obsidian-tasks-x/commits/c3f8dde3e4bb9f79bf61d8486ca9a52cd582aedb))
 * remove extra cobnsole log ([306751f](https://github.com/sytone/obsidian-tasks-x/commits/306751f083f0bdb4084ef688a59d5d9443c58470))
+
 
 ### Documentation
 
@@ -26,11 +37,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [2.6.0](https://github.com/sytone/obsidian-tasks-x/compare/2.5.2...2.6.0) (2022-07-02)
 
+
 ### Features
 
 * add feature to customize render ([72636aa](https://github.com/sytone/obsidian-tasks-x/commits/72636aadf72fabb065e6c7d58cfdec93b6b6de8c))
 * add template based rendering flag and setting ([a2d7bad](https://github.com/sytone/obsidian-tasks-x/commits/a2d7bad8cb6591526f66d002f905b8f493510552))
 * added created to ui ([ae01177](https://github.com/sytone/obsidian-tasks-x/commits/ae0117754c4615a04d40ed4adca001fcb9cb067a))
+
 
 ### Documentation
 
@@ -38,9 +51,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [2.5.2](https://github.com/sytone/obsidian-tasks-x/compare/2.5.0...2.5.2) (2022-06-30)
 
+
 ### Documentation
 
 * update workspace layout ([212ed33](https://github.com/sytone/obsidian-tasks-x/commits/212ed33fd4dfc9b2844581a31e8e33cc8bd5d6c9))
+
 
 ### Bug Fixes and Changes
 
@@ -48,10 +63,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [2.5.0](https://github.com/sytone/obsidian-tasks-x/compare/2.4.2...2.5.0) (2022-06-29)
 
+
 ### Features
 
 * add created date and custom functions ([77270aa](https://github.com/sytone/obsidian-tasks-x/commits/77270aa8293ae20319cc7ddb3c46166515d0cd3c))
 * **tasksv1:** merge with tasks v1 code base ([aeffb3c](https://github.com/sytone/obsidian-tasks-x/commits/aeffb3c20f8d8ab534036aa4950abd4295bb54bb)), closes [#840](https://github.com/sytone/obsidian-tasks-x/issues/840) [#830](https://github.com/sytone/obsidian-tasks-x/issues/830) [#828](https://github.com/sytone/obsidian-tasks-x/issues/828) [#819](https://github.com/sytone/obsidian-tasks-x/issues/819) [#818](https://github.com/sytone/obsidian-tasks-x/issues/818) [#817](https://github.com/sytone/obsidian-tasks-x/issues/817) [#816](https://github.com/sytone/obsidian-tasks-x/issues/816) [#815](https://github.com/sytone/obsidian-tasks-x/issues/815) [#814](https://github.com/sytone/obsidian-tasks-x/issues/814) [#813](https://github.com/sytone/obsidian-tasks-x/issues/813) [#812](https://github.com/sytone/obsidian-tasks-x/issues/812) [#811](https://github.com/sytone/obsidian-tasks-x/issues/811) [#808](https://github.com/sytone/obsidian-tasks-x/issues/808) [#802](https://github.com/sytone/obsidian-tasks-x/issues/802) [#654](https://github.com/sytone/obsidian-tasks-x/issues/654) [#807](https://github.com/sytone/obsidian-tasks-x/issues/807) [#654](https://github.com/sytone/obsidian-tasks-x/issues/654) [#806](https://github.com/sytone/obsidian-tasks-x/issues/806) [#804](https://github.com/sytone/obsidian-tasks-x/issues/804) [#803](https://github.com/sytone/obsidian-tasks-x/issues/803) [#801](https://github.com/sytone/obsidian-tasks-x/issues/801) [#800](https://github.com/sytone/obsidian-tasks-x/issues/800) [#791](https://github.com/sytone/obsidian-tasks-x/issues/791) [#779](https://github.com/sytone/obsidian-tasks-x/issues/779) [#777](https://github.com/sytone/obsidian-tasks-x/issues/777) [#776](https://github.com/sytone/obsidian-tasks-x/issues/776) [#754](https://github.com/sytone/obsidian-tasks-x/issues/754) [#774](https://github.com/sytone/obsidian-tasks-x/issues/774) [#773](https://github.com/sytone/obsidian-tasks-x/issues/773) [#772](https://github.com/sytone/obsidian-tasks-x/issues/772) [#771](https://github.com/sytone/obsidian-tasks-x/issues/771) [#764](https://github.com/sytone/obsidian-tasks-x/issues/764) [#758](https://github.com/sytone/obsidian-tasks-x/issues/758) [#757](https://github.com/sytone/obsidian-tasks-x/issues/757) [#760](https://github.com/sytone/obsidian-tasks-x/issues/760) [#759](https://github.com/sytone/obsidian-tasks-x/issues/759) [#756](https://github.com/sytone/obsidian-tasks-x/issues/756) [#755](https://github.com/sytone/obsidian-tasks-x/issues/755) [#579](https://github.com/sytone/obsidian-tasks-x/issues/579) [#749](https://github.com/sytone/obsidian-tasks-x/issues/749) [#748](https://github.com/sytone/obsidian-tasks-x/issues/748) [#744](https://github.com/sytone/obsidian-tasks-x/issues/744) [#739](https://github.com/sytone/obsidian-tasks-x/issues/739) [#735](https://github.com/sytone/obsidian-tasks-x/issues/735) [#733](https://github.com/sytone/obsidian-tasks-x/issues/733) [#731](https://github.com/sytone/obsidian-tasks-x/issues/731) [#720](https://github.com/sytone/obsidian-tasks-x/issues/720) [#714](https://github.com/sytone/obsidian-tasks-x/issues/714) [#710](https://github.com/sytone/obsidian-tasks-x/issues/710) [#707](https://github.com/sytone/obsidian-tasks-x/issues/707) [#706](https://github.com/sytone/obsidian-tasks-x/issues/706) [#705](https://github.com/sytone/obsidian-tasks-x/issues/705) [#701](https://github.com/sytone/obsidian-tasks-x/issues/701) [#700](https://github.com/sytone/obsidian-tasks-x/issues/700) [#699](https://github.com/sytone/obsidian-tasks-x/issues/699) [#683](https://github.com/sytone/obsidian-tasks-x/issues/683) [#660](https://github.com/sytone/obsidian-tasks-x/issues/660) [#655](https://github.com/sytone/obsidian-tasks-x/issues/655) [#696](https://github.com/sytone/obsidian-tasks-x/issues/696) [#690](https://github.com/sytone/obsidian-tasks-x/issues/690)
+
 
 ### Documentation
 
@@ -60,6 +77,7 @@ All notable changes to this project will be documented in this file. See [standa
 * add static index page for redirect and upload updated manifest ([eb1f33c](https://github.com/sytone/obsidian-tasks-x/commits/eb1f33c40caf449cb06b1fe405ef33a3692a4abd))
 * fixed duplicate example from PR [#8](https://github.com/sytone/obsidian-tasks-x/issues/8) ([3e56998](https://github.com/sytone/obsidian-tasks-x/commits/3e5699865f7f349fc0c59d8b609756a12ce48428))
 * update mapping to jekyll ([e73cead](https://github.com/sytone/obsidian-tasks-x/commits/e73cead25208534168e05d9831eb35b405bdcd16))
+
 
 ### Bug Fixes and Changes
 
@@ -72,6 +90,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [2.4.0](https://github.com/sytone/obsidian-tasks-x/compare/2.3.0...2.4.0) (2022-06-24)
 
+
 ### Features
 
 * add ability to log with trace id ([678ef27](https://github.com/sytone/obsidian-tasks-x/commits/678ef2778378bf8f76d063054306da3bf20a6861))
@@ -80,10 +99,12 @@ All notable changes to this project will be documented in this file. See [standa
 * add page details query block is executing on ([e1a7802](https://github.com/sytone/obsidian-tasks-x/commits/e1a7802145d5597556d35410bf790506cd75bcbb))
 * update logging to make tracing of queries simpler ([f0af6dc](https://github.com/sytone/obsidian-tasks-x/commits/f0af6dcea38fb28b33663d33f0e706fe306d7251))
 
+
 ### Bug Fixes and Changes
 
 * resolve casing issue with config folder ([cb08924](https://github.com/sytone/obsidian-tasks-x/commits/cb08924c4d935b7aa4b2e9112f581fed365ad349))
 * resolve the casing oF the config folder ([4a99b1a](https://github.com/sytone/obsidian-tasks-x/commits/4a99b1aa344c1f014afa55f6746684ac701c0d93))
+
 
 ### Internal
 
@@ -91,6 +112,7 @@ All notable changes to this project will be documented in this file. See [standa
 * code cleanup and correct feature usage ([48aeda4](https://github.com/sytone/obsidian-tasks-x/commits/48aeda41369333f7fcc2dad4b76b864d72657a7a))
 * implement faster header parsing saves a few ms per call ([9ecafac](https://github.com/sytone/obsidian-tasks-x/commits/9ecafac76c49ee318e5c1f1b0a0af80714798f98))
 * only render markdown if links, saves over 5ms per call ([60e3d0c](https://github.com/sytone/obsidian-tasks-x/commits/60e3d0c20388d08c94ebecee7ef209b535f1f436))
+
 
 ### Documentation
 
@@ -108,10 +130,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [2.3.0](https://github.com/sytone/obsidian-tasks-x/compare/2.1.0...2.3.0) (2022-06-11)
 
+
 ### Features
 
 * add file as property of the task for quering ([eff7181](https://github.com/sytone/obsidian-tasks-x/commits/eff718153a118137651e001207ff1cb3b63de75c))
 * separation of rendering logic from task model ([c289af9](https://github.com/sytone/obsidian-tasks-x/commits/c289af94b329633dba8cd8cde03b68704a39a2ed))
+
 
 ### Internal
 
@@ -120,11 +144,13 @@ All notable changes to this project will be documented in this file. See [standa
 * Create tag/tags filter class ([#714](https://github.com/sytone/obsidian-tasks-x/issues/714)) ([251093f](https://github.com/sytone/obsidian-tasks-x/commits/251093f225a469cf9b976e3c6aa535d1729a0d64))
 * Create text filter classes ([#705](https://github.com/sytone/obsidian-tasks-x/issues/705)) ([30a095b](https://github.com/sytone/obsidian-tasks-x/commits/30a095bf30331da12706f89187d4450f95e7db35))
 
+
 ### Documentation
 
 * Fix 'How does Tasks handle status changes?' formatting ([#720](https://github.com/sytone/obsidian-tasks-x/issues/720)) ([17c9545](https://github.com/sytone/obsidian-tasks-x/commits/17c95451c01c43158e08fdc869d991af93113542))
 * fix old references to Tasks X ([7e3cc89](https://github.com/sytone/obsidian-tasks-x/commits/7e3cc898d8b04a75ac948dd8b8a5c05d937d6fde))
 * Indicate when 1.6.0 features were released ([#731](https://github.com/sytone/obsidian-tasks-x/issues/731)) ([3da6d12](https://github.com/sytone/obsidian-tasks-x/commits/3da6d1256510a8137afd38d7660ecd69d7239c0a))
+
 
 ### Bug Fixes and Changes
 
@@ -133,10 +159,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [2.2.0](https://github.com/sytone/obsidian-tasks-x/compare/2.1.0...2.2.0) (2022-06-11)
 
+
 ### Features
 
 * add file as property of the task for quering ([eff7181](https://github.com/sytone/obsidian-tasks-x/commits/eff718153a118137651e001207ff1cb3b63de75c))
 * separation of rendering logic from task model ([c289af9](https://github.com/sytone/obsidian-tasks-x/commits/c289af94b329633dba8cd8cde03b68704a39a2ed))
+
 
 ### Internal
 
@@ -145,11 +173,13 @@ All notable changes to this project will be documented in this file. See [standa
 * Create tag/tags filter class ([#714](https://github.com/sytone/obsidian-tasks-x/issues/714)) ([251093f](https://github.com/sytone/obsidian-tasks-x/commits/251093f225a469cf9b976e3c6aa535d1729a0d64))
 * Create text filter classes ([#705](https://github.com/sytone/obsidian-tasks-x/issues/705)) ([30a095b](https://github.com/sytone/obsidian-tasks-x/commits/30a095bf30331da12706f89187d4450f95e7db35))
 
+
 ### Documentation
 
 * Fix 'How does Tasks handle status changes?' formatting ([#720](https://github.com/sytone/obsidian-tasks-x/issues/720)) ([17c9545](https://github.com/sytone/obsidian-tasks-x/commits/17c95451c01c43158e08fdc869d991af93113542))
 * fix old references to Tasks X ([7e3cc89](https://github.com/sytone/obsidian-tasks-x/commits/7e3cc898d8b04a75ac948dd8b8a5c05d937d6fde))
 * Indicate when 1.6.0 features were released ([#731](https://github.com/sytone/obsidian-tasks-x/issues/731)) ([3da6d12](https://github.com/sytone/obsidian-tasks-x/commits/3da6d1256510a8137afd38d7660ecd69d7239c0a))
+
 
 ### Bug Fixes and Changes
 
@@ -158,9 +188,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [2.1.0](https://github.com/sytone/obsidian-tasks-x/compare/2.0.14...2.1.0) (2022-06-06)
 
+
 ### Documentation
 
 * move screenshots to site for linking ([3de5e97](https://github.com/sytone/obsidian-tasks-x/commits/3de5e9743f94409a58964f211133a303d60d1fcc))
+
 
 ### Bug Fixes and Changes
 
@@ -171,6 +203,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### [2.0.13](https://github.com/sytone/obsidian-tasks-x/compare/v2.0.12...v2.0.13) (2022-06-03)
 
 ### 2.0.12 (2022-06-02)
+
 
 ### Features
 
@@ -190,6 +223,7 @@ All notable changes to this project will be documented in this file. See [standa
 * update logging levels ([b771787](https://github.com/sytone/obsidian-tasks-x/commits/b771787cc355359c3abb8625f908dac3db68e5ce))
 * update query language, add tests, make hash optional and query case insensative ([d8a95b0](https://github.com/sytone/obsidian-tasks-x/commits/d8a95b0b7c45fb44d1bb9bb0b98816abd91a7e1a))
 
+
 ### Internal
 
 * add tests to validate substring ([547f776](https://github.com/sytone/obsidian-tasks-x/commits/547f7765de41ff29bb069f3d0e2f361f524186d5))
@@ -199,6 +233,7 @@ All notable changes to this project will be documented in this file. See [standa
 * move querysql to correct folder ([2369885](https://github.com/sytone/obsidian-tasks-x/commits/2369885b11b9d027bd5254c89e1fb6f45352400b))
 * refactor tag tests out and make them data driven ([75eba71](https://github.com/sytone/obsidian-tasks-x/commits/75eba71a4c01a941b07cc79198f7090613a5664e))
 
+
 ### Documentation
 
 * cleanup readme ([4fb6bd2](https://github.com/sytone/obsidian-tasks-x/commits/4fb6bd2c8072f6bc11d876556ad853e819bff386))
@@ -207,6 +242,7 @@ All notable changes to this project will be documented in this file. See [standa
 * update filter documentation on the tag query ([a3964f7](https://github.com/sytone/obsidian-tasks-x/commits/a3964f78846c4325adc99be3efc6c893933b47a3))
 * update grammar based issue and sorting description for tags ([b2ace95](https://github.com/sytone/obsidian-tasks-x/commits/b2ace95dec86d5de8c1c0e440e3dd7b5eb314ace))
 * update the url to point to fork ([6a3ac4e](https://github.com/sytone/obsidian-tasks-x/commits/6a3ac4eed04dec02a735026bff3723e6fa1ef81a))
+
 
 ### Bug Fixes and Changes
 

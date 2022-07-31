@@ -4,7 +4,7 @@
     "type": "split",
     "children": [
       {
-        "id": "f9e96f5aec7956c3",
+        "id": "6e2a18d40bec7a45",
         "type": "leaf",
         "state": {
           "type": "markdown",
@@ -96,17 +96,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "f9e96f5aec7956c3",
+  "active": "6e2a18d40bec7a45",
   "lastOpenFiles": [
-    "7-scenarios/issue-13-created-duplication.md",
-    "7-scenarios/filter-time-of-day.md",
-    "7-scenarios/7-scenarios.md",
+    "5-queries-sql/layout.md",
+    "5-queries-sql/grouping.md",
+    "8-Reference/handlebars-cheatsheet.md",
+    "8-Reference/moment-formatting.md",
+    "8-Reference/8-Reference.md",
     "1-introduction/1-introduction.md",
-    "2-installation/2-installation.md",
+    "7-scenarios/filter-time-of-day.md",
+    "5-queries-sql/columns.md",
     "5-queries-sql/examples.md",
-    "5-queries-sql/comments.md",
-    "5-queries-sql/raw-data-debugging.md",
-    "5-queries-sql/operators.md",
-    "5-queries-sql/limit.md"
+    "5-queries-sql/comments.md"
   ]
 }

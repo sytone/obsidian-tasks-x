@@ -6,6 +6,17 @@ parent: Queries - SQL
 has_toc: false
 ---
 
+### Filtering on Tags
+
+    ```task-sql
+    WHERE '#MindCare' IN tags
+    ```
+
+```task-sql
+WHERE '#MindCare' IN tags
+
+```
+
 ### All open tasks that are due today
 
     ```tasks
