@@ -1,5 +1,5 @@
-import { EventEmitter2 } from 'eventemitter2';
 import moment from 'moment';
+import { Platform, Plugin } from 'obsidian';
 /*
  * EventEmitter2 is an implementation of the EventEmitter module found in Node.js.
  * In addition to having a better benchmark performance than EventEmitter and being
@@ -9,7 +9,7 @@ import moment from 'moment';
  * This has been added as EventEmitter in Node.JS is not available in the browser.
  * https://www.npmjs.com/package/eventemitter2
  */
-import { Platform, Plugin } from 'obsidian';
+import { EventEmitter2 } from 'eventemitter2';
 
 /**
  * All possible log levels
@@ -24,6 +24,31 @@ export interface ILogLevel {
 }
 
 /**
+ * Logger class to handle consistency of logs across the plugin.
+ *
+ * @export
+ * @interface LogEntry
+ */
+export interface LogEntry {
+    traceId?: string;
+    level: string;
+    module: string;
+    location?: string;
+    message: string;
+    objects: any;
+}
+
+/**
+ * Logging options structure.
+ *
+ * @export
+ * @interface LogOptions
+ */
+export interface LogOptions {
+    minLevels: { [module: string]: string };
+}
+
+/**
  * Log level IDs (1 - 5)
  * @public
  */
@@ -35,21 +60,43 @@ export type TLogLevelId = keyof ILogLevel;
  */
 export type TLogLevelName = ILogLevel[TLogLevelId];
 
+/**
+ * Logger class to handle consistency of logs across the plugin.
+ *
+ * @export
+ * @class LogManager
+ * @extends {EventEmitter2}
+ */
 export class LogManager extends EventEmitter2 {
     private options: LogOptions = {
         minLevels: {
             '': 'info',
+            tasks: 'info',
         },
     };
 
     // Prevent the console logger from being added twice
     private consoleLoggerRegistered: boolean = false;
 
+    /**
+     * Set the minimum log levels for the module name or global.
+     *
+     * @param {LogOptions} options
+     * @return {*}  {LogManager}
+     * @memberof LogManager
+     */
     public configure(options: LogOptions): LogManager {
         this.options = Object.assign({}, this.options, options);
         return this;
     }
 
+    /**
+     * Returns a logger instance for the given module name.
+     *
+     * @param {string} module
+     * @return {*}  {Logger}
+     * @memberof LogManager
+     */
     public getLogger(module: string): Logger {
         let minLevel = 'none';
         let match = '';
@@ -63,6 +110,13 @@ export class LogManager extends EventEmitter2 {
         return new Logger(this, module, minLevel);
     }
 
+    /**
+     *
+     *
+     * @param {(logEntry: LogEntry) => void} listener
+     * @return {*}  {LogManager}
+     * @memberof LogManager
+     */
     public onLogEntry(listener: (logEntry: LogEntry) => void): LogManager {
         this.on('log', listener);
         return this;
@@ -71,11 +125,19 @@ export class LogManager extends EventEmitter2 {
     // private period: number = 0;
     arrAvg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length;
 
+    /**
+     * Registers a logger that write to the console.
+     *
+     * @return {*}  {LogManager}
+     * @memberof LogManager
+     */
     public registerConsoleLogger(): LogManager {
         if (this.consoleLoggerRegistered) return this;
 
         this.onLogEntry((logEntry) => {
-            let msg = `[${moment().format('YYYYMMDDHHmmss')}][${logEntry.level}][${logEntry.module}]`;
+            let msg = `[${moment().format('YYYYMMDDHHmmss')}][${
+                logEntry.level
+            }][${logEntry.module}]`;
 
             if (logEntry.traceId) {
                 msg += `[${logEntry.traceId}]`;
@@ -86,13 +148,6 @@ export class LogManager extends EventEmitter2 {
                 logEntry.objects = '';
             }
 
-            // if (this.period++ % 30 === 0) {
-            //     Object.entries(timingMap).forEach(([key, value]) =>
-            //         console.log(
-            //             `${key}: ${value.length}:${Math.min(...value)}:${Math.max(...value)}:${this.arrAvg(value)}`,
-            //         ),
-            //     );
-            // }
             switch (logEntry.level) {
                 case 'trace':
                     console.trace(msg, logEntry.objects);
@@ -119,21 +174,15 @@ export class LogManager extends EventEmitter2 {
     }
 }
 
-export interface LogEntry {
-    traceId?: string;
-    level: string;
-    module: string;
-    location?: string;
-    message: string;
-    objects: any;
-}
-
-export interface LogOptions {
-    minLevels: { [module: string]: string };
-}
-
 export const logging = new LogManager();
 
+/**
+ * Main logging library, to view the logs a logger listener must be added. The
+ * Console Logger is already implemented for this project.
+ *
+ * @export
+ * @class Logger
+ */
 export class Logger {
     private logManager: EventEmitter2;
     private minLevel: number;
@@ -146,6 +195,13 @@ export class Logger {
         error: 5,
     };
 
+    /**
+     * Creates an instance of Logger.
+     * @param {EventEmitter2} logManager
+     * @param {string} module
+     * @param {string} minLevel
+     * @memberof Logger
+     */
     constructor(logManager: EventEmitter2, module: string, minLevel: string) {
         this.logManager = logManager;
         this.module = module;
@@ -158,7 +214,8 @@ export class Logger {
      * @param minLevel
      */
     private levelToInt(minLevel: string): number {
-        if (minLevel.toLowerCase() in this.levels) return this.levels[minLevel.toLowerCase()];
+        if (minLevel.toLowerCase() in this.levels)
+            return this.levels[minLevel.toLowerCase()];
         else return 99;
     }
 
@@ -171,7 +228,13 @@ export class Logger {
         const level = this.levelToInt(logLevel);
         if (level < this.minLevel) return;
 
-        const logEntry: LogEntry = { level: logLevel, module: this.module, message, objects, traceId: undefined };
+        const logEntry: LogEntry = {
+            level: logLevel,
+            module: this.module,
+            message,
+            objects,
+            traceId: undefined,
+        };
 
         // Obtain the line/file through a thoroughly hacky method
         // This creates a new stack trace and pulls the caller from it.  If the caller
@@ -206,15 +269,26 @@ export class Logger {
     }
 
     /**
-     * Central logging method.
+     * Central logging method with a trace ID to track calls between modules/components.
      * @param logLevel
      * @param message
      */
-    public logWithId(logLevel: string, traceId: string, message: string, objects?: any): void {
+    public logWithId(
+        logLevel: string,
+        traceId: string,
+        message: string,
+        objects?: any,
+    ): void {
         const level = this.levelToInt(logLevel);
         if (level < this.minLevel) return;
 
-        const logEntry: LogEntry = { level: logLevel, module: this.module, message, objects, traceId };
+        const logEntry: LogEntry = {
+            level: logLevel,
+            module: this.module,
+            message,
+            objects,
+            traceId,
+        };
 
         this.logManager.emit('log', logEntry);
     }
@@ -240,15 +314,21 @@ type TimingMap = {
     // count, avg, min, max
     [id: string]: number[];
 };
+
 const timingMap: TimingMap = {};
 
 /**
- * This deceleration will log the time taken to run the function it is attached to.
+ * This deceleration will log the time taken to run the function it is attached to. Be
+ * careful where it is added as it increases the output.
  *
  * @export
  * @return {*}
  */
-export const logCall = (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
+export const logCall = (
+    target: Object,
+    propertyKey: string,
+    descriptor: PropertyDescriptor,
+) => {
     const originalMethod = descriptor.value;
     //const logger = logging.getLogger('taskssql.perf');
     descriptor.value = function (...args: any[]) {
@@ -283,7 +363,11 @@ export const logCall = (target: Object, propertyKey: string, descriptor: Propert
 };
 
 export function logCallDetails() {
-    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    return function (
+        target: any,
+        propertyKey: string,
+        descriptor: PropertyDescriptor,
+    ) {
         const originalMethod = descriptor.value;
         const logger = logging.getLogger('taskssql');
 
@@ -304,7 +388,13 @@ export function logCallDetails() {
     };
 }
 
-// Global log function for the plugin.
+/**
+ * Provides a simple log function that can be used to log messages against default module.
+ *
+ * @export
+ * @param {TLogLevelName} logLevel
+ * @param {string} message
+ */
 export function log(logLevel: TLogLevelName, message: string) {
     const logger = logging.getLogger('taskssql');
 
